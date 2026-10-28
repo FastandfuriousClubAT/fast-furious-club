@@ -1,12 +1,19 @@
-FAST & FURIOUS CLUB — změny v této verzi
+FAST & FURIOUS CLUB — aktualizovaná statická verze
 
-Hotovo v prototypu:
-- Výchozí jazyk němčina.
-- Vybraný jazyk se ukládá v prohlížeči a při dalším otevření zůstane vybraný.
-- Datum výletu i transferu lze vybrat nejdříve od zítřka.
-- V hlavičce je místo F+ použito kruhové logo aplikace.
-- Nadpis hlavní stránky má akčnější, šikmé a výrazné písmo.
+NAHRÁNÍ
+1. Rozbalte ZIP.
+2. Nahrajte VŠECHNY soubory z této složky do kořene repozitáře GitHub (stejně jako minule).
+3. Při potvrzení změn napište například: „Redesign webu, logo a ikona“.
+4. Po nasazení otevřete web v anonymním okně nebo obnovte stránku bez cache.
 
-DŮLEŽITÉ: Automatické odesílání poptávek na odtahy.aut@gmail.com zatím není aktivní.
-Tato verze je statický web na GitHub Pages; k bezpečnému odesílání formulářů je potřeba
-napojit formulářovou službu nebo backend. Po nasazení této verze se žádná poptávka sama neposílá.
+CO JE UPRAVENO
+- Nové záhlaví s wordmarkem FAST AND FURIOUS CLUB, místo kruhové ikony použité jako logo.
+- Sportovnější, ale méně namačkané písmo hlavního nadpisu.
+- Nové bezpečně odsazené ikony 192×192 a 512×512 pro mobilní plochu.
+- Manifest pro instalaci jako webová aplikace.
+- Výchozí jazyk němčina a zapamatování poslední volby jazyka v prohlížeči.
+- Datum v kalendáři nejdříve od zítřka.
+- Formuláře jsou napojené na FormSubmit pro e-mail odtahy.aut@gmail.com.
+
+DŮLEŽITÉ K E-MAILU
+FormSubmit je externí služba. Při prvním odeslání může požádat o potvrzení adresy odtahy.aut@gmail.com e-mailem. Dokud nebude případné potvrzení dokončeno, neposílejte web zákazníkům jako ostrý rezervační systém. Po prvním testu ověřte, že zpráva skutečně dorazila. Formuláře posílají osobní údaje této externí službě; před veřejným spuštěním doplňte řádné informace o ochraně osobních údajů a souhlasy.
