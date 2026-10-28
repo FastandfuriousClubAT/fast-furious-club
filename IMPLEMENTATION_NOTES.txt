@@ -1,19 +1,18 @@
-FAST & FURIOUS CLUB — aktualizovaná statická verze
+FAST & FURIOUS CLUB — Redesign v2
 
-NAHRÁNÍ
+UPLOAD
 1. Rozbalte ZIP.
-2. Nahrajte VŠECHNY soubory z této složky do kořene repozitáře GitHub (stejně jako minule).
-3. Při potvrzení změn napište například: „Redesign webu, logo a ikona“.
-4. Po nasazení otevřete web v anonymním okně nebo obnovte stránku bez cache.
+2. Nahrajte všech 5 souborů z balíčku přímo do kořene repozitáře GitHub.
+3. Potvrďte změny a počkejte na zelenou fajfku v GitHub Pages.
+4. Na mobilu otevřete web znovu; pokud se ikona nezmění, bude potřeba aplikaci odebrat z plochy a znovu přidat, protože Android může starou ikonu držet v mezipaměti.
 
-CO JE UPRAVENO
-- Nové záhlaví s wordmarkem FAST AND FURIOUS CLUB, místo kruhové ikony použité jako logo.
-- Sportovnější, ale méně namačkané písmo hlavního nadpisu.
-- Nové bezpečně odsazené ikony 192×192 a 512×512 pro mobilní plochu.
-- Manifest pro instalaci jako webová aplikace.
-- Výchozí jazyk němčina a zapamatování poslední volby jazyka v prohlížeči.
+WHAT CHANGED
+- Nový responzivní vizuální styl se zachovaným schváleným nápisem v záhlaví.
+- Přehlednější akční nadpis, výraznější CTA, nové karty a čistší formuláře.
+- Vylepšená ikona: větší kruhový emblém, tmavý modrozelený podklad a decentní neonový akcent.
+- Němčina jako výchozí jazyk; výběr jazyka se ukládá v prohlížeči.
 - Datum v kalendáři nejdříve od zítřka.
-- Formuláře jsou napojené na FormSubmit pro e-mail odtahy.aut@gmail.com.
+- Zachována integrace FormSubmit na odtahy.aut@gmail.com; první použití může vyžadovat potvrzení adresy.
 
-DŮLEŽITÉ K E-MAILU
-FormSubmit je externí služba. Při prvním odeslání může požádat o potvrzení adresy odtahy.aut@gmail.com e-mailem. Dokud nebude případné potvrzení dokončeno, neposílejte web zákazníkům jako ostrý rezervační systém. Po prvním testu ověřte, že zpráva skutečně dorazila. Formuláře posílají osobní údaje této externí službě; před veřejným spuštěním doplňte řádné informace o ochraně osobních údajů a souhlasy.
+IMPORTANT
+Po nahrání ověřte e-mail odesláním testovací poptávky. FormSubmit je externí služba; před veřejným spuštěním doplňte řádné zásady ochrany osobních údajů a souhlas. PWA ikona se nemusí aktualizovat automaticky u již instalované zkratky — někdy je nutné zástupce odebrat a přidat znovu.
