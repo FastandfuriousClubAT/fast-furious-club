@@ -1,15 +1,11 @@
-FAST & FURIOUS CLUB — oprava ikony (v3)
+FAST & FURIOUS CLUB — SLOW AND SERIOUS DESIGN PACKAGE v4
 
-NAHRÁNÍ
-1. Rozbalte ZIP.
-2. Nahrajte všech 5 souborů do kořene repozitáře GitHub a potvrďte změny.
-3. Počkejte na úspěšné nasazení GitHub Pages.
-4. Pokud se ikona na již nainstalované ploše nezmění, odeberte starého zástupce a přidejte web znovu z Chromu; Android může ikonu ukládat do mezipaměti.
+Upload all files in this ZIP to the root of the existing GitHub repository, replacing files with the same names, then commit the upload. Wait until GitHub Pages deployment is green.
 
-CO JE OPRAVENO
-- Ikona 192×192 i 512×512 nyní obsahuje celý kruhový emblém s výrazně větším bezpečným okrajem, takže ho maska Androidu nemá ořezávat.
-- Verze ikon a manifestu zvýšena na v3 kvůli obnovení cache.
-- Zachován schválený wordmark, německý výchozí jazyk, uložení vybraného jazyka, kalendář od zítřka a e-mailové formuláře.
+Design updates: actual round club emblem in the header, supplied sport-style wordmark, stronger navy/gold/neon-green visual system, scenic hero photo, refreshed category cards, navigation, and responsive mobile layout.
 
-POZNÁMKA
-Formuláře používají externí službu FormSubmit pro odtahy.aut@gmail.com. Po nasazení proveďte testovací poptávku a ověřte doručení; první použití může vyžadovat potvrzení adresy.
+Behavior retained: German is the default language; selected language is stored in localStorage; trip and airport date fields cannot select today or past dates; request forms use FormSubmit to odtahy.aut@gmail.com. FormSubmit may require first-use confirmation from the recipient mailbox. Send a test request after deployment and verify delivery.
+
+App icon: circular badge placed within a safe margin on a dark square canvas. Android may cache the old shortcut icon; after deployment, remove the old home-screen shortcut and add the site again from Chrome if needed.
+
+This remains a static website: it does not yet have a booking database, payment processing, or customer accounts.
