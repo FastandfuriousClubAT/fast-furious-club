@@ -1,18 +1,15 @@
-FAST & FURIOUS CLUB — Redesign v2
+FAST & FURIOUS CLUB — oprava ikony (v3)
 
-UPLOAD
+NAHRÁNÍ
 1. Rozbalte ZIP.
-2. Nahrajte všech 5 souborů z balíčku přímo do kořene repozitáře GitHub.
-3. Potvrďte změny a počkejte na zelenou fajfku v GitHub Pages.
-4. Na mobilu otevřete web znovu; pokud se ikona nezmění, bude potřeba aplikaci odebrat z plochy a znovu přidat, protože Android může starou ikonu držet v mezipaměti.
+2. Nahrajte všech 5 souborů do kořene repozitáře GitHub a potvrďte změny.
+3. Počkejte na úspěšné nasazení GitHub Pages.
+4. Pokud se ikona na již nainstalované ploše nezmění, odeberte starého zástupce a přidejte web znovu z Chromu; Android může ikonu ukládat do mezipaměti.
 
-WHAT CHANGED
-- Nový responzivní vizuální styl se zachovaným schváleným nápisem v záhlaví.
-- Přehlednější akční nadpis, výraznější CTA, nové karty a čistší formuláře.
-- Vylepšená ikona: větší kruhový emblém, tmavý modrozelený podklad a decentní neonový akcent.
-- Němčina jako výchozí jazyk; výběr jazyka se ukládá v prohlížeči.
-- Datum v kalendáři nejdříve od zítřka.
-- Zachována integrace FormSubmit na odtahy.aut@gmail.com; první použití může vyžadovat potvrzení adresy.
+CO JE OPRAVENO
+- Ikona 192×192 i 512×512 nyní obsahuje celý kruhový emblém s výrazně větším bezpečným okrajem, takže ho maska Androidu nemá ořezávat.
+- Verze ikon a manifestu zvýšena na v3 kvůli obnovení cache.
+- Zachován schválený wordmark, německý výchozí jazyk, uložení vybraného jazyka, kalendář od zítřka a e-mailové formuláře.
 
-IMPORTANT
-Po nahrání ověřte e-mail odesláním testovací poptávky. FormSubmit je externí služba; před veřejným spuštěním doplňte řádné zásady ochrany osobních údajů a souhlas. PWA ikona se nemusí aktualizovat automaticky u již instalované zkratky — někdy je nutné zástupce odebrat a přidat znovu.
+POZNÁMKA
+Formuláře používají externí službu FormSubmit pro odtahy.aut@gmail.com. Po nasazení proveďte testovací poptávku a ověřte doručení; první použití může vyžadovat potvrzení adresy.
