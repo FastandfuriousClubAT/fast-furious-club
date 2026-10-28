@@ -1,0 +1,12 @@
+FAST & FURIOUS CLUB — změny v této verzi
+
+Hotovo v prototypu:
+- Výchozí jazyk němčina.
+- Vybraný jazyk se ukládá v prohlížeči a při dalším otevření zůstane vybraný.
+- Datum výletu i transferu lze vybrat nejdříve od zítřka.
+- V hlavičce je místo F+ použito kruhové logo aplikace.
+- Nadpis hlavní stránky má akčnější, šikmé a výrazné písmo.
+
+DŮLEŽITÉ: Automatické odesílání poptávek na odtahy.aut@gmail.com zatím není aktivní.
+Tato verze je statický web na GitHub Pages; k bezpečnému odesílání formulářů je potřeba
+napojit formulářovou službu nebo backend. Po nasazení této verze se žádná poptávka sama neposílá.
