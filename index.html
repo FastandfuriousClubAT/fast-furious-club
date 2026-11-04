@@ -370,6 +370,101 @@ main{padding-top:26px}
  .heroArt{height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:16/9;background:#071521}
  .heroArt img{width:100%;height:100%;min-height:0!important;object-fit:contain!important;object-position:center!important;background:#071521}
 }
+
+/* FFC layout refinement: same palette and assets, cleaner hierarchy and mobile spacing. */
+:root { scroll-behavior:smooth; }
+.top { backdrop-filter:blur(12px); }
+.brandlockup { flex-shrink:1; }
+.mainnav a { transition:color .18s ease,border-color .18s ease; }
+.hero { box-shadow:0 18px 42px #0004; }
+.hero>div:first-child { max-width:620px; }
+.hero h1 { text-wrap:balance; }
+.heroArt img { transition:transform .35s ease; }
+.card { height:100%; }
+.cardbody { display:flex; flex-direction:column; }
+.cardbody .cardfoot { margin-top:auto; padding-top:12px; }
+.service-tile { min-height:230px; }
+.section { scroll-margin-top:18px; }
+@media (min-width:681px) {
+  .topinner { align-items:center; }
+  .mainnav { gap:clamp(16px,2vw,30px); }
+  .hero { gap:clamp(24px,3vw,44px); }
+  .heroArt { min-height:390px; }
+  .heroArt img { min-height:390px; }
+  .service-grid { gap:20px; }
+  .service-tile { padding:26px; }
+}
+@media (max-width:850px) and (min-width:681px) {
+  .topinner { gap:12px; }
+  .brandlockup { flex-basis:300px; max-width:340px; }
+  .wordmark { max-width:300px; }
+  .mainnav { gap:16px; }
+  .mainnav a { font-size:10px; }
+  .hero { padding:24px; grid-template-columns:minmax(0,1fr) minmax(220px,.8fr); }
+  .hero h1 { font-size:clamp(36px,5vw,48px); }
+  .heroArt,.heroArt img { min-height:320px; }
+}
+@media (max-width:680px) {
+  .top { padding:9px 12px 7px; }
+  .topinner { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 9px; }
+  .brandlockup { grid-column:1; grid-row:1; max-width:100%; min-width:0; }
+  .brand-text { width:100%; max-width:100%; }
+  .wordmark { width:min(100%,245px); max-height:55px; }
+  .tagline { max-width:250px; font-size:8.5px; letter-spacing:.025em; }
+  .lang { grid-column:2; grid-row:1; gap:4px; }
+  .lang button { min-width:33px; min-height:38px; padding:6px 5px; }
+  .mainnav { grid-column:1/-1; grid-row:2; display:flex; flex-wrap:nowrap; overflow-x:auto; gap:19px; padding:8px 1px 3px; scrollbar-width:none; }
+  .mainnav::-webkit-scrollbar { display:none; }
+  .mainnav a { flex:none; font-size:10px; }
+  main { padding:13px 12px 38px; }
+  .hero { border-radius:17px; }
+  .hero>div:first-child { padding:20px 16px 17px; }
+  .eyebrow { font-size:10px; letter-spacing:.12em; }
+  .hero h1 { max-width:12ch; font-size:clamp(34px,8.5vw,43px); line-height:1.02; margin:12px 0; }
+  .hero p { font-size:14px; line-height:1.55; }
+  .btnrow { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:15px 0 12px; }
+  .btnrow .btn { width:100%; min-height:47px; padding:9px 8px; font-size:12px; line-height:1.25; }
+  .airport-cta-wrap { margin-top:11px; padding:11px; gap:9px; }
+  .airport-cta-wrap p { font-size:12px; line-height:1.45; }
+  .btn.airport { min-height:46px; font-size:13px; }
+  .heroArt { width:100%; height:178px; min-height:178px; max-height:178px; }
+  .heroArt img { width:100%; height:100%; min-height:0; object-position:center 40%; }
+  .service-grid { margin-top:17px; gap:11px; }
+  .service-tile { min-height:175px; padding:16px; }
+  .service-tile .service-icon { font-size:33px; }
+  .service-tile h3 { font-size:20px; margin:9px 0 5px; }
+  .service-tile p { font-size:12px; line-height:1.45; margin-bottom:11px; }
+  .service-tile .btn { min-height:42px; font-size:12px; padding:9px 11px; }
+  .section { margin-top:27px; }
+  .sectionhead { align-items:flex-start; }
+  .section h2,.panel h2 { font-size:25px; }
+  .cards { gap:11px; }
+  .card { border-radius:14px; }
+  .cardart { min-height:174px; }
+  .cardbody { padding:13px; }
+  .cardbody h3 { font-size:16px; line-height:1.25; }
+  .cardbody p { font-size:12px; line-height:1.45; }
+  .cardfoot .btn { width:100%; font-size:12px; padding:9px 8px; }
+  .app-showcase { margin-top:28px; }
+  .phone-preview { transform:none; }
+  .featurebox { border-radius:14px; }
+  .panel { margin-top:18px; }
+  .footer { gap:8px; }
+}
+@media (max-width:390px) {
+  .wordmark { width:min(100%,215px); }
+  .tagline { font-size:7.5px; }
+  .lang button { min-width:29px; padding:5px 4px; }
+  .hero>div:first-child { padding:18px 14px 15px; }
+  .hero h1 { font-size:33px; }
+  .heroArt { height:155px; min-height:155px; max-height:155px; }
+  .btnrow .btn { font-size:11px; }
+  .service-grid { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .heroArt img { transition:none; }
+}
+
 </style></head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN MIT KOMFORT UND ERLEBNIS</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cs">ČS</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
