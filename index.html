@@ -231,6 +231,19 @@ html{scroll-padding-top:18px}
   .hero h1{font-size:35px}
 }
 
+
+/* Mobile: keep the hero copy and its actions visible before the van photo. */
+@media(max-width:650px){
+  .hero>div:first-child{order:0;padding:16px 14px 12px}
+  .heroArt{order:1;width:100%;height:120px;min-height:120px;max-height:120px}
+  .hero h1{font-size:clamp(31px,8vw,38px);line-height:1;margin:10px 0}
+  .hero p{font-size:14px;line-height:1.45}
+  .btnrow{grid-template-columns:1fr 1fr;gap:8px;margin:13px 0}
+  .btnrow .btn{width:100%;min-height:44px;font-size:12px;padding:9px 8px}
+  .airport-cta-wrap{margin-top:10px;padding:10px;gap:8px}
+  .airport-cta-wrap p{font-size:12px;line-height:1.4}
+  .btn.airport{min-height:42px;padding:9px 12px}
+}
 </style></head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN MIT KOMFORT UND ERLEBNIS</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cs">ČS</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
