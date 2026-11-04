@@ -2,7 +2,7 @@
   "name": "Fast & Furious Club",
   "short_name": "FFC Club",
   "description": "Europa entdecken mit Komfort und Erlebnis",
-  "start_url": "./?source=ffc-v6",
+  "start_url": "./?source=ffc-v7",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -10,10 +10,10 @@
   "theme_color": "#061521",
   "icons": [
     {
-      "src": "app-icon.svg?v=6",
+      "src": "app-icon.svg?v=7",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
