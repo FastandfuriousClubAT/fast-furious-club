@@ -130,6 +130,107 @@ main{max-width:1440px;padding:22px 22px 64px}.hero{background:#0a2434;border:1px
 .phone-actions span{padding:10px 5px;border-radius:8px;background:#e7eef1;text-align:center;font-size:10px;font-weight:850}
 @media(max-width:680px){.service-grid{grid-template-columns:1fr;gap:12px;margin-top:22px}.service-tile{min-height:190px;padding:18px}.service-tile h3{font-size:22px}.app-showcase{grid-template-columns:1fr;gap:22px;padding:22px 17px}.phone-preview{width:min(76%,250px);grid-row:1}.app-copy{grid-row:2}.app-copy h2{font-size:29px}}
 
+
+
+/* Final layout correction: keep the vehicle photo and all copy in separate areas. */
+.top{position:relative;top:auto}
+html{scroll-padding-top:18px}
+.topinner{min-height:0;flex-wrap:wrap;align-items:center}
+.brandlockup{flex:0 1 390px}
+.mainnav{order:3;flex:1 0 100%;width:100%;justify-content:flex-start;gap:clamp(18px,3vw,34px);padding-top:8px;border-top:1px solid #24495a}
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(300px,.92fr);
+  align-items:stretch;
+  gap:clamp(22px,3vw,42px);
+  min-height:0;
+  padding:clamp(26px,4vw,52px);
+  background:linear-gradient(135deg,#071b29 0%,#0c2a3a 100%);
+}
+.hero:before{display:none}
+.hero:after{z-index:1}
+.hero>div:first-child{position:relative;z-index:2;align-self:center;max-width:650px}
+.heroArt{
+  position:relative;inset:auto;z-index:0;
+  display:block;align-self:stretch;
+  min-height:360px;height:100%;
+  border:1px solid #315b6d;border-radius:16px;
+  overflow:hidden;opacity:1;
+  background:#0b2635;
+  box-shadow:0 16px 34px #0005;
+}
+.heroArt img{
+  display:block;width:100%;height:100%;min-height:360px;
+  object-fit:cover;object-position:center 42%;
+  filter:saturate(1.04) contrast(1.04);
+}
+.hero h1{max-width:12ch}
+.airport-cta-wrap{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.airport-cta-wrap p{width:100%;max-width:100%;font-size:15px}
+.btn.airport{width:100%}
+@media(max-width:850px){
+  .top{padding:10px 15px}
+  .topinner{gap:10px}
+  .brandlockup{flex:1 1 230px;max-width:390px}
+  .mainnav{order:3;flex:1 0 100%;overflow-x:auto;white-space:nowrap}
+  .hero{grid-template-columns:minmax(0,1fr) minmax(240px,.85fr);padding:25px;gap:18px}
+  .heroArt,.heroArt img{min-height:320px}
+}
+@media(max-width:680px){
+  .top{padding:9px 12px}
+  .topinner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 10px}
+  .brandlockup{grid-column:1;grid-row:1;max-width:none;min-width:0}
+  .brand-text{max-width:100%;width:100%}
+  .wordmark{width:min(100%,260px);max-height:58px}
+  .tagline{font-size:9px;max-width:260px;line-height:1.2}
+  .lang{grid-column:2;grid-row:1;gap:4px}
+  .lang button{min-width:34px;padding:7px 6px;font-size:11px}
+  .spacer{display:none}
+  .mainnav{grid-column:1/-1;grid-row:2;order:initial;width:100%;padding:8px 0 2px;gap:20px;overflow-x:auto}
+  .mainnav a{font-size:10px;flex:none}
+  main{padding:14px 12px 42px}
+  .hero{
+    display:flex;flex-direction:column;
+    min-height:0;padding:0;gap:0;
+    border-radius:17px;overflow:hidden;
+    background:#071b29;
+  }
+  .heroArt{
+    order:0;position:relative;inset:auto;
+    width:100%;height:220px;min-height:220px;max-height:220px;
+    border:0;border-bottom:1px solid #315b6d;border-radius:0;
+    opacity:1;box-shadow:none;
+  }
+  .heroArt img{
+    width:100%;height:100%;min-height:0;
+    object-fit:cover;object-position:center 38%;
+  }
+  .hero>div:first-child{
+    order:1;width:100%;max-width:none;
+    padding:22px 18px 20px;z-index:2;
+    background:linear-gradient(180deg,#0a2433,#071b29);
+  }
+  .hero:before{display:none}
+  .hero:after{height:4px}
+  .eyebrow{font-size:10px;letter-spacing:.13em}
+  .hero h1{font-size:clamp(36px,9vw,48px);line-height:1.02;max-width:11ch;margin:13px 0 14px}
+  .hero p{font-size:15px;line-height:1.6;margin:0}
+  .btnrow{display:grid;grid-template-columns:1fr;gap:10px;margin:18px 0}
+  .btnrow .btn{width:100%;min-height:48px;font-size:14px}
+  .airport-cta-wrap{margin-top:17px;padding:14px;background:#102f40;border-color:#3a687b}
+  .airport-cta-wrap p{font-size:14px;line-height:1.55}
+  .btn.airport{min-height:48px;font-size:14px}
+  .service-grid{margin-top:20px}
+}
+@media(max-width:390px){
+  .wordmark{width:min(100%,220px)}
+  .tagline{font-size:8px}
+  .lang button{min-width:30px;padding:6px 4px}
+  .heroArt{height:195px;min-height:195px;max-height:195px}
+  .hero>div:first-child{padding:19px 15px}
+  .hero h1{font-size:35px}
+}
+
 </style></head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN MIT KOMFORT UND ERLEBNIS</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cs">ČS</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
