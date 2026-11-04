@@ -1,4 +1,4 @@
-const CACHE_NAME = "ffc-club-v13";
+const CACHE_NAME = "ffc-club-v14";
 const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./app-icon.jpg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
