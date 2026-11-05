@@ -1,4 +1,4 @@
-const CACHE_NAME = "ffc-club-v26";
+const CACHE_NAME = "ffc-club-v27";
 const APP_SHELL = [
   "./",
   "./index.html",
