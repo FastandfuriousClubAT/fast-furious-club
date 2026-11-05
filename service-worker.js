@@ -1,21 +1,16 @@
-const CACHE_NAME = "ffc-club-v35";
+const CACHE_NAME = "ffc-club-v31";
 const APP_SHELL = [
-  "/fast-furious-club/",
-  "/fast-furious-club/index.html",
-  "/fast-furious-club/manifest.webmanifest",
-  "/fast-furious-club/pwa-icon-192.png",
-  "/fast-furious-club/pwa-icon-512.png"
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./pwa-icon-192.png",
+  "./pwa-icon-512.png"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => Promise.all(
-        APP_SHELL.map(url => cache.add(url).catch(error => {
-          console.warn("FFC optional cache entry failed:", url, error);
-          return null;
-        }))
-      ))
+      .then(cache => cache.addAll(APP_SHELL))
       .then(() => self.skipWaiting())
   );
 });
@@ -35,20 +30,22 @@ self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).then(response => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache =>
-            cache.put("/fast-furious-club/index.html", copy)
-          );
-        }
-        return response;
-      }).catch(() => caches.match("/fast-furious-club/index.html"))
+      fetch(event.request)
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put("./index.html", copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
     );
     return;
   }
+
   event.respondWith(
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
