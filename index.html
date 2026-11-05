@@ -608,7 +608,7 @@ async function sendInquiry(form,notice,subject){
  const email=(details.airportEmail||details.rideEmail||details.customerEmail||'').toString();
  notice.classList.remove('show');notice.textContent=lang==='de'?'Anfrage wird gespeichert…':lang==='uk'?'Зберігаємо запит…':'Ukládám poptávku…';notice.classList.add('show');
  try{
-  const {error}=await ffcSupabase.from('inquiries').insert({user_id:null,inquiry_type:type,customer_name:name,customer_email:email?email.trim().toLowerCase():null,customer_phone:phone?phone.trim().replace(/[^\\d+]/g,''):null,details:{...details,subject}});
+  const {error}=await ffcSupabase.from('inquiries').insert({user_id:null,inquiry_type:type,customer_name:name,customer_email:email?email.trim().toLowerCase():null,customer_phone:phone?phone.trim().replace(/[^\d+]/g,''):null,details:{...details,subject}});
   if(error)throw error;
   notice.textContent=translations[lang][form.id==='airportForm'?'airportThanks':'thanks'];
   form.reset();setMinimumDates();if(form.id==='tripForm')updateDateFlex();
@@ -633,7 +633,7 @@ memberForm.addEventListener('submit',async(event)=>{
  event.preventDefault();
  if(!memberForm.reportValidity())return;
  const fullName=document.getElementById('memberName').value.trim();
- const phone=document.getElementById('memberPhone').value.trim().replace(/[^\\d+]/g,'');
+ const phone=document.getElementById('memberPhone').value.trim().replace(/[^\d+]/g,'');
  const email=document.getElementById('memberEmail').value.trim().toLowerCase();
  memberNotice.classList.remove('show');
  memberMessage(lang==='de'?'Registrierung wird gespeichert…':lang==='uk'?'Реєструємо дані…':'Ukládám registraci…');
