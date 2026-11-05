@@ -85,7 +85,7 @@ main{max-width:1240px;padding:clamp(22px,3.5vw,42px) clamp(14px,3vw,28px) 64px}
 .google-review-list{display:grid;gap:12px;margin:16px 0}
 .google-review-card{border:1px solid #e2e8eb;border-radius:13px;padding:15px;background:#fbfcfc}
 .google-review-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.google-review-author{font-weight:700;color:#1f3c4c}
+.google-review-author-wrap{display:flex;align-items:center;gap:9px}.google-review-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#e7edf0}.google-review-author{font-weight:700;color:#1f3c4c}
 .google-review-date{font-size:12px;color:#697783}
 .google-review-card p{margin:10px 0;white-space:pre-wrap}
 .google-review-links{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}
@@ -692,9 +692,12 @@ function renderGoogleReviews(data){
   const attribution=review.authorAttribution||{};
   if(attribution.uri){const authorLink=document.createElement('a');authorLink.href=attribution.uri;authorLink.target='_blank';authorLink.rel='noopener noreferrer';authorLink.textContent=attribution.displayName||'Google user';author.appendChild(authorLink);}
   else author.textContent=attribution.displayName||'Google user';
+  const authorWrap=document.createElement('div');authorWrap.className='google-review-author-wrap';
+  if(attribution.photoUri){const avatar=document.createElement('img');avatar.className='google-review-avatar';avatar.src=attribution.photoUri;avatar.alt='';avatar.loading='lazy';authorWrap.appendChild(avatar);}
+  authorWrap.appendChild(author);
   const date=document.createElement('span');date.className='google-review-date';date.textContent=review.relativePublishTimeDescription||'';
   const stars=document.createElement('span');stars.className='stars';stars.textContent='★'.repeat(Math.max(0,Math.min(5,Math.round(Number(review.rating)||0))));
-  head.append(author,stars,date);
+  head.append(authorWrap,stars,date);
   const body=document.createElement('p');body.textContent=review.text?.text||review.originalText?.text||'';
   const links=document.createElement('div');links.className='google-review-links';
   addGoogleReviewLink(links,googleReviewText('googleReviewsView'),review.googleMapsUri||data.googleMapsUri);
