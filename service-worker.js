@@ -1,11 +1,10 @@
-const CACHE_NAME = "ffc-club-v22";
+const CACHE_NAME = "ffc-club-v23";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./pwa-icon-192.png",
-  "./pwa-icon-512.png",
-  "./app-icon.jpg"
+  "./pwa-icon-512.png"
 ];
 
 self.addEventListener("install", event => {
