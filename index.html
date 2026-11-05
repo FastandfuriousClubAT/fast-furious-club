@@ -507,6 +507,7 @@ main{padding-top:26px}
  </form>
  <p class="sub" data-t="memberAdminNote">Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.</p>
  <div class="notice" id="memberNotice" role="status"></div>
+ <a class="btn dark hidden" id="memberWhatsapp" href="https://wa.me/4369010007070" target="_blank" rel="noopener noreferrer" data-t="memberWhatsapp">Napsat nám přes WhatsApp</a>
 </section>\n<section class="panel airport-panel" id="airportRequest"><h2 data-t="airportTitle">✈ Letištní transfer</h2><p class="airport-intro" data-t="airportPriceNote">Vyber směr a letiště. Jde vždy o jednu cestu.</p><form id="airportForm"><div class="formgrid">
 <div class="field full"><label for="airportDirection" data-t="airportDirection">Směr transferu</label><select id="airportDirection" required><option value="">Vyber…</option><option value="to" data-t="airportTo">Transfer na letiště</option><option value="from" data-t="airportFrom">Transfer z letiště</option></select></div>
 <div class="field"><label for="airportCode" data-t="airportSelect">Letiště</label><select id="airportCode" required><option value="">Vyber letiště…</option><option value="VIE">Vídeň (VIE)</option><option value="BTS">Bratislava (BTS)</option><option value="PRG">Praha (PRG)</option><option value="BUD">Budapešť (BUD)</option></select></div>
@@ -570,19 +571,19 @@ Object.assign(translations.cs,{
  memberTitle:'♥ Registrace zákazníka',memberIntro:'Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.',
  memberName:'Jméno a příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
  memberAdminNote:'Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.',
- memberThanks:'Děkujeme! Údaje byly uloženy, případně už v evidenci jsou.',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
+ memberThanks:'Děkujeme! Údaje byly uloženy, případně už v evidenci jsou.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
 });
 Object.assign(translations.de,{
  memberTitle:'♥ Kundenregistrierung',memberIntro:'Gib Name, Telefonnummer und E-Mail-Adresse ein. Diese Kombination dient dazu, dich bei weiteren Anfragen wiederzuerkennen. Es werden keine SMS oder Bestätigungscodes versendet.',
  memberName:'Vor- und Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
  memberAdminNote:'Kunden können ihre Angaben nicht selbst ändern. Änderungen nimmt der Veranstalter nach Absprache mit dem Kunden vor.',
- memberThanks:'Vielen Dank! Deine Angaben wurden gespeichert oder sind bereits registriert.',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
+ memberThanks:'Vielen Dank! Deine Angaben wurden gespeichert oder sind bereits registriert.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
 });
 Object.assign(translations.uk,{
  memberTitle:'♥ Реєстрація клієнта',memberIntro:'Вкажи ім’я, телефон та електронну пошту. Ця комбінація допоможе впізнати тебе під час наступних запитів. SMS та коди підтвердження не надсилаються.',
  memberName:'Ім’я та прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
  memberAdminNote:'Клієнт не може самостійно змінювати дані. Організатор вносить зміни лише за погодженням із клієнтом.',
- memberThanks:'Дякуємо! Дані збережено або вони вже є в реєстрі.',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
+ memberThanks:'Дякуємо! Дані збережено або вони вже є в реєстрі.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
 });
 let lang=localStorage.getItem('ffc-language')||'de';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns'},cs:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас'}};function setLang(l){lang=l;localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
@@ -641,6 +642,14 @@ memberForm.addEventListener('submit',async(event)=>{
   const {error}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
   if(error&&error.code!=='23505')throw error;
   memberMessage(translations[lang].memberThanks);
+  const whatsappButton=document.getElementById('memberWhatsapp');
+  const whatsappMessages={
+   cs:'Dobrý den, jsem registrovaný zákazník Fast & Furious Club. Jmenuji se '+fullName+' a rád bych se na něco zeptal.',
+   de:'Guten Tag, ich bin bei Fast & Furious Club registriert. Mein Name ist '+fullName+' und ich hätte eine Frage.',
+   uk:'Добрий день! Я зареєстрований клієнт Fast & Furious Club. Мене звати '+fullName+', і я хотів би дещо запитати.'
+  };
+  whatsappButton.href='https://wa.me/4369010007070?text='+encodeURIComponent(whatsappMessages[lang]||whatsappMessages.de);
+  whatsappButton.classList.remove('hidden');
   memberForm.reset();
  }catch(error){
   console.error('FFC customer registration failed',error);
