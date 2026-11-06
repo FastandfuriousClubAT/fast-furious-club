@@ -1,10 +1,12 @@
-const CACHE_NAME = "ffc-club-v36";
+const CACHE_NAME = "ffc-club-v37";
 const APP_SHELL = [
   "/fast-furious-club/",
   "/fast-furious-club/index.html",
   "/fast-furious-club/manifest.webmanifest",
   "/fast-furious-club/pwa-icon-192.png",
-  "/fast-furious-club/pwa-icon-512.png"
+  "/fast-furious-club/pwa-icon-512.png",
+  "/fast-furious-club/app-icon-192.png",
+  "/fast-furious-club/app-icon.png"
 ];
 
 self.addEventListener("install", event => {
