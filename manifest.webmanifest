@@ -3,21 +3,22 @@
   "name": "Fast & Furious Club",
   "short_name": "FFC Club",
   "description": "Europa entdecken mit Komfort und Erlebnis",
-  "start_url": "/fast-furious-club/?source=ffc-v30",
+  "start_url": "/fast-furious-club/",
   "scope": "/fast-furious-club/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "any",
   "background_color": "#061521",
   "theme_color": "#061521",
   "icons": [
     {
-      "src": "/fast-furious-club/pwa-icon-192.png?v=30",
+      "src": "/fast-furious-club/pwa-icon-192.png?v=29",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/fast-furious-club/pwa-icon-512.png?v=30",
+      "src": "/fast-furious-club/pwa-icon-512.png?v=29",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
