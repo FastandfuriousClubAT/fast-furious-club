@@ -607,19 +607,19 @@ Object.assign(translations.cz,{
  memberTitle:'♥ Registrace zákazníka',memberIntro:'Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.',
  memberName:'Jméno a příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
  memberAdminNote:'Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.',
- memberThanks:'Děkujeme! Údaje byly uloženy, případně už v evidenci jsou.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
+ memberThanks:'Vítejte, {name}! Vaše registrace se zpracovává.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
 });
 Object.assign(translations.de,{
  memberTitle:'♥ Kundenregistrierung',memberIntro:'Gib Name, Telefonnummer und E-Mail-Adresse ein. Diese Kombination dient dazu, dich bei weiteren Anfragen wiederzuerkennen. Es werden keine SMS oder Bestätigungscodes versendet.',
  memberName:'Vor- und Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
  memberAdminNote:'Kunden können ihre Angaben nicht selbst ändern. Änderungen nimmt der Veranstalter nach Absprache mit dem Kunden vor.',
- memberThanks:'Vielen Dank! Deine Angaben wurden gespeichert oder sind bereits registriert.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
+ memberThanks:'Willkommen, {name}! Ihre Registrierung wird bearbeitet.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
 });
 Object.assign(translations.uk,{
  memberTitle:'♥ Реєстрація клієнта',memberIntro:'Вкажи ім’я, телефон та електронну пошту. Ця комбінація допоможе впізнати тебе під час наступних запитів. SMS та коди підтвердження не надсилаються.',
  memberName:'Ім’я та прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
  memberAdminNote:'Клієнт не може самостійно змінювати дані. Організатор вносить зміни лише за погодженням із клієнтом.',
- memberThanks:'Дякуємо! Дані збережено або вони вже є в реєстрі.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
+ memberThanks:'Вітаємо, {name}! Ваша реєстрація обробляється.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
 });
 Object.assign(translations.cz,{memberCta:'♥ Registrace'});
 Object.assign(translations.de,{memberCta:'♥ Registrieren'});
@@ -843,7 +843,7 @@ memberForm.addEventListener('submit',async(event)=>{
  try{
   const {error}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
   if(error&&error.code!=='23505')throw error;
-  memberMessage(translations[lang].memberThanks);
+  memberMessage(translations[lang].memberThanks.replace('{name}',fullName));
   const whatsappButton=document.getElementById('memberWhatsapp');
   const whatsappMessages={
    cz:'Dobrý den, jsem registrovaný zákazník Fast & Furious Club. Jmenuji se '+fullName+' a rád bych se na něco zeptal.',
