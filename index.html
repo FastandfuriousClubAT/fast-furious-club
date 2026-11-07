@@ -521,6 +521,11 @@ main{padding-top:26px}
  <h2 data-t="memberTitle">♥ Registrace zákazníka</h2>
  <p class="sub" data-t="memberIntro">Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.</p>
  <div class="notice" id="memberSessionStatus" role="status" aria-live="polite"></div>
+ <div id="memberAccountCard" class="review hidden" aria-live="polite" style="margin:14px 0">
+  <div class="google-review-card-head"><strong id="memberAccountHeading">Můj účet</strong><span class="tag" id="memberAccountBadge">Přihlášen</span></div>
+  <h3 id="memberAccountName" style="margin:14px 0 4px">Zákazník</h3><p id="memberAccountEmail" class="sub" style="margin:0"></p>
+  <button type="button" class="btn dark" id="memberLogout" style="margin-top:16px">Odhlásit se</button>
+ </div>
  <form id="memberForm">
   <div class="formgrid">
    <div class="field"><label for="memberFirstName" data-t="memberFirstName">Jméno</label><input id="memberFirstName" name="first_name" autocomplete="given-name" placeholder="Jméno" minlength="1" maxlength="60" required></div>
@@ -609,19 +614,19 @@ Object.assign(translations.de,{rideButton:'Fahrt anfragen',rideTitle:'Fahrt anfr
 Object.assign(translations.uk,{rideButton:'Замовити поїздку',rideTitle:'Замовити поїздку',rideIntro:'Необов’язковий запит на поїздку. Заповни дані, і ми зв’яжемося з тобою.',rideDate:'Дата поїздки',rideTime:'Час поїздки',rideFrom:'Звідки',rideTo:'Куди',ridePeople:'Кількість пасажирів',rideSend:'Надіслати запит',airportTitle:'✈ Трансфер до аеропорту',airportPriceNote:'Обери напрямок та аеропорт. Доступна лише поїздка в один бік, без трансферу туди й назад.',airportDirection:'Напрямок трансферу',airportTo:'Трансфер до аеропорту',airportFrom:'Трансфер з аеропорту',airportSelect:'Аеропорт',airportAddress:'Місце посадки / адреса призначення',airportSend:'Запитати трансфер',contactName:'Ім’я',contactPhone:'Телефон',contactEmail:'Електронна пошта'});
 Object.assign(translations.cz,{
  memberTitle:'♥ Registrace zákazníka',memberIntro:'Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.',
- memberFirstName:'Jméno',memberLastName:'Příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
+ memberFirstName:'Jméno',memberLastName:'Příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',memberAccountTitle:'Můj účet',memberAccountActive:'Přihlášen',memberLogout:'Odhlásit se',memberLoggedOut:'Byl/a jsi odhlášen/a.',memberLogoutError:'Odhlášení se nepodařilo. Zkus to znovu.',
  memberAdminNote:'Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.',
  memberThanks:'Vítejte, {name}! Vaše registrace se zpracovává.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
 });
 Object.assign(translations.de,{
  memberTitle:'♥ Kundenregistrierung',memberIntro:'Gib Name, Telefonnummer und E-Mail-Adresse ein. Diese Kombination dient dazu, dich bei weiteren Anfragen wiederzuerkennen. Es werden keine SMS oder Bestätigungscodes versendet.',
- memberFirstName:'Vorname',memberLastName:'Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
+ memberFirstName:'Vorname',memberLastName:'Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',memberAccountTitle:'Mein Konto',memberAccountActive:'Angemeldet',memberLogout:'Abmelden',memberLoggedOut:'Du wurdest abgemeldet.',memberLogoutError:'Die Abmeldung ist fehlgeschlagen. Bitte versuche es erneut.',
  memberAdminNote:'Kunden können ihre Angaben nicht selbst ändern. Änderungen nimmt der Veranstalter nach Absprache mit dem Kunden vor.',
  memberThanks:'Willkommen, {name}! Ihre Registrierung wird bearbeitet.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
 });
 Object.assign(translations.uk,{
  memberTitle:'♥ Реєстрація клієнта',memberIntro:'Вкажи ім’я, телефон та електронну пошту. Ця комбінація допоможе впізнати тебе під час наступних запитів. SMS та коди підтвердження не надсилаються.',
- memberFirstName:'Ім’я',memberLastName:'Прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
+ memberFirstName:'Ім’я',memberLastName:'Прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',memberAccountTitle:'Мій обліковий запис',memberAccountActive:'Ви увійшли',memberLogout:'Вийти',memberLoggedOut:'Ви вийшли з облікового запису.',memberLogoutError:'Не вдалося вийти. Спробуйте ще раз.',
  memberAdminNote:'Клієнт не може самостійно змінювати дані. Організатор вносить зміни лише за погодженням із клієнтом.',
  memberThanks:'Вітаємо, {name}! Ваша реєстрація обробляється.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
 });
@@ -863,6 +868,8 @@ const memberLastNameField=document.getElementById('memberLastName').closest('.fi
 const memberPhoneField=document.getElementById('memberPhone').closest('.field');
 const memberPassword=document.getElementById('memberPassword');
 const memberSessionStatus=document.getElementById('memberSessionStatus');
+const memberAccountCard=document.getElementById('memberAccountCard');
+const memberLogout=document.getElementById('memberLogout');
 let memberMode='register';
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
 let currentMemberUser=null;
@@ -870,16 +877,32 @@ function updateHeroGreeting(){
  const hero=document.querySelector('[data-t="hero"]');
  if(!hero)return;
  if(!currentMemberUser){hero.textContent=translations[lang].hero;return;}
- const name=(currentMemberUser.user_metadata?.first_name||currentMemberUser.user_metadata?.full_name?.trim().split(/\\s+/)[0]||currentMemberUser.user_metadata?.name||currentMemberUser.email||'').trim();
+ const name=(currentMemberUser.user_metadata?.first_name||currentMemberUser.user_metadata?.full_name?.trim().split(/\s+/)[0]||currentMemberUser.user_metadata?.name||currentMemberUser.email||'').trim();
  const greeting=lang==='de'?'Wo soll es hingehen, '+name+'?':lang==='uk'?'То куди вирушимо, '+name+'?':'Tak kam vyrazíme, '+name+'?';
  hero.textContent=greeting;
 }
 function showMemberSession(user){
  currentMemberUser=user||null;
- if(!user){memberSessionStatus.textContent='';memberSessionStatus.classList.remove('show');updateHeroGreeting();return;}
- const name=(user.user_metadata?.full_name||user.user_metadata?.name||user.email||'zákazník').trim();
- memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',name);
+ const signedIn=!!user;
+ memberForm.classList.toggle('hidden',signedIn);
+ memberModeToggle.classList.toggle('hidden',signedIn);
+ memberAccountCard.classList.toggle('hidden',!signedIn);
+ if(!user){
+  memberSessionStatus.textContent='';
+  memberSessionStatus.classList.remove('show');
+  updateHeroGreeting();
+  return;
+ }
+ const meta=user.user_metadata||{};
+ const firstName=(meta.first_name||meta.full_name?.trim().split(/\s+/)[0]||meta.name||'').trim();
+ const fullName=(meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(' ')||user.email||'Zákazník').trim();
+ memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',fullName);
  memberSessionStatus.classList.add('show');
+ document.getElementById('memberAccountHeading').textContent=translations[lang].memberAccountTitle;
+ document.getElementById('memberAccountBadge').textContent=translations[lang].memberAccountActive;
+ document.getElementById('memberAccountName').textContent=fullName;
+ document.getElementById('memberAccountEmail').textContent=user.email||'';
+ memberLogout.textContent=translations[lang].memberLogout;
  updateHeroGreeting();
 }
 function setMemberMode(mode){
@@ -900,6 +923,19 @@ function setMemberMode(mode){
 }
 memberModeToggle.type='button';
 memberModeToggle.addEventListener('click',(event)=>{event.preventDefault();event.stopPropagation();setMemberMode(memberMode==='register'?'login':'register');});
+memberLogout.addEventListener('click',async()=>{
+ memberLogout.disabled=true;
+ try{
+  const {error}=await ffcSupabase.auth.signOut();
+  if(error)throw error;
+  memberPassword.value='';
+  memberForm.reset();
+  setMemberMode('login');
+  memberMessage(translations[lang].memberLoggedOut);
+  showMemberSession(null);
+ }catch(error){console.error('FFC sign-out failed',error);memberMessage(translations[lang].memberLogoutError);}
+ finally{memberLogout.disabled=false;}
+});
 memberForm.addEventListener('submit',async(event)=>{
  event.preventDefault();
  if(!memberForm.reportValidity())return;
@@ -1031,7 +1067,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       window.__ffcShowInstallPanel();
     }
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=37',{scope:'/fast-furious-club/'})
+      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=38',{scope:'/fast-furious-club/'})
         .then(registration=>console.info('FFC service worker ready',registration.scope))
         .catch(error=>console.error('FFC service worker registration failed',error));
     }
