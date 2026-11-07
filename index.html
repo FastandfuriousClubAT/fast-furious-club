@@ -498,7 +498,7 @@ main{padding-top:26px}
 @media(max-width:680px){.hero .btnrow{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hero .btnrow .btn{min-height:54px;font-size:13px}}
 @media(max-width:390px){.hero .btnrow .btn{font-size:12px;padding:10px 7px}}
 
-#memberAuthForms h3{margin:20px 0 12px;color:#173546;font-size:18px}#memberAuthForms form+form{border-top:1px solid var(--line);padding-top:8px}#memberAuthForms button+button{margin-left:8px}#memberSignedIn{padding:16px;background:#f3f8ed;border:1px solid #d7e7bd;border-radius:13px;color:#173546}#memberSignedIn button{margin-top:8px}
+#memberAuthForms h3{margin:20px 0 12px;color:#173546;font-size:18px}#memberAuthForms form+form{border-top:1px solid var(--line);padding-top:8px}#memberAuthForms button+button{margin-left:8px}#memberSignedIn{padding:16px;background:#f3f8ed;border:1px solid #d7e7bd;border-radius:13px;color:#173546}#memberSignedIn button{margin-top:8px}#memberWelcome{font-size:22px;font-weight:850;color:#173546;margin:0 0 10px}#memberWelcome[hidden]{display:none}
 </style></head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
@@ -544,6 +544,7 @@ main{padding-top:26px}
   </form>
  </div>
  <div id="memberSignedIn" class="hidden">
+  <p id="memberWelcome" class="member-welcome" hidden></p>
   <p><strong data-t="memberSignedInLabel">Jsi přihlášen jako:</strong> <span id="memberSignedInEmail"></span></p>
   <button class="btn secondary" type="button" id="memberSignOut" data-t="memberSignOut">Odhlásit se</button>
  </div>
@@ -853,7 +854,20 @@ const memberLoginForm=document.getElementById('memberLoginForm');
 const memberNotice=document.getElementById('memberNotice');
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
 function memberText(key){return translations[lang]?.[key]||translations.de[key]||key;}
+let currentMemberUser=null;
+function updateMemberWelcome(){
+ const welcome=document.getElementById('memberWelcome');
+ if(!welcome)return;
+ const user=currentMemberUser;
+ if(!user){welcome.hidden=true;welcome.textContent='';return;}
+ const fullName=String(user.user_metadata?.full_name||'').trim();
+ const firstName=fullName?fullName.split(/\\s+/)[0]:(user.email||'').split('@')[0];
+ const greeting=lang==='de'?'Willkommen':lang==='uk'?'Вітаємо':'Vítej';
+ welcome.textContent=greeting+', '+firstName+'!';
+ welcome.hidden=false;
+}
 function renderMemberSession(user){
+ currentMemberUser=user||null;
  const forms=document.getElementById('memberAuthForms'),signed=document.getElementById('memberSignedIn');
  if(user){
   forms.classList.add('hidden');signed.classList.remove('hidden');
@@ -863,7 +877,9 @@ function renderMemberSession(user){
   forms.classList.remove('hidden');signed.classList.add('hidden');
   document.getElementById('memberWhatsapp').classList.add('hidden');
  }
+ updateMemberWelcome();
 }
+document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',updateMemberWelcome));
 async function refreshMemberSession(){
  const {data,error}=await ffcSupabase.auth.getSession();
  if(error)console.warn('FFC session check failed',error);
