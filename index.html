@@ -564,7 +564,19 @@ main{padding-top:26px}
 <div class="field full"><label for="notes" data-t="notes">Další přání</label><textarea id="notes" placeholder="Např. konkrétní země, děti, ubytování, tempo programu…"></textarea></div>
 <div class="field full"><label class="check" style="border-radius:10px;align-items:flex-start"><input type="checkbox" id="privacy" required><span data-t="privacy">Souhlasím s tím, aby mě pořadatel kontaktoval ohledně této poptávky. (V ostré verzi bude doplněno řádné informační sdělení o ochraně osobních údajů.)</span></label></div>
 <div class="field full"><button class="btn dark" type="submit" data-t="send">Připravit poptávku</button><div class="notice" id="notice" role="status"></div></div></div></form></section>
-<section class="section"><div class="sectionhead"><div><h2 data-t="trustTitle">Skutečné zážitky, skutečné recenze</h2><p class="sub" data-t="trustSub">Hodnocení a recenze přímo z našeho profilu na Google.</p></div><a href="https://maps.app.goo.gl/DwnmGiY79v5MB2w67" target="_blank" rel="noopener noreferrer" class="btn secondary" data-t="google">Google Maps ↗</a></div><div class="review google-review-panel"><div id="googleReviewSummary" class="google-review-summary" hidden><span id="googleReviewStars" class="stars" aria-label="Google rating">★★★★★</span><strong id="googleReviewRating"></strong><span id="googleReviewCount" class="sub"></span></div><p class="sub" data-t="googleReviewsIntro">Načti aktuální hodnocení a recenze z našeho profilu na Google.</p><div id="googleReviewList" class="google-review-list"></div><button type="button" class="btn dark" id="loadGoogleReviews" data-t="googleReviewsLoad">Načíst recenze z Google</button><div id="googleReviewNotice" class="google-review-notice" role="status" aria-live="polite"></div><p class="google-review-policy" data-t="googleReviewsPolicy">Recenze jsou řazeny podle relevance. Google jednotlivé recenze neověřuje, ale kontroluje a odstraňuje falešný obsah, když jej zjistí.</p><div class="google-attribution" translate="no">Google Maps</div></div></section>
+<section class="section"><div class="sectionhead"><div><h2 data-t="trustTitle">Skutečné zážitky, skutečné recenze</h2><p class="sub" data-t="trustSub">Hodnocení a recenze přímo z našeho profilu na Google.</p></div><a href="https://maps.app.goo.gl/DwnmGiY79v5MB2w67" target="_blank" rel="noopener noreferrer" class="btn secondary" data-t="google">Google Maps ↗</a></div><div class="review google-review-panel"><div id="googleReviewSummary" class="google-review-summary" hidden><span id="googleReviewStars" class="stars" aria-label="Google rating">★★★★★</span><strong id="googleReviewRating"></strong><span id="googleReviewCount" class="sub"></span></div><p class="sub" data-t="googleReviewsIntro">Načti aktuální hodnocení a recenze z našeho profilu na Google.</p><div id="googleReviewList" class="google-review-list"></div><button type="button" class="btn dark" id="loadGoogleReviews" data-t="googleReviewsLoad">Načíst recenze z Google</button><div id="googleReviewNotice" class="google-review-notice" role="status" aria-live="polite"></div><p class="google-review-policy" data-t="googleReviewsPolicy">Recenze jsou řazeny podle relevance. Google jednotlivé recenze neověřuje, ale kontroluje a odstraňuje falešný obsah, když jej zjistí.</p><div class="review-submit-panel" style="margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#f8fafb">
+<h3 data-t="customerReviewTitle">Ohodnoť svou zkušenost</h3>
+<p class="sub" data-t="customerReviewIntro">Tvoje hodnocení uložíme do našeho zákaznického systému. Poté můžeš dobrovolně napsat vlastní recenzi také na Google.</p>
+<form id="customerReviewForm">
+<div class="formgrid">
+<div class="field"><label for="customerReviewName" data-t="customerReviewName">Jméno (nepovinné)</label><input id="customerReviewName" maxlength="80" autocomplete="name"></div>
+<div class="field"><label for="customerReviewService" data-t="customerReviewService">Čeho se hodnocení týká?</label><select id="customerReviewService"><option value="trip" data-t="customerReviewTrip">Výlet</option><option value="airport_transfer" data-t="customerReviewTransfer">Letištní transfer</option><option value="ride" data-t="customerReviewRide">Jiná jízda</option><option value="other" data-t="customerReviewOther">Jiné</option></select></div>
+<div class="field"><label for="customerReviewRating" data-t="customerReviewRating">Hodnocení</label><select id="customerReviewRating" required><option value="5">5 ★★★★★</option><option value="4">4 ★★★★☆</option><option value="3">3 ★★★☆☆</option><option value="2">2 ★★☆☆☆</option><option value="1">1 ★☆☆☆☆</option></select></div>
+<div class="field full"><label for="customerReviewText" data-t="customerReviewTextLabel">Tvoje zkušenost (10–2000 znaků)</label><textarea id="customerReviewText" minlength="10" maxlength="2000" required></textarea></div>
+<div class="field full"><button class="btn dark" type="submit" id="submitCustomerReview" data-t="customerReviewSubmit">Odeslat hodnocení</button><div class="notice" id="customerReviewNotice" role="status" aria-live="polite"></div>
+<a id="googleWriteReview" class="btn" href="https://search.google.com/local/writereview?placeid=ChIJN4f3RjmTC0cR5e4jXRE7ics" target="_blank" rel="noopener noreferrer" hidden data-t="customerReviewGoogleCta">Napsat vlastní recenzi na Google ↗</a>
+<p class="sub" style="font-size:12px" data-t="customerReviewGoogleNote">Odkaz na Google se zobrazí po odeslání. Recenzi na Google píšeš a zveřejňuješ sám/sama; zveřejnění není automatické. Hodnocení je dobrovolné a bez odměny.</p>
+</div></div></form></div><div class="google-attribution" translate="no">Google Maps</div></div></section>
 <footer class="footer"><span>© Fast & Furious Club · Fast and Furious s.r.o.</span><span data-t="prototype">Interaktivní prototyp — zatím bez serveru, registrace a ukládání objednávek.</span></footer>
 </main>
 <script>
@@ -611,6 +623,27 @@ Object.assign(translations.uk,{
 Object.assign(translations.cz,{memberCta:'♥ Registrace'});
 Object.assign(translations.de,{memberCta:'♥ Registrieren'});
 Object.assign(translations.uk,{memberCta:'♥ Реєстрація'});
+Object.assign(translations.cz,{
+ customerReviewTitle:'Ohodnoť svou zkušenost',customerReviewIntro:'Tvoje hodnocení uložíme do našeho zákaznického systému. Poté můžeš dobrovolně napsat vlastní recenzi také na Google.',
+ customerReviewName:'Jméno (nepovinné)',customerReviewService:'Čeho se hodnocení týká?',customerReviewTrip:'Výlet',customerReviewTransfer:'Letištní transfer',customerReviewRide:'Jiná jízda',customerReviewOther:'Jiné',
+ customerReviewRating:'Hodnocení',customerReviewTextLabel:'Tvoje zkušenost (10–2000 znaků)',customerReviewSubmit:'Odeslat hodnocení',
+ customerReviewSaved:'Děkujeme! Tvoje hodnocení bylo uloženo. Pokud chceš, můžeš nyní napsat vlastní recenzi na Google.',customerReviewError:'Hodnocení se nepodařilo uložit. Zkus to prosím znovu později.',
+ customerReviewGoogleCta:'Napsat vlastní recenzi na Google ↗',customerReviewGoogleNote:'Odkaz na Google se zobrazí po odeslání. Recenzi na Google píšeš a zveřejňuješ sám/sama; zveřejnění není automatické. Hodnocení je dobrovolné a bez odměny.'
+});
+Object.assign(translations.de,{
+ customerReviewTitle:'Teile deine Erfahrung',customerReviewIntro:'Wir speichern deine Bewertung in unserem Kundensystem. Anschließend kannst du freiwillig auch eine eigene Google-Rezension verfassen.',
+ customerReviewName:'Name (optional)',customerReviewService:'Worauf bezieht sich die Bewertung?',customerReviewTrip:'Ausflug',customerReviewTransfer:'Flughafentransfer',customerReviewRide:'Andere Fahrt',customerReviewOther:'Sonstiges',
+ customerReviewRating:'Bewertung',customerReviewTextLabel:'Deine Erfahrung (10–2000 Zeichen)',customerReviewSubmit:'Bewertung senden',
+ customerReviewSaved:'Vielen Dank! Deine Bewertung wurde gespeichert. Wenn du möchtest, kannst du jetzt auch eine eigene Google-Rezension schreiben.',customerReviewError:'Die Bewertung konnte nicht gespeichert werden. Bitte versuche es später erneut.',
+ customerReviewGoogleCta:'Eigene Google-Rezension schreiben ↗',customerReviewGoogleNote:'Der Google-Link erscheint nach dem Absenden. Du verfasst und veröffentlichst die Google-Rezension selbst; sie wird nicht automatisch veröffentlicht. Die Bewertung ist freiwillig und ohne Gegenleistung.'
+});
+Object.assign(translations.uk,{
+ customerReviewTitle:'Поділися своїм досвідом',customerReviewIntro:'Ми збережемо твою оцінку в нашій системі. Після цього ти зможеш за бажанням написати власний відгук у Google.',
+ customerReviewName:"Ім’я (необов’язково)",customerReviewService:'Що саме оцінюєш?',customerReviewTrip:'Подорож',customerReviewTransfer:'Трансфер до аеропорту',customerReviewRide:'Інша поїздка',customerReviewOther:'Інше',
+ customerReviewRating:'Оцінка',customerReviewTextLabel:'Твій досвід (10–2000 символів)',customerReviewSubmit:'Надіслати оцінку',
+ customerReviewSaved:'Дякуємо! Твою оцінку збережено. За бажанням тепер можеш написати власний відгук у Google.',customerReviewError:'Не вдалося зберегти оцінку. Спробуй пізніше.',
+ customerReviewGoogleCta:'Написати власний відгук у Google ↗',customerReviewGoogleNote:'Посилання на Google з’явиться після надсилання. Відгук у Google ти пишеш і публікуєш самостійно; автоматичної публікації немає. Оцінка добровільна й без винагороди.'
+});
 let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 setLang(lang);
@@ -735,6 +768,34 @@ googleReviewButton.addEventListener('click',async()=>{
  }finally{googleReviewButton.disabled=false;}
 });
 
+const customerReviewForm=document.getElementById('customerReviewForm');
+if(customerReviewForm){
+ customerReviewForm.addEventListener('submit',async(event)=>{
+  event.preventDefault();
+  if(!customerReviewForm.reportValidity())return;
+  const submitButton=document.getElementById('submitCustomerReview');
+  const notice=document.getElementById('customerReviewNotice');
+  const googleCta=document.getElementById('googleWriteReview');
+  submitButton.disabled=true;notice.classList.remove('show');
+  notice.textContent=lang==='de'?'Bewertung wird gespeichert…':lang==='uk'?'Зберігаємо оцінку…':'Ukládám hodnocení…';notice.classList.add('show');
+  googleCta.hidden=true;
+  try{
+   const {data,error}=await ffcSupabase.functions.invoke('submit-customer-review',{method:'POST',body:{
+    display_name:document.getElementById('customerReviewName').value.trim(),
+    service_type:document.getElementById('customerReviewService').value,
+    rating:Number(document.getElementById('customerReviewRating').value),
+    review_text:document.getElementById('customerReviewText').value.trim()
+   }});
+   if(error||!data?.success)throw error||new Error('Review was not saved');
+   notice.textContent=translations[lang].customerReviewSaved;
+   googleCta.hidden=false;
+   customerReviewForm.reset();
+  }catch(error){
+   console.error('FFC customer review submission failed',error);
+   notice.textContent=translations[lang].customerReviewError;
+  }finally{submitButton.disabled=false;}
+ });
+}
 const memberForm=document.getElementById('memberForm');
 const memberNotice=document.getElementById('memberNotice');
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
