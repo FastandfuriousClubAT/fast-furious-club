@@ -520,6 +520,7 @@ main{padding-top:26px}
 <section class="panel" id="memberArea">
  <h2 data-t="memberTitle">♥ Registrace zákazníka</h2>
  <p class="sub" data-t="memberIntro">Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.</p>
+ <div class="notice" id="memberSessionStatus" role="status" aria-live="polite"></div>
  <form id="memberForm">
   <div class="formgrid">
    <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" placeholder="Jméno a příjmení" minlength="2" maxlength="120" required></div>
@@ -715,19 +716,19 @@ Object.assign(translations.uk,{
 
 Object.assign(translations.cz,{
  memberPassword:'Heslo (min. 8 znaků)',memberLogin:'Přihlásit se',memberRegistering:'Vytvářím účet a ukládám registraci…',
- memberLoggingIn:'Přihlašuji…',memberLoginSuccess:'Jsi přihlášen/a. Vítej zpět!',memberCheckEmail:'Účet byl vytvořen. Dokonči registraci podle pokynů v e-mailu.',
+ memberLoggingIn:'Přihlašuji…',memberLoginSuccess:'Přihlášení proběhlo úspěšně.',memberSession:'🟢 Jsi přihlášen/a jako {name}.',memberCheckEmail:'Účet byl vytvořen. Dokonči registraci podle pokynů v e-mailu.',
  memberExists:'Účet s tímto e-mailem už existuje. Přepni na přihlášení.',memberLoginError:'E-mail nebo heslo nejsou správné.',
  memberSwitchToLogin:'Už mám účet – přihlásit se',memberSwitchToRegister:'Ještě nemám účet – registrovat se'
 });
 Object.assign(translations.de,{
  memberPassword:'Passwort (mind. 8 Zeichen)',memberLogin:'Anmelden',memberRegistering:'Konto wird erstellt und Registrierung gespeichert…',
- memberLoggingIn:'Anmeldung läuft…',memberLoginSuccess:'Du bist angemeldet. Willkommen zurück!',memberCheckEmail:'Das Konto wurde erstellt. Bitte folge den Anweisungen in deiner E-Mail.',
+ memberLoggingIn:'Anmeldung läuft…',memberLoginSuccess:'Anmeldung erfolgreich.',memberSession:'🟢 Du bist angemeldet als {name}.',memberCheckEmail:'Das Konto wurde erstellt. Bitte folge den Anweisungen in deiner E-Mail.',
  memberExists:'Für diese E-Mail-Adresse besteht bereits ein Konto. Bitte zur Anmeldung wechseln.',memberLoginError:'E-Mail-Adresse oder Passwort sind falsch.',
  memberSwitchToLogin:'Ich habe bereits ein Konto – anmelden',memberSwitchToRegister:'Ich habe noch kein Konto – registrieren'
 });
 Object.assign(translations.uk,{
  memberPassword:'Пароль (мін. 8 символів)',memberLogin:'Увійти',memberRegistering:'Створюємо обліковий запис і зберігаємо реєстрацію…',
- memberLoggingIn:'Вхід…',memberLoginSuccess:'Ви увійшли. З поверненням!',memberCheckEmail:'Обліковий запис створено. Виконайте інструкції в електронному листі.',
+ memberLoggingIn:'Вхід…',memberLoginSuccess:'Вхід успішний.',memberSession:'🟢 Ви увійшли як {name}.',memberCheckEmail:'Обліковий запис створено. Виконайте інструкції в електронному листі.',
  memberExists:'Для цієї електронної адреси обліковий запис уже існує. Перейдіть до входу.',memberLoginError:'Неправильна електронна адреса або пароль.',
  memberSwitchToLogin:'Уже маю обліковий запис – увійти',memberSwitchToRegister:'Ще не маю облікового запису – зареєструватися'
 });
@@ -859,8 +860,15 @@ const memberModeToggle=document.getElementById('memberModeToggle');
 const memberNameField=document.getElementById('memberName').closest('.field');
 const memberPhoneField=document.getElementById('memberPhone').closest('.field');
 const memberPassword=document.getElementById('memberPassword');
+const memberSessionStatus=document.getElementById('memberSessionStatus');
 let memberMode='register';
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
+function showMemberSession(user){
+ if(!user){memberSessionStatus.textContent='';memberSessionStatus.classList.remove('show');return;}
+ const name=(user.user_metadata?.full_name||user.user_metadata?.name||user.email||'zákazník').trim();
+ memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',name);
+ memberSessionStatus.classList.add('show');
+}
 function setMemberMode(mode){
  memberMode=mode;
  const registering=mode==='register';
@@ -915,8 +923,9 @@ memberForm.addEventListener('submit',async(event)=>{
    memberForm.reset();
   }else{
    memberMessage(translations[lang].memberLoggingIn);
-   const {error}=await ffcSupabase.auth.signInWithPassword({email,password});
+   const {data,error}=await ffcSupabase.auth.signInWithPassword({email,password});
    if(error)throw error;
+   showMemberSession(data.user);
    memberMessage(translations[lang].memberLoginSuccess);
    memberPassword.value='';
   }
@@ -936,6 +945,15 @@ memberForm.addEventListener('submit',async(event)=>{
  }
 });
 setMemberMode('register');
+
+// Restore the signed-in indicator after a refresh and keep it synchronized.
+ffcSupabase.auth.getUser().then(({data,error})=>{
+ if(error){console.warn('FFC session check failed',error);return;}
+ showMemberSession(data.user);
+});
+ffcSupabase.auth.onAuthStateChange((event,session)=>{
+ showMemberSession(session?.user||null);
+});
 
 </script>
 <script>
