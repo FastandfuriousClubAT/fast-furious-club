@@ -648,7 +648,7 @@ Object.assign(translations.uk,{
  customerReviewSaved:'Дякуємо! Твій відгук одразу опубліковано. За бажанням тепер можеш написати власний відгук у Google.',customerReviewError:'Не вдалося зберегти оцінку. Спробуй пізніше.',
  customerReviewGoogleCta:'Написати власний відгук у Google ↗',customerReviewGoogleNote:'Посилання на Google з’явиться після надсилання. Відгук у Google ти пишеш і публікуєш самостійно; автоматичної публікації немає. Оцінка добровільна й без винагороди.'
 });
-let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
+let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});if(typeof updateHeroGreeting==='function')updateHeroGreeting();document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 setLang(lang);
 function setMinimumDates(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+1);const min=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');['airportDate','rideDate','dateFrom','dateTo'].forEach(id=>{const el=document.getElementById(id);if(el){el.min=min;if(el.value&&el.value<min)el.value='';}});const from=document.getElementById('dateFrom'),to=document.getElementById('dateTo');if(from&&to){to.min=from.value&&from.value>min?from.value:min;}}
@@ -863,11 +863,22 @@ const memberPassword=document.getElementById('memberPassword');
 const memberSessionStatus=document.getElementById('memberSessionStatus');
 let memberMode='register';
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
+let currentMemberUser=null;
+function updateHeroGreeting(){
+ const hero=document.querySelector('[data-t="hero"]');
+ if(!hero)return;
+ if(!currentMemberUser){hero.textContent=translations[lang].hero;return;}
+ const name=(currentMemberUser.user_metadata?.full_name||currentMemberUser.user_metadata?.name||currentMemberUser.email||'').trim();
+ const greeting=lang==='de'?'Wo soll es hingehen, '+name+'?':lang==='uk'?'То куди вирушимо, '+name+'?':'Tak kam vyrazíme, '+name+'?';
+ hero.textContent=greeting;
+}
 function showMemberSession(user){
- if(!user){memberSessionStatus.textContent='';memberSessionStatus.classList.remove('show');return;}
+ currentMemberUser=user||null;
+ if(!user){memberSessionStatus.textContent='';memberSessionStatus.classList.remove('show');updateHeroGreeting();return;}
  const name=(user.user_metadata?.full_name||user.user_metadata?.name||user.email||'zákazník').trim();
  memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',name);
  memberSessionStatus.classList.add('show');
+ updateHeroGreeting();
 }
 function setMemberMode(mode){
  memberMode=mode;
