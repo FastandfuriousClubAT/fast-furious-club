@@ -525,10 +525,12 @@ main{padding-top:26px}
    <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" placeholder="Jméno a příjmení" minlength="2" maxlength="120" required></div>
    <div class="field"><label for="memberPhone" data-t="memberPhone">Telefon</label><input id="memberPhone" name="phone" type="tel" autocomplete="tel" placeholder="+43..." minlength="6" maxlength="30" required></div>
    <div class="field full"><label for="memberEmail" data-t="memberEmail">E-mail</label><input id="memberEmail" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
+   <div class="field full" id="memberPasswordField"><label for="memberPassword" data-t="memberPassword">Heslo</label><input id="memberPassword" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></div>
    <div class="field full"><button class="btn dark" id="memberRegister" type="submit" data-t="memberRegister">Zaregistrovat se</button></div>
   </div>
  </form>
- <p class="sub" data-t="memberAdminNote">Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.</p>
+ <button type="button" class="btn secondary" id="memberModeToggle" data-t="memberSwitchToLogin">Už mám účet – přihlásit se</button>
+ <p class="sub" data-t="memberAdminNote">Registrace vytvoří zákaznický účet pro další přihlášení.</p>
  <div class="notice" id="memberNotice" role="status"></div>
  <a class="btn dark hidden" id="memberWhatsapp" href="https://wa.me/4369010007070" target="_blank" rel="noopener noreferrer" data-t="memberWhatsapp">Napsat nám přes WhatsApp</a>
 </section>\n<section class="panel airport-panel" id="airportRequest"><h2 data-t="airportTitle">✈ Letištní transfer</h2><p class="airport-intro" data-t="airportPriceNote">Vyber směr a letiště. Jde vždy o jednu cestu.</p><form id="airportForm"><div class="formgrid">
@@ -711,6 +713,24 @@ Object.assign(translations.uk,{
  googleReviewsView:'Переглянути відгук у Google Maps',googleReviewsReport:'Поскаржитися на відгук'
 });
 
+Object.assign(translations.cz,{
+ memberPassword:'Heslo (min. 8 znaků)',memberLogin:'Přihlásit se',memberRegistering:'Vytvářím účet a ukládám registraci…',
+ memberLoggingIn:'Přihlašuji…',memberLoginSuccess:'Jsi přihlášen/a. Vítej zpět!',memberCheckEmail:'Účet byl vytvořen. Dokonči registraci podle pokynů v e-mailu.',
+ memberExists:'Účet s tímto e-mailem už existuje. Přepni na přihlášení.',memberLoginError:'E-mail nebo heslo nejsou správné.',
+ memberSwitchToLogin:'Už mám účet – přihlásit se',memberSwitchToRegister:'Ještě nemám účet – registrovat se'
+});
+Object.assign(translations.de,{
+ memberPassword:'Passwort (mind. 8 Zeichen)',memberLogin:'Anmelden',memberRegistering:'Konto wird erstellt und Registrierung gespeichert…',
+ memberLoggingIn:'Anmeldung läuft…',memberLoginSuccess:'Du bist angemeldet. Willkommen zurück!',memberCheckEmail:'Das Konto wurde erstellt. Bitte folge den Anweisungen in deiner E-Mail.',
+ memberExists:'Für diese E-Mail-Adresse besteht bereits ein Konto. Bitte zur Anmeldung wechseln.',memberLoginError:'E-Mail-Adresse oder Passwort sind falsch.',
+ memberSwitchToLogin:'Ich habe bereits ein Konto – anmelden',memberSwitchToRegister:'Ich habe noch kein Konto – registrieren'
+});
+Object.assign(translations.uk,{
+ memberPassword:'Пароль (мін. 8 символів)',memberLogin:'Увійти',memberRegistering:'Створюємо обліковий запис і зберігаємо реєстрацію…',
+ memberLoggingIn:'Вхід…',memberLoginSuccess:'Ви увійшли. З поверненням!',memberCheckEmail:'Обліковий запис створено. Виконайте інструкції в електронному листі.',
+ memberExists:'Для цієї електронної адреси обліковий запис уже існує. Перейдіть до входу.',memberLoginError:'Неправильна електронна адреса або пароль.',
+ memberSwitchToLogin:'Уже маю обліковий запис – увійти',memberSwitchToRegister:'Ще не маю облікового запису – зареєструватися'
+});
 const FFC_SUPABASE_URL='https://ljvcxwaipoepefwfdmnu.supabase.co';
 const FFC_SUPABASE_KEY='sb_publishable_pH0P9QZGE7BNIXKiUHwKag_8XxTiJ07';
 const ffcSupabase=window.supabase.createClient(FFC_SUPABASE_URL,FFC_SUPABASE_KEY);
@@ -835,34 +855,83 @@ if(customerReviewForm){
 }
 const memberForm=document.getElementById('memberForm');
 const memberNotice=document.getElementById('memberNotice');
+const memberModeToggle=document.getElementById('memberModeToggle');
+const memberNameField=document.getElementById('memberName').closest('.field');
+const memberPhoneField=document.getElementById('memberPhone').closest('.field');
+const memberPassword=document.getElementById('memberPassword');
+let memberMode='register';
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
+function setMemberMode(mode){
+ memberMode=mode;
+ const registering=mode==='register';
+ memberNameField.classList.toggle('hidden',!registering);
+ memberPhoneField.classList.toggle('hidden',!registering);
+ document.getElementById('memberName').required=registering;
+ document.getElementById('memberPhone').required=registering;
+ memberPassword.autocomplete=registering?'new-password':'current-password';
+ memberPassword.minLength=registering?8:1;
+ document.getElementById('memberRegister').textContent=registering?translations[lang].memberRegister:translations[lang].memberLogin;
+ document.getElementById('memberPasswordField').querySelector('label').textContent=translations[lang].memberPassword;
+ memberModeToggle.textContent=registering?translations[lang].memberSwitchToLogin:translations[lang].memberSwitchToRegister;
+ memberNotice.classList.remove('show');
+}
+memberModeToggle.addEventListener('click',()=>setMemberMode(memberMode==='register'?'login':'register'));
 memberForm.addEventListener('submit',async(event)=>{
  event.preventDefault();
  if(!memberForm.reportValidity())return;
+ const email=document.getElementById('memberEmail').value.trim().toLowerCase();
+ const password=memberPassword.value;
  const fullName=document.getElementById('memberName').value.trim();
  const phone=document.getElementById('memberPhone').value.trim().replace(/[^\d+]/g,'');
- const email=document.getElementById('memberEmail').value.trim().toLowerCase();
+ const submitButton=document.getElementById('memberRegister');
+ submitButton.disabled=true;
  memberNotice.classList.remove('show');
- memberMessage(lang==='de'?'Registrierung wird gespeichert…':lang==='uk'?'Реєструємо дані…':'Ukládám registraci…');
  try{
-  const {error}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
-  if(error&&error.code!=='23505')throw error;
-  memberMessage(translations[lang].memberThanks.replace('{name}',fullName));
-  const whatsappButton=document.getElementById('memberWhatsapp');
-  const whatsappMessages={
-   cz:'Dobrý den, jsem registrovaný zákazník Fast & Furious Club. Jmenuji se '+fullName+' a rád bych se na něco zeptal.',
-   de:'Guten Tag, ich bin bei Fast & Furious Club registriert. Mein Name ist '+fullName+' und ich hätte eine Frage.',
-   uk:'Добрий день! Я зареєстрований клієнт Fast & Furious Club. Мене звати '+fullName+', і я хотів би дещо запитати.'
-  };
-  whatsappButton.href='https://wa.me/4369010007070?text='+encodeURIComponent(whatsappMessages[lang]||whatsappMessages.de);
-  whatsappButton.classList.remove('hidden');
-  memberForm.reset();
+  if(memberMode==='register'){
+   memberMessage(translations[lang].memberRegistering);
+   const {data,error}=await ffcSupabase.auth.signUp({
+    email,password,
+    options:{data:{full_name:fullName,phone,ffc_customer:'true'}}
+   });
+   if(error)throw error;
+   if(!data.user)throw new Error('Account creation did not return a user');
+   if(!data.session){
+    memberMessage(translations[lang].memberCheckEmail);
+    return;
+   }
+   memberMessage(translations[lang].memberThanks.replace('{name}',fullName));
+   const whatsappButton=document.getElementById('memberWhatsapp');
+   const whatsappMessages={
+    cz:'Dobrý den, právě jsem si vytvořil/a účet Fast & Furious Club. Jmenuji se '+fullName+' a rád/a bych se na něco zeptal/a.',
+    de:'Guten Tag, ich habe gerade ein Konto bei Fast & Furious Club erstellt. Mein Name ist '+fullName+' und ich hätte eine Frage.',
+    uk:'Добрий день! Я щойно створив/створила обліковий запис Fast & Furious Club. Мене звати '+fullName+'.'
+   };
+   whatsappButton.href='https://wa.me/4369010007070?text='+encodeURIComponent(whatsappMessages[lang]||whatsappMessages.de);
+   whatsappButton.classList.remove('hidden');
+   memberForm.reset();
+  }else{
+   memberMessage(translations[lang].memberLoggingIn);
+   const {error}=await ffcSupabase.auth.signInWithPassword({email,password});
+   if(error)throw error;
+   memberMessage(translations[lang].memberLoginSuccess);
+   memberPassword.value='';
+  }
  }catch(error){
-  console.error('FFC customer registration failed',error);
-  memberMessage(translations[lang].memberError);
+  console.error('FFC customer account action failed',error);
+  const msg=(error?.message||'').toLowerCase();
+  if(memberMode==='register'&&(msg.includes('already registered')||msg.includes('already been registered')||msg.includes('user already registered'))){
+   memberMessage(translations[lang].memberExists);
+  }else if(memberMode==='login'&&(msg.includes('invalid login credentials')||msg.includes('invalid credentials'))){
+   memberMessage(translations[lang].memberLoginError);
+  }else{
+   memberMessage(translations[lang].memberError);
+  }
+ }finally{
+  submitButton.disabled=false;
+  memberNotice.scrollIntoView({behavior:'smooth',block:'nearest'});
  }
- memberNotice.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
+setMemberMode('register');
 
 </script>
 <script>
