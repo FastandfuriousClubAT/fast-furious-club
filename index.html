@@ -523,7 +523,8 @@ main{padding-top:26px}
  <div class="notice" id="memberSessionStatus" role="status" aria-live="polite"></div>
  <form id="memberForm">
   <div class="formgrid">
-   <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" placeholder="Jméno a příjmení" minlength="2" maxlength="120" required></div>
+   <div class="field"><label for="memberFirstName" data-t="memberFirstName">Jméno</label><input id="memberFirstName" name="first_name" autocomplete="given-name" placeholder="Jméno" minlength="1" maxlength="60" required></div>
+   <div class="field"><label for="memberLastName" data-t="memberLastName">Příjmení</label><input id="memberLastName" name="last_name" autocomplete="family-name" placeholder="Příjmení" minlength="1" maxlength="60" required></div>
    <div class="field"><label for="memberPhone" data-t="memberPhone">Telefon</label><input id="memberPhone" name="phone" type="tel" autocomplete="tel" placeholder="+43..." minlength="6" maxlength="30" required></div>
    <div class="field full"><label for="memberEmail" data-t="memberEmail">E-mail</label><input id="memberEmail" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
    <div class="field full" id="memberPasswordField"><label for="memberPassword" data-t="memberPassword">Heslo</label><input id="memberPassword" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></div>
@@ -608,19 +609,19 @@ Object.assign(translations.de,{rideButton:'Fahrt anfragen',rideTitle:'Fahrt anfr
 Object.assign(translations.uk,{rideButton:'Замовити поїздку',rideTitle:'Замовити поїздку',rideIntro:'Необов’язковий запит на поїздку. Заповни дані, і ми зв’яжемося з тобою.',rideDate:'Дата поїздки',rideTime:'Час поїздки',rideFrom:'Звідки',rideTo:'Куди',ridePeople:'Кількість пасажирів',rideSend:'Надіслати запит',airportTitle:'✈ Трансфер до аеропорту',airportPriceNote:'Обери напрямок та аеропорт. Доступна лише поїздка в один бік, без трансферу туди й назад.',airportDirection:'Напрямок трансферу',airportTo:'Трансфер до аеропорту',airportFrom:'Трансфер з аеропорту',airportSelect:'Аеропорт',airportAddress:'Місце посадки / адреса призначення',airportSend:'Запитати трансфер',contactName:'Ім’я',contactPhone:'Телефон',contactEmail:'Електронна пошта'});
 Object.assign(translations.cz,{
  memberTitle:'♥ Registrace zákazníka',memberIntro:'Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.',
- memberName:'Jméno a příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
+ memberFirstName:'Jméno',memberLastName:'Příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
  memberAdminNote:'Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.',
  memberThanks:'Vítejte, {name}! Vaše registrace se zpracovává.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
 });
 Object.assign(translations.de,{
  memberTitle:'♥ Kundenregistrierung',memberIntro:'Gib Name, Telefonnummer und E-Mail-Adresse ein. Diese Kombination dient dazu, dich bei weiteren Anfragen wiederzuerkennen. Es werden keine SMS oder Bestätigungscodes versendet.',
- memberName:'Vor- und Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
+ memberFirstName:'Vorname',memberLastName:'Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
  memberAdminNote:'Kunden können ihre Angaben nicht selbst ändern. Änderungen nimmt der Veranstalter nach Absprache mit dem Kunden vor.',
  memberThanks:'Willkommen, {name}! Ihre Registrierung wird bearbeitet.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
 });
 Object.assign(translations.uk,{
  memberTitle:'♥ Реєстрація клієнта',memberIntro:'Вкажи ім’я, телефон та електронну пошту. Ця комбінація допоможе впізнати тебе під час наступних запитів. SMS та коди підтвердження не надсилаються.',
- memberName:'Ім’я та прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
+ memberFirstName:'Ім’я',memberLastName:'Прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
  memberAdminNote:'Клієнт не може самостійно змінювати дані. Організатор вносить зміни лише за погодженням із клієнтом.',
  memberThanks:'Вітаємо, {name}! Ваша реєстрація обробляється.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
 });
@@ -857,7 +858,8 @@ if(customerReviewForm){
 const memberForm=document.getElementById('memberForm');
 const memberNotice=document.getElementById('memberNotice');
 const memberModeToggle=document.getElementById('memberModeToggle');
-const memberNameField=document.getElementById('memberName').closest('.field');
+const memberFirstNameField=document.getElementById('memberFirstName').closest('.field');
+const memberLastNameField=document.getElementById('memberLastName').closest('.field');
 const memberPhoneField=document.getElementById('memberPhone').closest('.field');
 const memberPassword=document.getElementById('memberPassword');
 const memberSessionStatus=document.getElementById('memberSessionStatus');
@@ -868,7 +870,7 @@ function updateHeroGreeting(){
  const hero=document.querySelector('[data-t="hero"]');
  if(!hero)return;
  if(!currentMemberUser){hero.textContent=translations[lang].hero;return;}
- const name=(currentMemberUser.user_metadata?.full_name||currentMemberUser.user_metadata?.name||currentMemberUser.email||'').trim();
+ const name=(currentMemberUser.user_metadata?.first_name||currentMemberUser.user_metadata?.full_name?.trim().split(/\\s+/)[0]||currentMemberUser.user_metadata?.name||currentMemberUser.email||'').trim();
  const greeting=lang==='de'?'Wo soll es hingehen, '+name+'?':lang==='uk'?'То куди вирушимо, '+name+'?':'Tak kam vyrazíme, '+name+'?';
  hero.textContent=greeting;
 }
@@ -883,9 +885,11 @@ function showMemberSession(user){
 function setMemberMode(mode){
  memberMode=mode;
  const registering=mode==='register';
- memberNameField.classList.toggle('hidden',!registering);
+ memberFirstNameField.classList.toggle('hidden',!registering);
+ memberLastNameField.classList.toggle('hidden',!registering);
  memberPhoneField.classList.toggle('hidden',!registering);
- document.getElementById('memberName').required=registering;
+ document.getElementById('memberFirstName').required=registering;
+ document.getElementById('memberLastName').required=registering;
  document.getElementById('memberPhone').required=registering;
  memberPassword.autocomplete=registering?'new-password':'current-password';
  memberPassword.minLength=registering?8:1;
@@ -894,13 +898,16 @@ function setMemberMode(mode){
  memberModeToggle.textContent=registering?translations[lang].memberSwitchToLogin:translations[lang].memberSwitchToRegister;
  memberNotice.classList.remove('show');
 }
-memberModeToggle.addEventListener('click',()=>setMemberMode(memberMode==='register'?'login':'register'));
+memberModeToggle.type='button';
+memberModeToggle.addEventListener('click',(event)=>{event.preventDefault();event.stopPropagation();setMemberMode(memberMode==='register'?'login':'register');});
 memberForm.addEventListener('submit',async(event)=>{
  event.preventDefault();
  if(!memberForm.reportValidity())return;
  const email=document.getElementById('memberEmail').value.trim().toLowerCase();
  const password=memberPassword.value;
- const fullName=document.getElementById('memberName').value.trim();
+ const firstName=document.getElementById('memberFirstName').value.trim();
+ const lastName=document.getElementById('memberLastName').value.trim();
+ const fullName=[firstName,lastName].filter(Boolean).join(' ');
  const phone=document.getElementById('memberPhone').value.trim().replace(/[^\d+]/g,'');
  const submitButton=document.getElementById('memberRegister');
  submitButton.disabled=true;
@@ -910,7 +917,7 @@ memberForm.addEventListener('submit',async(event)=>{
    memberMessage(translations[lang].memberRegistering);
    const {data,error}=await ffcSupabase.auth.signUp({
     email,password,
-    options:{data:{full_name:fullName,phone,ffc_customer:'true'}}
+    options:{data:{full_name:fullName,first_name:firstName,last_name:lastName,phone,ffc_customer:'true'}}
    });
    if(error)throw error;
    if(!data.user)throw new Error('Account creation did not return a user');
