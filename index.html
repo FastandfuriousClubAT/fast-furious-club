@@ -527,7 +527,8 @@ main{padding-top:26px}
   <form id="memberForm">
    <h3 data-t="memberCreateAccount">Vytvořit účet</h3>
    <div class="formgrid">
-    <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" minlength="2" maxlength="120" required></div>
+    <div class="field"><label for="memberFirstName" data-t="memberFirstName">Jméno</label><input id="memberFirstName" name="given-name" autocomplete="given-name" minlength="1" maxlength="60" required></div>
+    <div class="field"><label for="memberLastName" data-t="memberLastName">Příjmení</label><input id="memberLastName" name="family-name" autocomplete="family-name" minlength="1" maxlength="60" required></div>
     <div class="field"><label for="memberPhone" data-t="memberPhone">Telefon</label><input id="memberPhone" name="phone" type="tel" autocomplete="tel" minlength="6" maxlength="30" required></div>
     <div class="field"><label for="memberEmail" data-t="memberEmail">E-mail</label><input id="memberEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div>
     <div class="field"><label for="memberPassword" data-t="memberPassword">Heslo (min. 8 znaků)</label><input id="memberPassword" type="password" autocomplete="new-password" minlength="8" required></div>
@@ -625,19 +626,19 @@ Object.assign(translations.de,{rideButton:'Fahrt anfragen',rideTitle:'Fahrt anfr
 Object.assign(translations.uk,{rideButton:'Замовити поїздку',rideTitle:'Замовити поїздку',rideIntro:'Необов’язковий запит на поїздку. Заповни дані, і ми зв’яжемося з тобою.',rideDate:'Дата поїздки',rideTime:'Час поїздки',rideFrom:'Звідки',rideTo:'Куди',ridePeople:'Кількість пасажирів',rideSend:'Надіслати запит',airportTitle:'✈ Трансфер до аеропорту',airportPriceNote:'Обери напрямок та аеропорт. Доступна лише поїздка в один бік, без трансферу туди й назад.',airportDirection:'Напрямок трансферу',airportTo:'Трансфер до аеропорту',airportFrom:'Трансфер з аеропорту',airportSelect:'Аеропорт',airportAddress:'Місце посадки / адреса призначення',airportSend:'Запитати трансфер',contactName:'Ім’я',contactPhone:'Телефон',contactEmail:'Електронна пошта'});
 Object.assign(translations.cz,{
  memberTitle:'♥ Registrace zákazníka',memberIntro:'Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.',
- memberName:'Jméno a příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
+ memberFirstName:'Jméno',memberLastName:'Příjmení',memberPhone:'Telefon',memberEmail:'E-mail',memberRegister:'Zaregistrovat se',
  memberAdminNote:'Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.',
  memberThanks:'Děkujeme! Údaje byly uloženy, případně už v evidenci jsou.',memberWhatsapp:'Napsat nám přes WhatsApp',memberError:'Registraci se nepodařilo uložit. Zkontroluj údaje a zkus to znovu.'
 });
 Object.assign(translations.de,{
  memberTitle:'♥ Kundenregistrierung',memberIntro:'Gib Name, Telefonnummer und E-Mail-Adresse ein. Diese Kombination dient dazu, dich bei weiteren Anfragen wiederzuerkennen. Es werden keine SMS oder Bestätigungscodes versendet.',
- memberName:'Vor- und Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
+ memberFirstName:'Vorname',memberLastName:'Nachname',memberPhone:'Telefon',memberEmail:'E-Mail',memberRegister:'Registrieren',
  memberAdminNote:'Kunden können ihre Angaben nicht selbst ändern. Änderungen nimmt der Veranstalter nach Absprache mit dem Kunden vor.',
  memberThanks:'Vielen Dank! Deine Angaben wurden gespeichert oder sind bereits registriert.',memberWhatsapp:'Uns über WhatsApp schreiben',memberError:'Die Registrierung konnte nicht gespeichert werden. Bitte überprüfe deine Angaben und versuche es erneut.'
 });
 Object.assign(translations.uk,{
  memberTitle:'♥ Реєстрація клієнта',memberIntro:'Вкажи ім’я, телефон та електронну пошту. Ця комбінація допоможе впізнати тебе під час наступних запитів. SMS та коди підтвердження не надсилаються.',
- memberName:'Ім’я та прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
+ memberFirstName:'Ім’я',memberLastName:'Прізвище',memberPhone:'Телефон',memberEmail:'Електронна пошта',memberRegister:'Зареєструватися',
  memberAdminNote:'Клієнт не може самостійно змінювати дані. Організатор вносить зміни лише за погодженням із клієнтом.',
  memberThanks:'Дякуємо! Дані збережено або вони вже є в реєстрі.',memberWhatsapp:'Написати нам у WhatsApp',memberError:'Не вдалося зберегти реєстрацію. Перевір дані та спробуй ще раз.'
 });
@@ -861,7 +862,7 @@ function updateMemberWelcome(){
  const user=currentMemberUser;
  if(!user){welcome.hidden=true;welcome.textContent='';return;}
  const fullName=String(user.user_metadata?.full_name||'').trim();
- const firstName=fullName?fullName.split(/\\s+/)[0]:(user.email||'').split('@')[0];
+ const firstName=String(user.user_metadata?.first_name||'').trim()||(fullName?fullName.split(/\\s+/)[0]:(user.email||'').split('@')[0]);
  const greeting=lang==='de'?'Willkommen':lang==='uk'?'Вітаємо':'Vítej';
  welcome.textContent=greeting+', '+firstName+'!';
  welcome.hidden=false;
@@ -889,7 +890,9 @@ ffcSupabase.auth.onAuthStateChange((_event,session)=>renderMemberSession(session
 refreshMemberSession();
 memberForm.addEventListener('submit',async(event)=>{
  event.preventDefault();if(!memberForm.reportValidity())return;
- const fullName=document.getElementById('memberName').value.trim();
+ const firstName=document.getElementById('memberFirstName').value.trim();
+ const lastName=document.getElementById('memberLastName').value.trim();
+ const fullName=[firstName,lastName].filter(Boolean).join(' ');
  const phone=document.getElementById('memberPhone').value.trim().replace(/[^\d+]/g,'');
  const email=document.getElementById('memberEmail').value.trim().toLowerCase();
  const password=document.getElementById('memberPassword').value;
@@ -897,7 +900,7 @@ memberForm.addEventListener('submit',async(event)=>{
  memberMessage(lang==='de'?'Konto wird erstellt…':lang==='uk'?'Створюємо обліковий запис…':'Vytvářím účet…');
  const button=document.getElementById('memberRegister');button.disabled=true;
  try{
-  const {data,error}=await ffcSupabase.auth.signUp({email,password,options:{data:{full_name:fullName,phone}}});
+  const {data,error}=await ffcSupabase.auth.signUp({email,password,options:{data:{first_name:firstName,last_name:lastName,full_name:fullName,phone}}});
   if(error)throw error;
   const {error:registryError}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
   if(registryError&&registryError.code!=='23505')throw registryError;
