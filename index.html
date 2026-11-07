@@ -497,6 +497,8 @@ main{padding-top:26px}
 .hero .btnrow .btn.airport{background:#1e7f9c;border-color:#1e7f9c;color:#fff;box-shadow:0 5px 0 #12566c;padding:11px 10px}
 @media(max-width:680px){.hero .btnrow{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hero .btnrow .btn{min-height:54px;font-size:13px}}
 @media(max-width:390px){.hero .btnrow .btn{font-size:12px;padding:10px 7px}}
+
+#memberAuthForms h3{margin:20px 0 12px;color:#173546;font-size:18px}#memberAuthForms form+form{border-top:1px solid var(--line);padding-top:8px}#memberAuthForms button+button{margin-left:8px}#memberSignedIn{padding:16px;background:#f3f8ed;border:1px solid #d7e7bd;border-radius:13px;color:#173546}#memberSignedIn button{margin-top:8px}
 </style></head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
@@ -520,15 +522,32 @@ main{padding-top:26px}
 <section class="panel" id="memberArea">
  <h2 data-t="memberTitle">♥ Registrace zákazníka</h2>
  <p class="sub" data-t="memberIntro">Zadej jméno, telefon a e-mail. Jejich kombinace slouží k rozpoznání zákazníka při dalších poptávkách. Neposíláme SMS ani ověřovací kódy.</p>
- <form id="memberForm">
-  <div class="formgrid">
-   <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" placeholder="Jméno a příjmení" minlength="2" maxlength="120" required></div>
-   <div class="field"><label for="memberPhone" data-t="memberPhone">Telefon</label><input id="memberPhone" name="phone" type="tel" autocomplete="tel" placeholder="+43..." minlength="6" maxlength="30" required></div>
-   <div class="field full"><label for="memberEmail" data-t="memberEmail">E-mail</label><input id="memberEmail" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
-   <div class="field full"><button class="btn dark" id="memberRegister" type="submit" data-t="memberRegister">Zaregistrovat se</button></div>
-  </div>
- </form>
- <p class="sub" data-t="memberAdminNote">Zákazník nemůže údaje sám měnit. Případné změny provede pořadatel po dohodě se zákazníkem.</p>
+ <p class="sub" data-t="memberIntro">Zaregistruj se e-mailem a heslem. Na tomto zařízení zůstaneš přihlášený; na jiném se přihlásíš stejnými údaji.</p>
+ <div id="memberAuthForms">
+  <form id="memberForm">
+   <h3 data-t="memberCreateAccount">Vytvořit účet</h3>
+   <div class="formgrid">
+    <div class="field"><label for="memberName" data-t="memberName">Jméno a příjmení</label><input id="memberName" name="full_name" autocomplete="name" minlength="2" maxlength="120" required></div>
+    <div class="field"><label for="memberPhone" data-t="memberPhone">Telefon</label><input id="memberPhone" name="phone" type="tel" autocomplete="tel" minlength="6" maxlength="30" required></div>
+    <div class="field"><label for="memberEmail" data-t="memberEmail">E-mail</label><input id="memberEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+    <div class="field"><label for="memberPassword" data-t="memberPassword">Heslo (min. 8 znaků)</label><input id="memberPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+    <div class="field full"><button class="btn dark" id="memberRegister" type="submit" data-t="memberRegister">Vytvořit účet</button></div>
+   </div>
+  </form>
+  <form id="memberLoginForm" style="margin-top:22px">
+   <h3 data-t="memberLoginTitle">Už máš účet? Přihlášení</h3>
+   <div class="formgrid">
+    <div class="field"><label for="memberLoginEmail" data-t="memberEmail">E-mail</label><input id="memberLoginEmail" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="memberLoginPassword" data-t="memberPasswordLogin">Heslo</label><input id="memberLoginPassword" type="password" autocomplete="current-password" required></div>
+    <div class="field full"><button class="btn dark" type="submit" data-t="memberLogin">Přihlásit se</button><button class="btn secondary" type="button" id="memberForgot" data-t="memberForgot">Zapomenuté heslo</button></div>
+   </div>
+  </form>
+ </div>
+ <div id="memberSignedIn" class="hidden">
+  <p><strong data-t="memberSignedInLabel">Jsi přihlášen jako:</strong> <span id="memberSignedInEmail"></span></p>
+  <button class="btn secondary" type="button" id="memberSignOut" data-t="memberSignOut">Odhlásit se</button>
+ </div>
+ <p class="sub" data-t="memberAdminNote">Přihlášení zůstane uložené v tomto zařízení. Na jiném zařízení použij stejný e-mail a heslo.</p>
  <div class="notice" id="memberNotice" role="status"></div>
  <a class="btn dark hidden" id="memberWhatsapp" href="https://wa.me/4369010007070" target="_blank" rel="noopener noreferrer" data-t="memberWhatsapp">Napsat nám přes WhatsApp</a>
 </section>\n<section class="panel airport-panel" id="airportRequest"><h2 data-t="airportTitle">✈ Letištní transfer</h2><p class="airport-intro" data-t="airportPriceNote">Vyber směr a letiště. Jde vždy o jednu cestu.</p><form id="airportForm"><div class="formgrid">
@@ -587,15 +606,15 @@ de:{tagline:'EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH',eyebrow:'Dein C
 uk:{tagline:'ВІДКРИВАЙ ЄВРОПУ З КОМФОРТОМ І ВРАЖЕННЯМИ',eyebrow:'Твій клуб для нових пригод',hero:'Куди вирушимо?',intro:'Розкажи, що хочеш побачити. Ми допоможемо спланувати поїздку з урахуванням дати, кількості людей та ваших інтересів.',cta:'Спланувати поїздку на замовлення ↗',offersBtn:'Переглянути пропозиції',offerTitle:'Ідеї для подорожей',offerSub:'Приклади категорій — конкретні дати та ціни будуть додані пізніше.',daytrip:'На один або кілька днів',seaTitle:'До води й сонця',seaDesc:'Озера, море та цікаві зупинки дорогою.',askPrice:'Ціна за пропозицією',details:'Цікавить',culture:'Міста й культура',cityTitle:'Відкривай Європу',cityDesc:'Історичні центри, пам’ятки та місцева атмосфера.',nature:'Природа та враження',natureTitle:'За межі міста',natureDesc:'Гори, оглядові майданчики, термальні купальні й незвичайні враження.',groupsTitle:'Для вашої компанії',groupsDesc:'Чотири вільні дні, Новий рік чи сімейна подорож? Опишіть побажання — ми підготуємо варіант. Невеликі групи подорожують нашими мікроавтобусами, більші поїздки можна організувати з транспортним партнером.',rewardsTitle:'Переваги для клієнтів',rewardsDesc:'У майбутньому: ваучери, винагороди за рекомендації та переваги для постійних клієнтів. Участь безкоштовна.',formTitle:'Спланувати поїздку на замовлення',formSub:'Опишіть основні побажання. Ми надішлемо запит електронною поштою та підтвердимо дату й ціну.',people:'Кількість людей',duration:'Тривалість поїздки',choose:'Оберіть…',oneDay:'Один день',weekend:'Вихідні',fourDays:'3–5 днів',weekPlus:'Тиждень або довше',when:'Коли хочете вирушити?',dates:'Дати поїздки — від / до',from:'Від',to:'До',flexibleLabel:'Дати гнучкі (± 2 дні)?',flexibleHint:'Будь ласка, завжди вкажіть дати від–до. Якщо так, поїздка може початися на 2 дні раніше або пізніше.',yes:'Так',no:'Ні',departure:'Місце відправлення',interests:'Що вас цікавить? Можна вибрати кілька варіантів.',swimming:'Купання та море',culture2:'Культура й пам’ятки',nature2:'Природа й гори',wellness:'Термальні купальні та wellness',food:'Гастрономія',adventure:'Пригоди',budget:'Бажаний бюджет у євро (необов’язково)',flexible:'Спочатку хочу побачити варіанти',economy:'Якомога бюджетніше',balanced:'Баланс ціни та вражень',comfort:'Більше комфорту',contact:'Як з вами зв’язатися?',notes:'Додаткові побажання',privacy:'Я погоджуюся, щоб організатор зв’язався зі мною щодо цього запиту. (Перед запуском буде додано повну інформацію про захист персональних даних.)',send:'Підготувати запит',trustTitle:'Справжні враження, справжні відгуки',trustSub:'Відгуки клієнтів будуть окремо від публічного профілю Google.',google:'Google Maps ↗',reviewPlaceholder:'Місце для перевірених відгуків клієнтів',reviewSub:'У цьому прикладі немає вигаданих відгуків. У готовій версії відгуки з’являться після запровадження перевірки та модерації.',prototype:'Запит не зобов’язує до бронювання. Дату й ціну підтвердимо електронною поштою.',airportTeaser:'Потрібен трансфер до аеропорту або зустріч після прильоту?',airportButton:'✈ Замовити трансфер до аеропорту',airportTitle:'✈ Трансфер до аеропорту',airportPriceNote:'Фіксовані ціни для VIE, BTS, NUE, BUD і PRG додамо пізніше. Надішліть запит — підтверджену ціну отримаєте до бронювання.',airportSelect:'Аеропорт',airportDirection:'Тип трансферу',oneway:'В один бік',return:'Туди й назад',pickup:'Зустріч після прильоту',airportDate:'Дата',airportTime:'Час',airportPeople:'Кількість пасажирів',airportFlight:'Номер рейсу (необов’язково)',airportAddress:'Адреса посадки / адреса призначення',airportName:'Ім’я',airportContact:'Телефон або електронна пошта',airportNotes:'Додаткова інформація (необов’язково)',airportSend:'Запитати трансфер',airportThanks:'Дякуємо! Запит надіслано. Ми зв’яжемося з вами для підтвердження та повідомимо ціну.',thanks:'Дякуємо! Запит надіслано. Ми зв’яжемося з вами з пропозицією та підтвердженням дати.'}
 };
 
-Object.assign(translations.cz,{
+Object.assign(translations.cz,{memberCreateAccount:'Vytvořit účet',memberPassword:'Heslo (min. 8 znaků)',memberLoginTitle:'Už máš účet? Přihlášení',memberPasswordLogin:'Heslo',memberLogin:'Přihlásit se',memberForgot:'Zapomenuté heslo',memberSignedInLabel:'Jsi přihlášen jako:',memberSignOut:'Odhlásit se',memberConfirmEmail:'Účet je vytvořen. Potvrď e-mail kliknutím na odkaz, který jsme ti poslali.',memberAlreadyExists:'Tento e-mail už má účet. Přihlas se níže.',memberSigningIn:'Přihlašování…',memberLoginSuccess:'Úspěšně přihlášeno. Přihlášení zůstane v tomto zařízení uložené.',memberLoginError:'Přihlášení se nezdařilo. Zkontroluj e-mail a heslo.',memberSignedOut:'Byl jsi odhlášen.',memberEnterEmailForReset:'Nejprve zadej e-mail pro obnovení hesla.',memberResetError:'E-mail pro obnovení hesla se nepodařilo odeslat.',memberResetSent:'Pokyny k obnovení hesla byly odeslány na e-mail.',
  serviceTransfer:'Transfer',serviceTransferDesc:'Na letiště nebo zpět — pohodlně a bez starostí.',serviceBook:'Objednat transfer ›',serviceTours:'Výlety na míru',serviceToursDesc:'Ty vybereš cíl — o zbytek se postaráme my.',serviceAsk:'Poslat poptávku ›',
  appEyebrow:'Vždy po ruce',appTitle:'Tvůj klub. Tvoje další cesta.',appDesc:'Objevuj nabídky, plánuj výlety na míru a poptávej transfery pohodlně ze svého telefonu.',appPoint1:'Výlety na přání',appPoint2:'Letištní transfery',appPoint3:'Objevuj Evropu',appPhoneTitle:'Tak kam vyrazíme?',appPhoneDesc:'Tvé další dobrodružství začíná tady.'
 });
-Object.assign(translations.de,{
+Object.assign(translations.de,{memberCreateAccount:'Konto erstellen',memberPassword:'Passwort (mind. 8 Zeichen)',memberLoginTitle:'Du hast schon ein Konto? Anmelden',memberPasswordLogin:'Passwort',memberLogin:'Anmelden',memberForgot:'Passwort vergessen',memberSignedInLabel:'Du bist angemeldet als:',memberSignOut:'Abmelden',memberConfirmEmail:'Konto erstellt. Bitte bestätige deine E-Mail über den zugesandten Link.',memberAlreadyExists:'Für diese E-Mail gibt es bereits ein Konto. Bitte melde dich unten an.',memberSigningIn:'Anmeldung läuft…',memberLoginSuccess:'Erfolgreich angemeldet. Du bleibst auf diesem Gerät angemeldet.',memberLoginError:'Anmeldung fehlgeschlagen. Bitte überprüfe E-Mail und Passwort.',memberSignedOut:'Du wurdest abgemeldet.',memberEnterEmailForReset:'Bitte gib zuerst deine E-Mail-Adresse ein.',memberResetError:'Die E-Mail zum Zurücksetzen konnte nicht gesendet werden.',memberResetSent:'Anweisungen zum Zurücksetzen des Passworts wurden per E-Mail gesendet.',
  serviceTransfer:'Transfer',serviceTransferDesc:'Zum Flughafen und zurück — bequem und zuverlässig.',serviceBook:'Transfer buchen ›',serviceTours:'Individuelle Touren',serviceToursDesc:'Du wählst das Ziel — wir kümmern uns um den Rest.',serviceAsk:'Anfrage senden ›',
  appEyebrow:'Immer dabei',appTitle:'Dein Club. Deine nächste Reise.',appDesc:'Entdecke Angebote, plane individuelle Ausflüge und frage Transfers direkt an — bequem auf deinem Smartphone.',appPoint1:'Ausflüge nach Wunsch',appPoint2:'Flughafentransfers',appPoint3:'Europa entdecken',appPhoneTitle:'Wo soll es hingehen?',appPhoneDesc:'Dein nächstes Abenteuer beginnt hier.'
 });
-Object.assign(translations.uk,{
+Object.assign(translations.uk,{memberCreateAccount:'Створити обліковий запис',memberPassword:'Пароль (мінімум 8 символів)',memberLoginTitle:'Вже маєш обліковий запис? Увійти',memberPasswordLogin:'Пароль',memberLogin:'Увійти',memberForgot:'Забули пароль',memberSignedInLabel:'Ви увійшли як:',memberSignOut:'Вийти',memberConfirmEmail:'Обліковий запис створено. Підтвердіть електронну пошту за посиланням у листі.',memberAlreadyExists:'Для цієї електронної адреси вже існує обліковий запис. Увійдіть нижче.',memberSigningIn:'Виконується вхід…',memberLoginSuccess:'Вхід успішний. На цьому пристрої ви залишатиметеся в системі.',memberLoginError:'Не вдалося увійти. Перевірте електронну пошту та пароль.',memberSignedOut:'Ви вийшли з облікового запису.',memberEnterEmailForReset:'Спочатку введіть електронну пошту для відновлення пароля.',memberResetError:'Не вдалося надіслати лист для відновлення пароля.',memberResetSent:'Інструкції з відновлення пароля надіслано на електронну пошту.',
  serviceTransfer:'Трансфер',serviceTransferDesc:'До аеропорту, готелю й назад — комфортно та надійно.',serviceBook:'Замовити трансфер ›',serviceTours:'Індивідуальні тури',serviceToursDesc:'Ти обираєш напрямок — про решту подбаємо ми.',serviceAsk:'Надіслати запит ›',
  appEyebrow:'Завжди поруч',appTitle:'Твій клуб. Твоя наступна подорож.',appDesc:'Переглядай пропозиції, плануй індивідуальні поїздки та замовляй трансфери просто зі смартфона.',appPoint1:'Поїздки на замовлення',appPoint2:'Трансфери до аеропорту',appPoint3:'Відкривай Європу',appPhoneTitle:'Куди вирушимо?',appPhoneDesc:'Твоя наступна пригода починається тут.'
 });
@@ -830,34 +849,80 @@ if(customerReviewForm){
  });
 }
 const memberForm=document.getElementById('memberForm');
+const memberLoginForm=document.getElementById('memberLoginForm');
 const memberNotice=document.getElementById('memberNotice');
 function memberMessage(message){memberNotice.textContent=message;memberNotice.classList.add('show');}
+function memberText(key){return translations[lang]?.[key]||translations.de[key]||key;}
+function renderMemberSession(user){
+ const forms=document.getElementById('memberAuthForms'),signed=document.getElementById('memberSignedIn');
+ if(user){
+  forms.classList.add('hidden');signed.classList.remove('hidden');
+  document.getElementById('memberSignedInEmail').textContent=user.email||'';
+  document.getElementById('memberWhatsapp').classList.remove('hidden');
+ }else{
+  forms.classList.remove('hidden');signed.classList.add('hidden');
+  document.getElementById('memberWhatsapp').classList.add('hidden');
+ }
+}
+async function refreshMemberSession(){
+ const {data,error}=await ffcSupabase.auth.getSession();
+ if(error)console.warn('FFC session check failed',error);
+ renderMemberSession(data?.session?.user||null);
+}
+ffcSupabase.auth.onAuthStateChange((_event,session)=>renderMemberSession(session?.user||null));
+refreshMemberSession();
 memberForm.addEventListener('submit',async(event)=>{
- event.preventDefault();
- if(!memberForm.reportValidity())return;
+ event.preventDefault();if(!memberForm.reportValidity())return;
  const fullName=document.getElementById('memberName').value.trim();
  const phone=document.getElementById('memberPhone').value.trim().replace(/[^\d+]/g,'');
  const email=document.getElementById('memberEmail').value.trim().toLowerCase();
+ const password=document.getElementById('memberPassword').value;
  memberNotice.classList.remove('show');
- memberMessage(lang==='de'?'Registrierung wird gespeichert…':lang==='uk'?'Реєструємо дані…':'Ukládám registraci…');
+ memberMessage(lang==='de'?'Konto wird erstellt…':lang==='uk'?'Створюємо обліковий запис…':'Vytvářím účet…');
+ const button=document.getElementById('memberRegister');button.disabled=true;
  try{
-  const {error}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
-  if(error&&error.code!=='23505')throw error;
-  memberMessage(translations[lang].memberThanks);
-  const whatsappButton=document.getElementById('memberWhatsapp');
-  const whatsappMessages={
-   cz:'Dobrý den, jsem registrovaný zákazník Fast & Furious Club. Jmenuji se '+fullName+' a rád bych se na něco zeptal.',
-   de:'Guten Tag, ich bin bei Fast & Furious Club registriert. Mein Name ist '+fullName+' und ich hätte eine Frage.',
-   uk:'Добрий день! Я зареєстрований клієнт Fast & Furious Club. Мене звати '+fullName+', і я хотів би дещо запитати.'
-  };
-  whatsappButton.href='https://wa.me/4369010007070?text='+encodeURIComponent(whatsappMessages[lang]||whatsappMessages.de);
-  whatsappButton.classList.remove('hidden');
+  const {data,error}=await ffcSupabase.auth.signUp({email,password,options:{data:{full_name:fullName,phone}}});
+  if(error)throw error;
+  const {error:registryError}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
+  if(registryError&&registryError.code!=='23505')throw registryError;
   memberForm.reset();
+  if(data.session){
+   memberMessage(memberText('memberThanks'));
+   renderMemberSession(data.user);
+  }else{
+   memberMessage(memberText('memberConfirmEmail'));
+  }
  }catch(error){
-  console.error('FFC customer registration failed',error);
-  memberMessage(translations[lang].memberError);
- }
+  console.error('FFC account registration failed',error);
+  const msg=String(error?.message||'');
+  memberMessage(/already registered|already exists/i.test(msg)?memberText('memberAlreadyExists'):memberText('memberError'));
+ }finally{button.disabled=false;}
  memberNotice.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+memberLoginForm.addEventListener('submit',async(event)=>{
+ event.preventDefault();if(!memberLoginForm.reportValidity())return;
+ const email=document.getElementById('memberLoginEmail').value.trim().toLowerCase();
+ const password=document.getElementById('memberLoginPassword').value;
+ const button=memberLoginForm.querySelector('button[type=submit]');button.disabled=true;
+ memberMessage(memberText('memberSigningIn'));
+ try{
+  const {data,error}=await ffcSupabase.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  memberLoginForm.reset();renderMemberSession(data.user);memberMessage(memberText('memberLoginSuccess'));
+ }catch(error){
+  console.error('FFC account sign-in failed',error);memberMessage(memberText('memberLoginError'));
+ }finally{button.disabled=false;}
+});
+document.getElementById('memberSignOut').addEventListener('click',async()=>{
+ const {error}=await ffcSupabase.auth.signOut();
+ if(error){memberMessage(memberText('memberError'));return;}
+ renderMemberSession(null);memberMessage(memberText('memberSignedOut'));
+});
+document.getElementById('memberForgot').addEventListener('click',async()=>{
+ const email=document.getElementById('memberLoginEmail').value.trim().toLowerCase();
+ if(!email){memberMessage(memberText('memberEnterEmailForReset'));document.getElementById('memberLoginEmail').focus();return;}
+ const {error}=await ffcSupabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});
+ memberMessage(error?memberText('memberResetError'):memberText('memberResetSent'));
 });
 
 </script>
