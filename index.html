@@ -686,9 +686,9 @@ async function sendInquiry(form,notice,subject){
  }
  const type=form.id==='airportForm'?'airport':form.id==='rideForm'?'ride':'trip';
  const contact=(details.contact||'').toString().trim();
- const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/i)||[])[0]||'';
- const contactPhone=contact.replace(/[^\\d+]/g,'');
- const hasContactPhone=(contactPhone.match(/\\d/g)||[]).length>=7?contactPhone:'';
+ const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+ const contactPhone=contact.replace(/[^\d+]/g,'');
+ const hasContactPhone=(contactPhone.match(/\d/g)||[]).length>=7?contactPhone:'';
  const name=(details.airportName||details.rideName||details.customerName||details.contactName||details.name||(!contactEmail&&!hasContactPhone?contact:'')||'Website visitor').toString();
  const phone=(details.airportPhone||details.ridePhone||details.customerPhone||contactPhone&&hasContactPhone||'').toString();
  const email=(details.airportEmail||details.rideEmail||details.customerEmail||contactEmail||'').toString();
