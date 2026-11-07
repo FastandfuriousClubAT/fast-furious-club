@@ -900,7 +900,7 @@ memberForm.addEventListener('submit',async(event)=>{
  memberMessage(lang==='de'?'Konto wird erstellt…':lang==='uk'?'Створюємо обліковий запис…':'Vytvářím účet…');
  const button=document.getElementById('memberRegister');button.disabled=true;
  try{
-  const {data,error}=await ffcSupabase.auth.signUp({email,password,options:{data:{first_name:firstName,last_name:lastName,full_name:fullName,phone}}});
+  const {data,error}=await ffcSupabase.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+window.location.pathname,data:{first_name:firstName,last_name:lastName,full_name:fullName,phone}}});
   if(error)throw error;
   const {error:registryError}=await ffcSupabase.from('customer_registry').insert({full_name:fullName,phone,email});
   if(registryError&&registryError.code!=='23505')throw registryError;
