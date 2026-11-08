@@ -898,8 +898,11 @@ function showMemberSession(user){
  memberForm.classList.toggle('hidden',signedIn);
  memberModeToggle.classList.toggle('hidden',signedIn);
  memberAccountCard.classList.toggle('hidden',!signedIn);
- // Hide any public registration CTA while a customer is signed in.
- document.querySelectorAll('a[href="#memberArea"],button[data-target="memberArea"],.hero-member').forEach(el=>el.classList.toggle('hidden',signedIn));
+ // Keep the account entry in the main navigation available after sign-in.
+ // Hide only the promotional hero registration button while signed in.
+ document.querySelectorAll('.hero-member').forEach(el=>el.classList.toggle('hidden',signedIn));
+ const memberNav=document.querySelector('[data-nav="member"]');
+ if(memberNav)memberNav.textContent=signedIn?(lang==='de'?'Mein Konto':lang==='uk'?'Мій кабінет':'Můj účet'):(lang==='de'?'Registrierung':lang==='uk'?'Реєстрація':'Registrace');
  if(!user){
   memberSessionStatus.textContent='';
   memberSessionStatus.classList.remove('show');
