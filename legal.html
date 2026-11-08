@@ -28,10 +28,10 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 <button type="button" data-lang="de">DE</button><button type="button" data-lang="cz">CZ</button><button type="button" data-lang="uk">УКР</button>
 </div></div></header>
 <main>
-<nav><a href="#impressum" data-t="navImprint">Impressum</a><a href="#datenschutz" data-t="navPrivacy">Datenschutzerklärung</a><a class="back" href="./" data-t="back">← Zurück zum Club</a></nav>
+<nav><a href="#impressum-de" data-anchor="impressum" data-t="navImprint">Impressum</a><a href="#datenschutz-de" data-anchor="datenschutz" data-t="navPrivacy">Datenschutzerklärung</a><a class="back" href="./" data-t="back">← Zurück zum Club</a></nav>
 
 <section class="content" data-content="de">
-<article id="impressum">
+<article id="impressum-de">
 <h1>Impressum</h1>
 <p><strong>Fast and Furious s.r.o.</strong></p>
 <p>Jaurisova 515/4<br>140 00 Praha 4 – Michle<br>Tschechische Republik</p>
@@ -40,7 +40,7 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 <p>E-Mail: <a href="mailto:odtahy.aut@gmail.com">odtahy.aut@gmail.com</a><br>Telefon / WhatsApp: <a href="tel:+4369010007070">+43 690 10007070</a></p>
 <h3>Verantwortlich für den Inhalt</h3><p>Fast and Furious s.r.o., unter der oben genannten Geschäftsanschrift.</p>
 </article>
-<article id="datenschutz">
+<article id="datenschutz-de">
 <h1>Datenschutzerklärung</h1>
 <p class="muted">Stand: 8. November 2026</p>
 <p>Diese Datenschutzerklärung erläutert, wie Fast and Furious s.r.o. personenbezogene Daten verarbeitet, wenn Sie die Website und die Funktionen des Fast & Furious Club nutzen.</p>
@@ -67,7 +67,7 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 </article></section>
 
 <section class="content" data-content="cz" hidden>
-<article id="impressum">
+<article id="impressum-cz">
 <h1>Identifikační a kontaktní údaje</h1>
 <p><strong>Fast and Furious s.r.o.</strong></p>
 <p>Jaurisova 515/4<br>140 00 Praha 4 – Michle<br>Česká republika</p>
@@ -76,7 +76,7 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 <p>E-mail: <a href="mailto:odtahy.aut@gmail.com">odtahy.aut@gmail.com</a><br>Telefon / WhatsApp: <a href="tel:+4369010007070">+43 690 10007070</a></p>
 <h3>Odpovědnost za obsah</h3><p>Fast and Furious s.r.o. na výše uvedené firemní adrese.</p>
 </article>
-<article id="datenschutz">
+<article id="datenschutz-cz">
 <h1>Zásady ochrany osobních údajů</h1><p class="muted">Aktualizováno: 8. listopadu 2026</p>
 <p>Tyto zásady vysvětlují, jak společnost Fast and Furious s.r.o. zpracovává osobní údaje při používání webu a funkcí Fast & Furious Club.</p>
 <h3>1. Správce údajů</h3><p>Fast and Furious s.r.o., Jaurisova 515/4, 140 00 Praha 4 – Michle, Česká republika, IČO 11777451. Kontakt: <a href="mailto:odtahy.aut@gmail.com">odtahy.aut@gmail.com</a>, telefon/WhatsApp +43 690 10007070.</p>
@@ -102,7 +102,7 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 </article></section>
 
 <section class="content" data-content="uk" hidden>
-<article id="impressum">
+<article id="impressum-uk">
 <h1>Відомості про компанію та контакти</h1>
 <p><strong>Fast and Furious s.r.o.</strong></p>
 <p>Jaurisova 515/4<br>140 00 Praha 4 – Michle<br>Чеська Республіка</p>
@@ -111,7 +111,7 @@ footer{max-width:980px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 <p>Електронна пошта: <a href="mailto:odtahy.aut@gmail.com">odtahy.aut@gmail.com</a><br>Телефон / WhatsApp: <a href="tel:+4369010007070">+43 690 10007070</a></p>
 <h3>Відповідальний за зміст</h3><p>Fast and Furious s.r.o. за вказаною вище юридичною адресою.</p>
 </article>
-<article id="datenschutz">
+<article id="datenschutz-uk">
 <h1>Політика конфіденційності</h1><p class="muted">Оновлено: 8 листопада 2026 року</p>
 <p>Ця політика пояснює, як компанія Fast and Furious s.r.o. обробляє персональні дані під час використання вебсайту та функцій Fast & Furious Club.</p>
 <h3>1. Володілець персональних даних</h3><p>Fast and Furious s.r.o., Jaurisova 515/4, 140 00 Praha 4 – Michle, Чеська Республіка, IČO 11777451. Контакт: <a href="mailto:odtahy.aut@gmail.com">odtahy.aut@gmail.com</a>, телефон/WhatsApp +43 690 10007070.</p>
@@ -148,11 +148,18 @@ function setLegalLang(lang){
  document.documentElement.lang=lang==="cz"?"cs":lang;
  try{localStorage.setItem("ffc-language",lang);}catch(e){}
  document.querySelectorAll("[data-content]").forEach(s=>s.hidden=s.dataset.content!==lang);
+ document.querySelectorAll("[data-anchor]").forEach(a=>a.href="#"+a.dataset.anchor+"-"+lang);
  document.querySelectorAll("[data-lang]").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
  document.querySelectorAll("[data-t]").forEach(el=>{const key=el.dataset.t;if(ui[lang][key])el.textContent=ui[lang][key];});
 }
 let initial="de";try{initial=localStorage.getItem("ffc-language")||"de";}catch(e){}
 document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setLegalLang(b.dataset.lang)));
 setLegalLang(initial==="cs"?"cz":initial);
+const requestedHash=location.hash.slice(1);
+if(requestedHash==="impressum"||requestedHash==="datenschutz"){
+ const target=requestedHash+"-"+(initial==="cs"?"cz":initial);
+ history.replaceState(null,"","#"+target);
+ document.getElementById(target)?.scrollIntoView();
+}
 </script>
 </body></html>
