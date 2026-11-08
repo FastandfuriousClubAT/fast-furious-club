@@ -656,7 +656,7 @@ Object.assign(translations.uk,{
 });
 let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});if(typeof setMemberMode==='function')setMemberMode(memberMode);if(typeof showMemberSession==='function')showMemberSession(currentMemberUser);else if(typeof updateHeroGreeting==='function')updateHeroGreeting();document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
-setLang(lang);
+// Initial language setup runs after member-mode functions are initialized.
 function setMinimumDates(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+1);const min=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');['airportDate','rideDate','dateFrom','dateTo'].forEach(id=>{const el=document.getElementById(id);if(el){el.min=min;if(el.value&&el.value<min)el.value='';}});const from=document.getElementById('dateFrom'),to=document.getElementById('dateTo');if(from&&to){to.min=from.value&&from.value>min?from.value:min;}}
 setMinimumDates();
 function updateDateFlex(){const from=document.getElementById('dateFrom'),to=document.getElementById('dateTo');from.required=true;to.required=true;from.disabled=false;to.disabled=false;}
@@ -1018,6 +1018,7 @@ memberForm.addEventListener('submit',async(event)=>{
   memberNotice.scrollIntoView({behavior:'smooth',block:'nearest'});
  }
 });
+setLang(lang);
 setMemberMode('register');
 
 // Restore the signed-in indicator after a refresh and keep it synchronized.
