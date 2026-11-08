@@ -898,6 +898,8 @@ function showMemberSession(user){
  memberForm.classList.toggle('hidden',signedIn);
  memberModeToggle.classList.toggle('hidden',signedIn);
  memberAccountCard.classList.toggle('hidden',!signedIn);
+ // Hide any public registration CTA while a customer is signed in.
+ document.querySelectorAll('a[href="#memberArea"],button[data-target="memberArea"],.hero-member').forEach(el=>el.classList.toggle('hidden',signedIn));
  if(!user){
   memberSessionStatus.textContent='';
   memberSessionStatus.classList.remove('show');
@@ -971,10 +973,18 @@ memberForm.addEventListener('submit',async(event)=>{
     memberMessage(translations[lang].memberExists);
     return;
    }
-   if(!data.session){
-    memberMessage(translations[lang].memberCheckEmail);
-    return;
+   let registeredUser=data.user;
+   let registeredSession=data.session;
+   // Email confirmation is intentionally disabled for FFC customer registration.
+   // If Supabase does not return a session immediately, try a direct password sign-in.
+   if(!registeredSession){
+    const {data:loginData,error:loginError}=await ffcSupabase.auth.signInWithPassword({email,password});
+    if(loginError)throw loginError;
+    registeredUser=loginData.user||registeredUser;
+    registeredSession=loginData.session;
    }
+   if(!registeredSession)throw new Error('Registrace proběhla, ale nepodařilo se vytvořit přihlášenou relaci.');
+   showMemberSession(registeredUser);
    memberMessage(translations[lang].memberThanks.replace('{name}',fullName));
    const whatsappButton=document.getElementById('memberWhatsapp');
    const whatsappMessages={
