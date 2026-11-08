@@ -523,7 +523,7 @@ main{padding-top:26px}
  <div class="notice" id="memberSessionStatus" role="status" aria-live="polite"></div>
  <div id="memberAccountCard" class="review hidden" aria-live="polite" style="margin:14px 0">
   <div class="google-review-card-head"><strong id="memberAccountHeading">Můj účet</strong><span class="tag" id="memberAccountBadge">Přihlášen</span></div>
-  <h3 id="memberAccountName" style="margin:14px 0 4px">Zákazník</h3><p id="memberAccountEmail" class="sub" style="margin:0"></p>
+  <h3 id="memberAccountName" style="margin:14px 0 4px">Zákazník</h3><p id="memberAccountEmail" class="sub" style="margin:0"></p><p id="memberAccountPhone" class="sub" style="margin:4px 0 0"></p>
   <button type="button" class="btn dark" id="memberLogout" style="margin-top:16px">Odhlásit se</button>
  </div>
  <form id="memberForm">
@@ -917,6 +917,7 @@ function showMemberSession(user){
  document.getElementById('memberAccountBadge').textContent=translations[lang].memberAccountActive;
  document.getElementById('memberAccountName').textContent=fullName;
  document.getElementById('memberAccountEmail').textContent=user.email||'';
+ document.getElementById('memberAccountPhone').textContent=meta.phone||'';
  memberLogout.textContent=translations[lang].memberLogout;
  updateHeroGreeting();
 }
