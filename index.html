@@ -503,6 +503,9 @@ main{padding-top:26px}
 
 /* Improve contrast of category labels on travel offer cards. */
 .cardbody .tag{color:#263d19!important;background:#e9f5d7!important;text-shadow:none!important;font-weight:900;}
+
+/* Legal links in the site footer */
+.legal-links{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.legal-links a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 </style>
 <style id="ffc-category-contrast-fix">
 /* Final override: readable dark category text on pale green pills. */
@@ -598,7 +601,15 @@ main{padding-top:26px}
 <p class="sub" style="font-size:12px" data-t="customerReviewGoogleNote">Odkaz na Google se zobrazí po odeslání. Recenzi na Google píšeš a zveřejňuješ sám/sama; zveřejnění není automatické. Hodnocení je dobrovolné a bez odměny.</p>
 <div class="customer-public-reviews" style="margin-top:22px"><h3 data-t="customerPublicTitle">Hodnocení zákazníků</h3><div id="customerPublicReviews" class="google-review-list" aria-live="polite"></div><p id="customerPublicReviewsNotice" class="google-review-notice sub"></p></div>
 </div></div></form></div><div class="google-attribution" translate="no">Google Maps</div></div></section>
-<footer class="footer"><span>© Fast & Furious Club · Fast and Furious s.r.o.</span><span data-t="prototype">Interaktivní prototyp — zatím bez serveru, registrace a ukládání objednávek.</span></footer>
+<footer class="footer">
+  <span>© Fast & Furious Club · Fast and Furious s.r.o.</span>
+  <span class="legal-links">
+    <a href="legal.html#impressum" data-legal="imprint">Impressum</a>
+    <span aria-hidden="true">·</span>
+    <a href="legal.html#datenschutz" data-legal="privacy">Datenschutz</a>
+  </span>
+  <span data-t="prototype">Interaktiver Club für Reisen und Erlebnisse.</span>
+</footer>
 </main>
 <script>
 const translations={
@@ -1107,7 +1118,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       window.__ffcShowInstallPanel();
     }
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=48',{scope:'/fast-furious-club/'})
+      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=49',{scope:'/fast-furious-club/'})
         .then(registration=>console.info('FFC service worker ready',registration.scope))
         .catch(error=>console.error('FFC service worker registration failed',error));
     }
