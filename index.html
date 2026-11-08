@@ -696,15 +696,15 @@ async function sendInquiry(form,notice,subject){
   }
   const type=form.id==='airportForm'?'airport':form.id==='rideForm'?'ride':'trip';
   const contact=(details.contact||'').toString().trim();
-  const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/i)||[])[0]||'';
-  const contactPhone=contact.replace(/[^\\d+]/g,'');
-  const hasContactPhone=(contactPhone.match(/\\d/g)||[]).length>=7?contactPhone:'';
+  const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+  const contactPhone=contact.replace(/[^\d+]/g,'');
+  const hasContactPhone=(contactPhone.match(/\d/g)||[]).length>=7?contactPhone:'';
   const name=(details.airportName||details.rideName||details.customerName||details.contactName||details.name||(!contactEmail&&!hasContactPhone?contact:'')||'Website visitor').toString();
   const phone=(details.airportPhone||details.ridePhone||details.customerPhone||hasContactPhone||'').toString();
   const email=(details.airportEmail||details.rideEmail||details.customerEmail||contactEmail||'').toString();
   notice.classList.remove('show');notice.textContent=lang==='de'?'Anfrage wird gespeichert…':lang==='uk'?'Зберігаємо запит…':'Ukládám poptávku…';notice.classList.add('show');
   try{
-   const {error}=await ffcSupabase.from('inquiries').insert({user_id:null,inquiry_type:type,customer_name:name,customer_email:email?email.trim().toLowerCase():null,customer_phone:phone?phone.trim().replace(/[^\\d+]/g,''):null,details:{...details,subject}});
+   const {error}=await ffcSupabase.from('inquiries').insert({user_id:null,inquiry_type:type,customer_name:name,customer_email:email?email.trim().toLowerCase():null,customer_phone:phone?phone.trim().replace(/[^\d+]/g,''):null,details:{...details,subject}});
    if(error)throw error;
    let emailSent=false;
    try{
