@@ -1,7 +1,8 @@
-const CACHE_NAME = "ffc-club-v48";
+const CACHE_NAME = "ffc-club-v49";
 const APP_SHELL = [
   "/fast-furious-club/",
   "/fast-furious-club/index.html",
+  "/fast-furious-club/legal.html",
   "/fast-furious-club/manifest.webmanifest",
   "/fast-furious-club/pwa-icon-192.png",
   "/fast-furious-club/pwa-icon-512.png",
