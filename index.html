@@ -1107,7 +1107,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       window.__ffcShowInstallPanel();
     }
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=45',{scope:'/fast-furious-club/'})
+      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=46',{scope:'/fast-furious-club/'})
         .then(registration=>console.info('FFC service worker ready',registration.scope))
         .catch(error=>console.error('FFC service worker registration failed',error));
     }
