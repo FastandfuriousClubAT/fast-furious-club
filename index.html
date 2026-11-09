@@ -1021,13 +1021,13 @@ memberLogout.addEventListener('click',async()=>{
 
 const memberPushEnable=document.getElementById('memberPushEnable');
 const memberPushStatus=document.getElementById('memberPushStatus');
-async function waitForFfcPushSubscription(OneSignal,maxWaitMs=30000){
+async function waitForFfcPushSubscription(OneSignal,maxWaitMs=45000){
  const started=Date.now();
  let subscription=OneSignal.User?.PushSubscription;
  while(Date.now()-started<maxWaitMs){
   subscription=OneSignal.User?.PushSubscription;
-  if(subscription?.id&&subscription?.token&&subscription?.optedIn)return subscription;
-  await new Promise(resolve=>setTimeout(resolve,500));
+  if(subscription?.id&&subscription?.optedIn)return subscription;
+  await new Promise(resolve=>setTimeout(resolve,750));
  }
  return subscription;
 }
@@ -1039,30 +1039,47 @@ memberPushEnable.addEventListener('click',async()=>{
    memberPushStatus.textContent=translations[lang].pushUnsupported;
    return;
   }
+  const OneSignal=await window.ffcOneSignalReady;
+  if(!currentMemberUser?.id)throw new Error('Missing signed-in customer ID');
+  // Link the signed-in customer FIRST. Otherwise OneSignal can create an anonymous
+  // subscription which is not attached to the customer account.
+  await OneSignal.login(currentMemberUser.id);
+  ffcOneSignalExternalId=currentMemberUser.id;
   if(Notification.permission==='denied'){
    memberPushStatus.textContent=translations[lang].pushDenied;
    return;
   }
-  const OneSignal=await window.ffcOneSignalReady;
-  const registration=await navigator.serviceWorker.ready;
-  if(!registration||!registration.scope.includes('/fast-furious-club/'))throw new Error('FFC service worker scope mismatch');
-  let subscription=OneSignal.User?.PushSubscription;
-  if(!subscription?.id||!subscription?.token||!subscription?.optedIn){
-   await OneSignal.User.PushSubscription.optIn();
-   subscription=await waitForFfcPushSubscription(OneSignal,30000);
+  if(Notification.permission==='default'){
+   await OneSignal.Notifications.requestPermission();
   }
-  if(!subscription?.id||!subscription?.token||!subscription?.optedIn){
-   memberPushStatus.textContent=Notification.permission==='denied'?translations[lang].pushDenied:translations[lang].pushError;
-   console.warn('FFC push subscription incomplete',{permission:Notification.permission,optedIn:subscription?.optedIn,hasId:!!subscription?.id,hasToken:!!subscription?.token,serviceWorkerScope:registration.scope});
+  if(Notification.permission!=='granted'){
+   memberPushStatus.textContent=translations[lang].pushDenied;
    return;
   }
-  if(currentMemberUser?.id){
-   await OneSignal.login(currentMemberUser.id);
-   ffcOneSignalExternalId=currentMemberUser.id;
+  let subscription=OneSignal.User?.PushSubscription;
+  if(!subscription?.id||!subscription?.optedIn){
+   await OneSignal.User.PushSubscription.optIn();
+   subscription=await waitForFfcPushSubscription(OneSignal,45000);
+  }
+  if(!subscription?.id||!subscription?.optedIn){
+   memberPushStatus.textContent=translations[lang].pushError;
+   console.warn('FFC OneSignal subscription did not become active',{
+    permission:Notification.permission,
+    optedIn:subscription?.optedIn,
+    hasSubscriptionId:!!subscription?.id,
+    hasToken:!!subscription?.token,
+    externalId:OneSignal.User?.externalId
+   });
+   return;
   }
   memberPushStatus.textContent=translations[lang].pushEnabled;
   memberPushEnable.textContent=translations[lang].pushAlready;
-  console.info('FFC push subscription ready',{optedIn:subscription.optedIn,hasId:!!subscription.id,hasToken:!!subscription.token,externalId:OneSignal.User?.externalId});
+  console.info('FFC OneSignal subscription active',{
+   subscriptionId:subscription.id,
+   optedIn:subscription.optedIn,
+   hasToken:!!subscription.token,
+   externalId:OneSignal.User?.externalId
+  });
  }catch(error){
   console.error('FFC push opt-in failed',error);
   memberPushStatus.textContent=translations[lang].pushError;
