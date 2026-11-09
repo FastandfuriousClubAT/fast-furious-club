@@ -1052,8 +1052,10 @@ memberPushEnable.addEventListener('click',async()=>{
   }
   // Request the browser permission directly from this button click.
   // This avoids depending on the separately configured OneSignal Slidedown prompt.
-  const granted=await OneSignal.Notifications.requestPermission();
-  if(!granted||Notification.permission!=='granted'){
+  // requestPermission() is a void API in OneSignal Web SDK v16.
+  // Determine the result from the browser permission state instead of its return value.
+  await OneSignal.Notifications.requestPermission();
+  if(Notification.permission!=='granted'||!OneSignal.Notifications.permission){
    memberPushStatus.textContent=translations[lang].pushDenied;
    return;
   }
