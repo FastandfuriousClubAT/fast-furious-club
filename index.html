@@ -1243,11 +1243,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
     if(/iphone|ipad|ipod/i.test(navigator.userAgent)){
       window.__ffcShowInstallPanel();
     }
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=62',{scope:'/fast-furious-club/'})
-        .then(registration=>console.info('FFC service worker ready',registration.scope))
-        .catch(error=>console.error('FFC service worker registration failed',error));
-    }
+    // OneSignal.init registers the shared app/OneSignal service worker.
   });
 })();
 </script>
