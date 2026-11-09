@@ -1,6 +1,6 @@
 importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "ffc-club-v55";
+const CACHE_NAME = "ffc-club-v56";
 const APP_SHELL = [
   "/fast-furious-club/",
   "/fast-furious-club/index.html",
