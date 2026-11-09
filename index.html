@@ -1071,12 +1071,10 @@ memberPushTest.addEventListener('click',async()=>{
    window.OneSignalDeferred.push(async function(OneSignal){
     try{
      await OneSignal.login(currentMemberUser.id);
-     const subscription=OneSignal.User?.PushSubscription;
-     if(!subscription?.optedIn||!subscription?.id){
-      resolve({data:{success:false,code:'NO_SUBSCRIBED_DEVICE'}});
-      return;
-     }
-     const result=await ffcSupabase.functions.invoke('ffc-push-test',{method:'POST',body:{subscription_id:subscription.id}});
+     // The server targets the authenticated Supabase user through OneSignal External ID.
+     // Do not block the request merely because the browser SDK has not exposed a subscription ID yet.
+     await new Promise(resolve=>setTimeout(resolve,1200));
+     const result=await ffcSupabase.functions.invoke('ffc-push-test',{method:'POST',body:{}});
      resolve(result);
     }catch(error){reject(error);}
    });
