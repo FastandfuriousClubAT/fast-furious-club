@@ -1044,10 +1044,8 @@ memberPushEnable.addEventListener('click',async()=>{
   OneSignal.Debug?.setLogLevel?.('debug');
   await OneSignal.login(currentMemberUser.id);
   ffcOneSignalExternalId=currentMemberUser.id;
-  // Make sure the current app worker is installed and active before subscribing.
-  await navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=61',{scope:'/fast-furious-club/'});
-  const registration=await navigator.serviceWorker.ready;
-  if(!registration?.active)throw new Error('Service worker se nepodařilo aktivovat.');
+  // OneSignal.init owns registration of its configured service worker.
+  // Do not register the same scope a second time from the button handler.
   if(Notification.permission==='denied'){
    memberPushStatus.textContent=translations[lang].pushDenied;
    return;
@@ -1063,8 +1061,7 @@ memberPushEnable.addEventListener('click',async()=>{
   const subscription=await waitForFfcPushSubscription(OneSignal,30000);
   console.info('FFC push diagnostics after opt-in',{
    permission:Notification.permission,
-   swScope:registration.scope,
-   swActive:!!registration.active,
+   swReady:!!(await navigator.serviceWorker.getRegistration('/fast-furious-club/'))?.active,
    subscriptionId:subscription?.id||null,
    optedIn:subscription?.optedIn??null,
    hasToken:!!subscription?.token,
@@ -1247,7 +1244,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       window.__ffcShowInstallPanel();
     }
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=61',{scope:'/fast-furious-club/'})
+      navigator.serviceWorker.register('/fast-furious-club/service-worker.js?v=62',{scope:'/fast-furious-club/'})
         .then(registration=>console.info('FFC service worker ready',registration.scope))
         .catch(error=>console.error('FFC service worker registration failed',error));
     }
