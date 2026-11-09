@@ -1028,17 +1028,26 @@ memberPushEnable.addEventListener('click',async()=>{
   window.OneSignalDeferred=window.OneSignalDeferred||[];
   window.OneSignalDeferred.push(async function(OneSignal){
    try{
-    if(OneSignal.User?.PushSubscription?.optedIn){
+    if(currentMemberUser?.id)await OneSignal.login(currentMemberUser.id);
+    let subscription=OneSignal.User?.PushSubscription;
+    if(subscription?.optedIn&&subscription?.id){
      memberPushStatus.textContent=translations[lang].pushAlready;
      memberPushEnable.textContent=translations[lang].pushAlready;
      return;
     }
-    await OneSignal.Slidedown.promptPush();
-    if(OneSignal.User?.PushSubscription?.optedIn){
+    await subscription?.optIn();
+    for(let attempt=0;attempt<20;attempt++){
+     subscription=OneSignal.User?.PushSubscription;
+     if(subscription?.optedIn&&subscription?.id)break;
+     await new Promise(resolve=>setTimeout(resolve,500));
+    }
+    if(subscription?.optedIn&&subscription?.id){
      memberPushStatus.textContent=translations[lang].pushEnabled;
      memberPushEnable.textContent=translations[lang].pushAlready;
     }else if(Notification.permission==='denied'){
      memberPushStatus.textContent=translations[lang].pushDenied;
+    }else{
+     memberPushStatus.textContent=translations[lang].pushError;
     }
    }catch(error){
     console.error('FFC push opt-in failed',error);
