@@ -3,7 +3,7 @@
 window.ffcOneSignalReady=new Promise((resolve,reject)=>{
  window.OneSignalDeferred.push(async function(OneSignal){
   try{
-   await OneSignal.init({appId:"4c23d673-3f92-472d-b418-31871e3cfa5a",serviceWorkerPath:"/fast-furious-club/service-worker.js",serviceWorkerParam:{scope:"/fast-furious-club/"},serviceWorkerOverrideForTypical:true,notificationClickHandlerMatch:"origin"});
+   await OneSignal.init({appId:"4c23d673-3f92-472d-b418-31871e3cfa5a",serviceWorkerPath:"/fast-furious-club/OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/fast-furious-club/"},notificationClickHandlerMatch:"origin"});
    resolve(OneSignal);
   }catch(error){console.error("FFC OneSignal init failed",error);reject(error);}
  });
