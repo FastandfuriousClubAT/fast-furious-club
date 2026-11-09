@@ -1041,48 +1041,46 @@ memberPushEnable.addEventListener('click',async()=>{
   }
   const OneSignal=await window.ffcOneSignalReady;
   if(!currentMemberUser?.id)throw new Error('Missing signed-in customer ID');
-  // Link the signed-in customer FIRST. Otherwise OneSignal can create an anonymous
-  // subscription which is not attached to the customer account.
+  OneSignal.Debug?.setLogLevel?.('debug');
   await OneSignal.login(currentMemberUser.id);
   ffcOneSignalExternalId=currentMemberUser.id;
   if(Notification.permission==='denied'){
    memberPushStatus.textContent=translations[lang].pushDenied;
    return;
   }
+  // Use OneSignal's own prompt flow when permission has not yet been granted.
+  // If the browser permission already exists, explicitly re-subscribe through optIn().
   if(Notification.permission==='default'){
-   await OneSignal.Notifications.requestPermission();
+   await OneSignal.Slidedown.promptPush();
+  }else if(Notification.permission==='granted'){
+   await OneSignal.User.PushSubscription.optIn();
   }
+  const registration=await navigator.serviceWorker.getRegistration('/fast-furious-club/');
+  console.info('FFC push diagnostics after opt-in',{
+   permission:Notification.permission,
+   swScope:registration?.scope||null,
+   swActive:!!registration?.active,
+   subscriptionId:OneSignal.User?.PushSubscription?.id||null,
+   optedIn:OneSignal.User?.PushSubscription?.optedIn??null,
+   hasToken:!!OneSignal.User?.PushSubscription?.token,
+   externalId:OneSignal.User?.externalId||null
+  });
+  const subscription=await waitForFfcPushSubscription(OneSignal,20000);
   if(Notification.permission!=='granted'){
    memberPushStatus.textContent=translations[lang].pushDenied;
    return;
   }
-  let subscription=OneSignal.User?.PushSubscription;
-  if(!subscription?.id||!subscription?.optedIn){
-   await OneSignal.User.PushSubscription.optIn();
-   subscription=await waitForFfcPushSubscription(OneSignal,45000);
-  }
-  if(!subscription?.id||!subscription?.optedIn){
-   memberPushStatus.textContent=translations[lang].pushError;
-   console.warn('FFC OneSignal subscription did not become active',{
-    permission:Notification.permission,
-    optedIn:subscription?.optedIn,
-    hasSubscriptionId:!!subscription?.id,
-    hasToken:!!subscription?.token,
-    externalId:OneSignal.User?.externalId
-   });
+  if(!subscription?.id||!subscription?.token||!subscription?.optedIn){
+   const reason=!registration?.active?'Service worker není aktivní.':!subscription?.id?'OneSignal nevytvořil ID předplatného.':!subscription?.token?'OneSignal nevytvořil push token.':'Předplatné není aktivní.';
+   memberPushStatus.textContent=reason+' (povolení prohlížeče: '+Notification.permission+')';
+   console.warn('FFC OneSignal subscription incomplete',reason);
    return;
   }
   memberPushStatus.textContent=translations[lang].pushEnabled;
   memberPushEnable.textContent=translations[lang].pushAlready;
-  console.info('FFC OneSignal subscription active',{
-   subscriptionId:subscription.id,
-   optedIn:subscription.optedIn,
-   hasToken:!!subscription.token,
-   externalId:OneSignal.User?.externalId
-  });
  }catch(error){
   console.error('FFC push opt-in failed',error);
-  memberPushStatus.textContent=translations[lang].pushError;
+  memberPushStatus.textContent='Chyba OneSignal: '+(error?.message||String(error));
  }finally{memberPushEnable.disabled=false;}
 });
 const memberPushTest=document.getElementById('memberPushTest');
