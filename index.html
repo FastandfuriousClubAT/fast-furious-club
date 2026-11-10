@@ -875,7 +875,7 @@ async function sendInquiry(form,notice,subject){
   try{
    const {error}=await ffcSupabase.from('inquiries').insert({user_id:null,inquiry_type:type,customer_name:name,customer_email:email?email.trim().toLowerCase():null,customer_phone:phone?phone.trim().replace(/[^\d+]/g,''):null,details:{...details,subject}});
    if(error)throw error;
-   let emailSent=false;
+   let emailSent=false,emailErrorMessage='';
    try{
     const emailFields=Object.fromEntries(Object.entries(details).map(([key,value])=>[key,Array.isArray(value)?value.join(', '):String(value??'')]));
     const mailPayload={...emailFields,_subject:subject,_replyto:email||undefined,_template:'table',_url:location.href,name,phone,email,inquiry_type:type,message:JSON.stringify(details,null,2)};
@@ -883,8 +883,8 @@ async function sendInquiry(form,notice,subject){
     const mailResult=await mailResponse.json().catch(()=>({success:'false',message:'E-mailová služba vrátila neplatnou odpověď.'}));
     if(!mailResponse.ok||String(mailResult.success).toLowerCase()!=='true')throw new Error(mailResult.message||mailResult.error||'E-mailová služba odmítla odeslání.');
     emailSent=true;
-   }catch(mailError){console.error('FFC inquiry email failed; inquiry remains saved in Supabase',mailError);}
-   notice.textContent=emailSent?translations[lang][form.id==='airportForm'?'airportThanks':'thanks']:(lang==='de'?'Anfrage gespeichert, aber die E-Mail konnte nicht gesendet werden. Bitte kontaktiere uns direkt per WhatsApp.':lang==='uk'?'Запит збережено, але електронний лист не вдалося надіслати. Будь ласка, зв’яжіться з нами через WhatsApp.':'Poptávka je uložená, ale e-mail se nepodařilo odeslat. Kontaktuj nás prosím přes WhatsApp.');
+   }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error('FFC inquiry email failed; inquiry remains saved in Supabase',mailError);}
+   notice.textContent=emailSent?translations[lang][form.id==='airportForm'?'airportThanks':'thanks']:(lang==='de'?'Anfrage gespeichert, aber die E-Mail konnte nicht gesendet werden.':lang==='uk'?'Запит збережено, але електронний лист не вдалося надіслати.':'Poptávka je uložená, ale e-mail se nepodařilo odeslat.')+(emailErrorMessage?' ('+emailErrorMessage+')':'')+(lang==='de'?' Bitte kontaktiere uns bei Bedarf per WhatsApp.':lang==='uk'?' За потреби зв’яжися з нами через WhatsApp.':' V případě potřeby nás kontaktuj přes WhatsApp.');
    form.reset();setMinimumDates();if(form.id==='tripForm')updateDateFlex();
   }catch(err){
    console.error('FFC inquiry save failed',err);
@@ -1476,15 +1476,15 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
      const persons=Number(count.value),unitPrice=t.price==null?null:Number(t.price);
      const payload={inquiry_type:"trip",customer_name:nm.input.value.trim(),customer_email:em.input.value.trim(),customer_phone:ph.input.value.trim(),user_id:user?.id||null,details:{trip_id:t.id,destination:t.destination,departure_date:t.departure_date,departure_time:"12:00",departure_location:"Wien Hauptbahnhof",return_time:"20:00 approx.",persons,unit_price:unitPrice,total_price:unitPrice===null?null:unitPrice*persons,currency:t.currency||"EUR",language:l}};
      const {error}=await db.from("inquiries").insert(payload);if(error)throw error;
-     let emailSent=false;
+     let emailSent=false,emailErrorMessage='';
      try{
       const bookingLines=[`Kunde: ${payload.customer_name}`,`E-Mail: ${payload.customer_email}`,`Telefon: ${payload.customer_phone}`,`Ausflug: ${payload.details.destination}`,`Abfahrt: ${payload.details.departure_date} um ${payload.details.departure_time}`,`Abfahrtort: ${payload.details.departure_location}`,`Personen: ${payload.details.persons}`,`Preis pro Person: ${payload.details.unit_price??"nicht angegeben"} ${payload.details.currency}`,`Gesamtpreis: ${payload.details.total_price??"nicht angegeben"} ${payload.details.currency}`,`Rückkehr: ${payload.details.return_time}`].join("\\n");
       const mailPayload={_subject:`Fast & Furious Club – Neue Buchung: ${payload.details.destination}`,_replyto:payload.customer_email,_template:"table",_url:location.href,name:payload.customer_name,email:payload.customer_email,phone:payload.customer_phone,inquiry_type:"trip",message:bookingLines,details_json:JSON.stringify(payload.details)};
       const mailResponse=await fetch("https://formsubmit.co/ajax/odtahy.aut@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(mailPayload)});
       const mailResult=await mailResponse.json().catch(()=>({success:"false",message:"E-Mailová služba vrátila neplatnou odpověď."}));
       if(!mailResponse.ok||String(mailResult.success).toLowerCase()!=="true")throw new Error(mailResult.message||mailResult.error||"E-mailová služba odmítla odeslání.");emailSent=true;
-     }catch(mailError){console.error("FFC trip booking email failed; booking remains saved in Supabase",mailError);}
-     msg.textContent=emailSent?c.success:c.emailWarning;msg.classList.add("success");form.reset();count.value="1";
+     }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error("FFC trip booking email failed; booking remains saved in Supabase",mailError);}
+     msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);form.reset();count.value="1";
     }catch(error){console.error("FFC trip booking failed",error);msg.textContent=c.error;msg.classList.remove("success");}
     finally{send.disabled=false;send.textContent=c.send;}
    });
