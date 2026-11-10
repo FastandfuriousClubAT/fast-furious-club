@@ -640,13 +640,39 @@ main{padding-top:26px}
   .heroArt img{display:block!important;width:100%!important;height:100%!important;min-height:300px!important;object-fit:cover!important;object-position:center 48%!important}
 }
 </style>
-</head><body>
-<header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
+<style id="ffc-admin-dashboard-style">
+#ffcAdmin[hidden],#ffcAdminNav[hidden]{display:none!important}
+#ffcAdmin{margin:28px auto;padding:22px;border:1px solid #3c7184;border-radius:22px;background:#0b2635;color:#eef6f9}
+#ffcAdmin .sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#ffcAdmin .sectionhead h2{color:#fff}
+.ffc-admin-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.ffc-admin-stat{padding:16px;border:1px solid #31586a;border-radius:14px;background:#102f40}
+.ffc-admin-stat strong{display:block;font-size:26px;color:#a8ed27}
+.ffc-admin-stat span{font-size:13px;color:#c3d2d9}
+.ffc-admin-tools{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:10px;margin:16px 0}
+.ffc-admin-tools input,.ffc-admin-tools select,.ffc-admin-card select{min-height:46px;width:100%;padding:10px 12px;border:1px solid #b8c9d0;border-radius:10px;background:#fff;color:#132b39}
+.ffc-admin-list{display:grid;gap:12px}
+.ffc-admin-card{padding:16px;border:1px solid #31586a;border-radius:16px;background:#102b3a}
+.ffc-admin-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ffc-admin-card h3{margin:0 0 5px;color:#fff;font-size:19px}
+.ffc-admin-card p{margin:5px 0;color:#c5d3da;line-height:1.5}
+.ffc-admin-card a{color:#b8ed54;text-decoration:underline}
+.ffc-admin-meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.ffc-admin-pill{padding:5px 9px;border-radius:999px;background:#24495a;color:#e7f2f6;font-size:12px;font-weight:800}
+.ffc-admin-details{margin-top:10px;padding:10px 12px;border-radius:10px;background:#091e2a;color:#cbd9df;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.ffc-admin-status{min-width:165px;max-width:220px}
+@media(max-width:650px){.ffc-admin-stats{grid-template-columns:1fr 1fr}.ffc-admin-tools{grid-template-columns:1fr}#ffcAdmin{padding:16px}.ffc-admin-card-head{display:block}.ffc-admin-status{max-width:none;margin-top:10px}}
+</style></head><body>
+<header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a><a href="#ffcAdmin" id="ffcAdminNav" hidden>ADMIN</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
 <section class="hero"><div><div class="eyebrow" data-t="eyebrow">Tvůj klub pro další dobrodružství</div><div class="hero-title-row"><h1 data-t="hero">Tak kam vyrazíme?</h1><button class="btn member hero-member" onclick="showPanel('memberArea')" data-t="memberCta">♥ Registrace zákazníka</button></div><p data-t="intro">Ty řekneš, co chceš zažít. My ti pomůžeme sestavit výlet podle termínu, počtu lidí a tvých zájmů.</p><div class="btnrow"><button class="btn tours" onclick="showPanel('request')" data-t="cta">Sestavit výlet na přání ↗</button><button class="btn offers" onclick="document.getElementById('offers').scrollIntoView({behavior:'smooth'})" data-t="offersBtn">Prohlédnout nabídky</button><button class="btn ride" onclick="showPanel('rideRequest')" data-t="rideButton">Poptat jízdu</button><button class="btn airport" onclick="showPanel('airportRequest')" data-t="airportButton">✈ Transfer – na letiště nebo zpět</button></div></div><div class="heroArt" aria-hidden="true"><img src="hero-road.png?v=6" alt="" loading="eager"></div></section>
 <section class="section" id="publishedTrips"><div class="sectionhead"><div><h2 id="publishedTripsTitle">Aktuální výlety</h2><p class="sub" id="publishedTripsSub">Nové nabídky Fast & Furious Club</p></div></div><div class="cards" id="publishedTripsList"><p class="sub" id="publishedTripsLoading">Načítám aktuální nabídky…</p></div></section>
-
-
+<section class="section" id="ffcAdmin" hidden>
+ <div class="sectionhead"><div><h2 id="ffcAdminTitle">Buchungsverwaltung</h2><p class="sub" id="ffcAdminSubtitle">Private Administration</p></div><button class="btn" type="button" id="ffcAdminReload">Aktualisieren</button></div>
+ <div class="ffc-admin-stats" id="ffcAdminStats"></div>
+ <div class="ffc-admin-tools"><input id="ffcAdminSearch" type="search" placeholder="Name, Telefon oder Reiseziel suchen"><select id="ffcAdminFilter" aria-label="Anfragen filtern"><option value="all">Alle Anfragen</option><option value="new">Neu</option><option value="in_progress">In Bearbeitung</option><option value="answered">Beantwortet</option><option value="closed">Geschlossen</option></select></div>
+ <p class="sub" id="ffcAdminMessage" aria-live="polite"></p><div id="ffcAdminList" class="ffc-admin-list"></div>
+</section>
 <section class="service-grid" aria-label="Unsere Services">
  <article class="service-tile"><div class="service-icon">✈️</div><h3 data-t="serviceTransfer">Transfer</h3><p data-t="serviceTransferDesc">Flughafen, Unterkunft und zurück — wir bringen dich bequem ans Ziel.</p><button class="btn" onclick="showPanel('airportRequest')" data-t="serviceBook">Transfer buchen ›</button></article>
  <article class="service-tile"><div class="service-icon">📍</div><h3 data-t="serviceTours">Individuelle Touren</h3><p data-t="serviceToursDesc">Du wählst das Ziel — wir kümmern uns um den Rest.</p><button class="btn" onclick="showPanel('request')" data-t="serviceAsk">Anfrage senden ›</button></article>
@@ -1463,4 +1489,56 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
  load();document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setTimeout(load,0)));
 })(); 
 </script>
-</body></html>
+<script id="ffc-admin-dashboard">
+(function(){
+ const nav=document.getElementById('ffcAdminNav'),panel=document.getElementById('ffcAdmin');
+ if(!nav||!panel||!window.supabase)return;
+ const db=ffcSupabase,list=document.getElementById('ffcAdminList'),message=document.getElementById('ffcAdminMessage');
+ const search=document.getElementById('ffcAdminSearch'),filter=document.getElementById('ffcAdminFilter');
+ const words={
+ cz:{title:'Správa objednávek',sub:'Soukromá administrace Fast & Furious Club',reload:'Obnovit',search:'Hledat jméno, telefon nebo cíl',all:'Všechny poptávky',new:'Nové',in_progress:'Rozpracované',answered:'Zodpovězené',closed:'Uzavřené',newCount:'Nové poptávky',seats:'Počet míst – výlety',potential:'Hodnota poptávek',trip:'Výlet',ride:'Jízda',airport:'Letištní transfer',people:'osob',destination:'Cíl',empty:'Žádné poptávky neodpovídají filtru.',loading:'Načítám objednávky…',error:'Objednávky se nepodařilo načíst. Zkontroluj přihlášení správce.',saved:'Stav uložen.',saveError:'Stav se nepodařilo uložit.',details:'Další údaje',name:'Zákazník'},
+ de:{title:'Buchungsverwaltung',sub:'Private Administration des Fast & Furious Club',reload:'Aktualisieren',search:'Name, Telefon oder Reiseziel suchen',all:'Alle Anfragen',new:'Neu',in_progress:'In Bearbeitung',answered:'Beantwortet',closed:'Geschlossen',newCount:'Neue Anfragen',seats:'Angefragte Plätze',potential:'Anfragewert',trip:'Ausflug',ride:'Fahrt',airport:'Flughafentransfer',people:'Personen',destination:'Ziel',empty:'Keine passenden Anfragen gefunden.',loading:'Buchungen werden geladen…',error:'Buchungen konnten nicht geladen werden. Bitte Admin-Anmeldung prüfen.',saved:'Status gespeichert.',saveError:'Status konnte nicht gespeichert werden.',details:'Weitere Angaben',name:'Kunde'},
+ uk:{title:'Керування бронюваннями',sub:'Приватна адміністрація Fast & Furious Club',reload:'Оновити',search:'Пошук за ім’ям, телефоном або напрямком',all:'Усі запити',new:'Нові',in_progress:'У роботі',answered:'Відповіли',closed:'Закриті',newCount:'Нові запити',seats:'Замовлені місця',potential:'Сума запитів',trip:'Подорож',ride:'Поїздка',airport:'Трансфер до аеропорту',people:'осіб',destination:'Напрямок',empty:'Немає запитів за цим фільтром.',loading:'Завантажуємо бронювання…',error:'Не вдалося завантажити бронювання. Перевір вхід адміністратора.',saved:'Статус збережено.',saveError:'Не вдалося зберегти статус.',details:'Додаткова інформація',name:'Клієнт'}
+ };
+ let rows=[];
+ const currentLang=()=>{const v=localStorage.getItem('ffc-language')||'de';return v==='cs'?'cz':v;};
+ const t=()=>words[currentLang()]||words.de;
+ function el(parent,tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;n.textContent=value;parent.appendChild(n);return n;}
+ function render(){
+  const c=t(),q=(search.value||'').toLowerCase(),state=filter.value;
+  const shown=rows.filter(r=>{const d=r.details||{},hay=[r.customer_name,r.customer_email,r.customer_phone,d.destination,d.departure_location,d.contact,d.subject].join(' ').toLowerCase();return(state==='all'||r.status===state)&&(!q||hay.includes(q));});
+  list.replaceChildren();
+  const seats=rows.filter(r=>r.inquiry_type==='trip'&&r.status!=='closed').reduce((n,r)=>n+(Number(r.details?.persons)||0),0);
+  const total=rows.filter(r=>r.status!=='closed').reduce((n,r)=>n+(Number(r.details?.total_price)||0),0);
+  const stats=document.getElementById('ffcAdminStats');stats.replaceChildren();
+  [[rows.filter(r=>r.status==='new').length,c.newCount],[seats,c.seats],[total.toLocaleString('de-AT',{style:'currency',currency:'EUR',maximumFractionDigits:0}),c.potential]].forEach(([v,l])=>{const x=el(stats,'div','ffc-admin-stat','');el(x,'strong','',v);el(x,'span','',l);});
+  document.getElementById('ffcAdminTitle').textContent=c.title;document.getElementById('ffcAdminSubtitle').textContent=c.sub;document.getElementById('ffcAdminReload').textContent=c.reload;search.placeholder=c.search;
+  filter.options[0].textContent=c.all;['new','in_progress','answered','closed'].forEach((v,i)=>filter.options[i+1].textContent=c[v]);
+  message.textContent=shown.length+' / '+rows.length;
+  if(!shown.length){el(list,'p','',c.empty);return;}
+  shown.forEach(r=>{
+   const d=r.details||{},card=el(list,'article','ffc-admin-card',''),head=el(card,'div','ffc-admin-card-head',''),left=el(head,'div','','');
+   el(left,'h3','',r.customer_name||c.name);
+   el(left,'p','',(c[r.inquiry_type]||r.inquiry_type)+' · '+new Date(r.created_at).toLocaleString(currentLang()==='cz'?'cs-CZ':currentLang()==='uk'?'uk-UA':'de-AT'));
+   const select=document.createElement('select');select.className='ffc-admin-status';select.setAttribute('aria-label','Status');
+   [['new',c.new],['in_progress',c.in_progress],['answered',c.answered],['closed',c.closed]].forEach(([v,label])=>{const o=document.createElement('option');o.value=v;o.textContent=label;select.appendChild(o);});
+   select.value=r.status;select.addEventListener('change',async()=>{const old=r.status;select.disabled=true;const {error}=await db.from('inquiries').update({status:select.value}).eq('id',r.id);select.disabled=false;if(error){message.textContent=c.saveError;select.value=old;return;}r.status=select.value;render();message.textContent=c.saved;});head.appendChild(select);
+   const meta=el(card,'div','ffc-admin-meta','');
+   if(d.destination)el(meta,'span','ffc-admin-pill',c.destination+': '+d.destination);
+   if(d.persons)el(meta,'span','ffc-admin-pill',d.persons+' '+c.people);
+   if(d.departure_date)el(meta,'span','ffc-admin-pill',d.departure_date);
+   if(d.total_price!=null)el(meta,'span','ffc-admin-pill',Number(d.total_price).toLocaleString('de-AT')+' '+(d.currency||'EUR'));
+   const contact=el(card,'p','','');
+   if(r.customer_phone){const a=document.createElement('a');a.href='tel:'+r.customer_phone;a.textContent=r.customer_phone;contact.append('☎ ',a);}
+   if(r.customer_email){if(contact.childNodes.length)contact.append(' · ');const a=document.createElement('a');a.href='mailto:'+r.customer_email;a.textContent=r.customer_email;contact.append('✉ ',a);}
+   const extra=Object.entries(d).filter(([k,v])=>!['trip_id','language','unit_price','total_price','currency','persons','destination','departure_date'].includes(k)&&v!=null&&v!=='').map(([k,v])=>k+': '+(Array.isArray(v)?v.join(', '):typeof v==='object'?JSON.stringify(v):String(v)));
+   if(extra.length)el(card,'div','ffc-admin-details',c.details+'\n'+extra.join('\n'));
+  });
+ }
+ async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();}
+ async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error){console.warn('FFC admin access check failed',error);return;}if(!data)return;nav.hidden=false;panel.hidden=false;await load();}
+ document.getElementById('ffcAdminReload').addEventListener('click',load);search.addEventListener('input',render);filter.addEventListener('change',render);
+ db.auth.getUser().then(({data,error})=>{if(!error)sync(data.user||null);});
+ db.auth.onAuthStateChange((event,session)=>{sync(session?.user||null);});
+})();
+</script></body></html>
