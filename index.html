@@ -1538,7 +1538,9 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
  async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();}
  async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error){console.warn('FFC admin access check failed',error);return;}if(!data)return;nav.hidden=false;panel.hidden=false;await load();}
  document.getElementById('ffcAdminReload').addEventListener('click',load);search.addEventListener('input',render);filter.addEventListener('change',render);
- db.auth.getUser().then(({data,error})=>{if(!error)sync(data.user||null);});
- db.auth.onAuthStateChange((event,session)=>{sync(session?.user||null);});
+ // Run database checks outside the Supabase auth callback to avoid its auth-lock deadlock.
+ db.auth.getSession().then(({data,error})=>{if(error){console.warn('FFC admin session check failed',error);return;}setTimeout(()=>sync(data.session?.user||null),0);});
+ db.auth.onAuthStateChange((event,session)=>{setTimeout(()=>sync(session?.user||null),0);});
+ nav.addEventListener('click',event=>{event.preventDefault();if(!panel.hidden)panel.scrollIntoView({behavior:'smooth',block:'start'});});
 })();
 </script></body></html>
