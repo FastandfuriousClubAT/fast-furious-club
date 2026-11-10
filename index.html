@@ -582,6 +582,63 @@ main{padding-top:26px}
  .ffc-booking-form .formgrid{grid-template-columns:1fr}
  .hero{padding:20px!important}
 }
+
+/* FINAL MOBILE HERO LAYOUT: keep the enquiry buttons and show the branded van below them */
+@media(max-width:760px){
+  .hero{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:0!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:0!important;
+    overflow:hidden!important;
+    position:relative!important;
+  }
+  .hero>div:first-child{
+    order:0!important;
+    position:relative!important;
+    z-index:2!important;
+    width:100%!important;
+    max-width:none!important;
+    padding:22px 18px 20px!important;
+  }
+  .heroArt{
+    display:block!important;
+    order:1!important;
+    position:relative!important;
+    inset:auto!important;
+    z-index:1!important;
+    width:100%!important;
+    height:clamp(190px,55vw,260px)!important;
+    min-height:190px!important;
+    max-height:260px!important;
+    margin:0!important;
+    border:0!important;
+    border-top:1px solid #315b6d!important;
+    border-radius:0!important;
+    overflow:hidden!important;
+    opacity:1!important;
+    background:#071521!important;
+    box-shadow:none!important;
+  }
+  .heroArt img{
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    object-fit:cover!important;
+    object-position:center 48%!important;
+    opacity:1!important;
+  }
+}
+@media(min-width:761px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)!important;padding:30px!important;min-height:360px!important}
+  .heroArt{display:block!important;position:relative!important;inset:auto!important;z-index:1!important;min-height:300px!important;height:100%!important;max-height:none!important}
+  .heroArt img{display:block!important;width:100%!important;height:100%!important;min-height:300px!important;object-fit:cover!important;object-position:center 48%!important}
+}
 </style>
 </head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
