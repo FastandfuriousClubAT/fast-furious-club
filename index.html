@@ -855,44 +855,17 @@ document.querySelectorAll('input[name=flexibleDate]').forEach(r=>r.addEventListe
 function showPanel(id){document.getElementById(id).classList.add('open');document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
 function prefill(type){showPanel('request');document.querySelectorAll('input[name=interest]').forEach(x=>x.checked=x.value===type)}
 async function sendFfcEmail({name,phone,email,inquiry_type,subject,details}) {
-  const accessKey = "53fb70e0-8010-446d-8ecd-c3dee116efa2";
-  const detailText = Object.entries(details || {}).map(([key,value]) =>
-    key.replace(/[_-]/g," ") + ": " +
-    (Array.isArray(value) ? value.join(", ") : typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? ""))
-  ).join("\n");
-  const message = [
-    "Neue Anfrage über Fast & Furious Club",
-    "",
-    "Name: " + name,
-    "E-Mail: " + (email || "—"),
-    "Telefon: " + (phone || "—"),
-    "Typ: " + inquiry_type,
-    "",
-    "Details:",
-    detailText,
-    "",
-    "Die Anfrage ist unverbindlich und wird erst nach unserer ausdrücklichen Bestätigung verbindlich."
-  ].join("\n");
-  const response = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({
-      access_key: accessKey,
-      name,
-      email: email || "",
-      phone: phone || "",
-      inquiry_type,
-      message,
-      subject,
-      from_name: "Fast & Furious Club",
-      replyto: email || "odtahy.aut@gmail.com"
-    })
+  const { data, error } = await ffcSupabase.functions.invoke("ffc-inquiry-email", {
+    body: { name, phone, email: (email || "").trim().toLowerCase(), inquiry_type, subject, details: details || {} }
   });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.success !== true) {
-    throw new Error(result.message || result.body?.message || result.error || "Web3Forms e-mail odeslání nepotvrdil.");
+  if (error) throw new Error(error.message || "E-mailová služba není dostupná.");
+  if (!data?.success || !data?.owner_notification) {
+    throw new Error(data?.error || "Odeslání oznámení nebylo potvrzeno.");
   }
-  return result;
+  if (email && !data?.customer_copy) {
+    throw new Error(data?.error || "Oznámení správci bylo odesláno, ale kopie zákazníkovi nebyla potvrzena.");
+  }
+  return data;
 }
 async function sendInquiry(form,notice,subject){
   const details={};
