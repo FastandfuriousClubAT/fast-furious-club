@@ -885,7 +885,7 @@ async function sendInquiry(form,notice,subject){
     emailSent=true;
    }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error('FFC inquiry email failed; inquiry remains saved in Supabase',mailError);}
    notice.textContent=emailSent?translations[lang][form.id==='airportForm'?'airportThanks':'thanks']:(lang==='de'?'Anfrage gespeichert, aber die E-Mail konnte nicht gesendet werden.':lang==='uk'?'Запит збережено, але електронний лист не вдалося надіслати.':'Poptávka je uložená, ale e-mail se nepodařilo odeslat.')+(emailErrorMessage?' ('+emailErrorMessage+')':'')+(lang==='de'?' Bitte kontaktiere uns bei Bedarf per WhatsApp.':lang==='uk'?' За потреби зв’яжися з нами через WhatsApp.':' V případě potřeby nás kontaktuj přes WhatsApp.');
-   form.reset();setMinimumDates();if(form.id==='tripForm')updateDateFlex();
+   if(emailSent){form.reset();setMinimumDates();if(form.id==='tripForm')updateDateFlex();}
   }catch(err){
    console.error('FFC inquiry save failed',err);
    notice.textContent=lang==='de'?'Speichern fehlgeschlagen. Bitte versuche es erneut oder kontaktiere uns direkt.':lang==='uk'?'Не вдалося зберегти запит. Спробуйте ще раз або зв’яжіться з нами напряму.':'Poptávku se nepodařilo uložit. Zkus to znovu nebo nás kontaktuj přímo.';
@@ -1423,15 +1423,27 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
  async function openBooking(form,t,button,c){
   form.classList.toggle("hidden");
   button.setAttribute("aria-expanded",String(!form.classList.contains("hidden")));
-  if(form.dataset.prefilled)return;
-  form.dataset.prefilled="1";
+  if(form.classList.contains("hidden")||form.dataset.prefilled||form.dataset.prefilling)return;
+  form.dataset.prefilling="1";
+  const submit=form.querySelector('button[type="submit"]');
+  if(submit)submit.disabled=true;
   try{
-   const {data}=await db.auth.getUser();const u=data?.user;if(!u)return;
+   let u=currentMemberUser||null;
+   if(!u){const {data,error}=await db.auth.getUser();if(error)throw error;u=data?.user||null;}
+   if(!u){delete form.dataset.prefilling;return;}
    const meta=u.user_metadata||{};
-   form.querySelector('[name="customer_name"]').value=meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(" ")||"";
-   form.querySelector('[name="customer_email"]').value=u.email||"";
-   form.querySelector('[name="customer_phone"]').value=meta.phone||"";
-  }catch(e){console.warn("FFC booking prefill skipped",e);}
+   const values={
+    customer_name:meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(" ")||"",
+    customer_email:u.email||"",
+    customer_phone:meta.phone||""
+   };
+   for(const [name,value] of Object.entries(values)){
+    const input=form.querySelector('[name="'+name+'"]');
+    if(input){input.value=value;input.readOnly=true;input.autocomplete="off";}
+   }
+   form.dataset.prefilled="1";
+  }catch(e){console.warn("FFC booking prefill failed; form remains editable",e);}
+  finally{delete form.dataset.prefilling;if(submit)submit.disabled=false;}
  }
  function render(rows){
   const l=langNow(),c=copy[l]||copy.de;
@@ -1484,7 +1496,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       const mailResult=await mailResponse.json().catch(()=>({success:"false",message:"E-Mailová služba vrátila neplatnou odpověď."}));
       if(!mailResponse.ok||String(mailResult.success).toLowerCase()!=="true")throw new Error(mailResult.message||mailResult.error||"E-mailová služba odmítla odeslání.");emailSent=true;
      }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error("FFC trip booking email failed; booking remains saved in Supabase",mailError);}
-     msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);form.reset();count.value="1";
+     msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);if(emailSent){form.reset();count.value="1";delete form.dataset.prefilled;}
     }catch(error){console.error("FFC trip booking failed",error);msg.textContent=c.error;msg.classList.remove("success");}
     finally{send.disabled=false;send.textContent=c.send;}
    });
