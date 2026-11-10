@@ -1502,7 +1502,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
       await sendFfcEmail({name:payload.customer_name,phone:payload.customer_phone,email:payload.customer_email,inquiry_type:"trip",subject:`Fast & Furious Club – Neue Buchung: ${payload.details.destination}`,details:payload.details});
       emailSent=true;
      }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error("FFC trip booking email failed; booking remains saved in Supabase",mailError);}
-     msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);if(emailSent){form.reset();count.value="1";delete form.dataset.prefilled;}
+     msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);form.reset();count.value="1";delete form.dataset.prefilled;intro.classList.add("hidden");grid.classList.add("hidden");send.classList.add("hidden");form.dataset.submitted="1";
     }catch(error){console.error("FFC trip booking failed",error);msg.textContent=c.error;msg.classList.remove("success");}
     finally{send.disabled=false;send.textContent=c.send;}
    });
