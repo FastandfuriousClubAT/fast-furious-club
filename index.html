@@ -532,6 +532,7 @@ main{padding-top:26px}
 <article class="card"><div class="cardart"><img src="card-coast.jpg" alt="Airbus A320 im Fast & Furious Club Design" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="daytrip">Jednodenní i vícedenní</span><h3 data-t="seaTitle">K vodě a za sluncem</h3><p data-t="seaDesc">Jezera, moře a příjemné zastávky cestou.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('swim')" data-t="details">Mám zájem</button></div></div></article>
 <article class="card"><div class="cardart"><img src="card-city.jpg" alt="Schloss in Europa" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="culture">Města a kultura</span><h3 data-t="cityTitle">Objevuj Evropu</h3><p data-t="cityDesc">Historická centra, památky a místní atmosféra.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('culture')" data-t="details">Mám zájem</button></div></div></article>
 <article class="card"><div class="cardart"><img src="card-nature.jpg" alt="See in der Natur" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="nature">Příroda a zážitky</span><h3 data-t="natureTitle">Vyraz mimo město</h3><p data-t="natureDesc">Hory, vyhlídky, termály a netradiční zážitky.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('nature')" data-t="details">Mám zájem</button></div></div></article></div></section>
+<section class="section" id="publishedTrips"><div class="sectionhead"><div><h2 id="publishedTripsTitle">Aktuální výlety</h2><p class="sub" id="publishedTripsSub">Nové nabídky Fast & Furious Club</p></div></div><div class="cards" id="publishedTripsList"><p class="sub" id="publishedTripsLoading">Načítám aktuální nabídky…</p></div></section>
 <section class="section" id="about"><div class="feature"><div class="featurebox"><div class="featureicon">👥</div><div><h3 data-t="groupsTitle">Pro vaši partu</h3><p data-t="groupsDesc">Čtyři dny volna, Silvestr nebo rodinný výlet? Zadejte společné přání a připravíme návrh. Menší skupiny cestují našimi mikrobusy, větší výlety lze řešit ve spolupráci s dopravním partnerem.</p></div></div><div class="featurebox"><div class="featureicon">🎁</div><div><h3 data-t="rewardsTitle">Zákaznické výhody</h3><p data-t="rewardsDesc">Do budoucna: poukazy, odměny za doporučení a výhody pro opakované zákazníky. Členství zdarma.</p></div></div></div></section>
 
 <section class="app-showcase" aria-label="Fast and Furious Club App">
@@ -1247,6 +1248,42 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
     }
     // OneSignal.init registers the shared app/OneSignal service worker.
   });
+})();
+</script>
+<script>
+/* Published trips from Supabase – read-only public catalogue */
+(function(){
+ const copy={
+  cz:{title:"Aktuální výlety",sub:"Nové nabídky Fast & Furious Club",loading:"Načítám aktuální nabídky…",empty:"Momentálně nejsou zveřejněné žádné výlety. Připravujeme další nabídky.",from:"Odjezd",price:"Cena na osobu",details:"Podrobnosti / rezervace",ask:"Cena na dotaz"},
+  de:{title:"Aktuelle Ausflüge",sub:"Neue Angebote von Fast & Furious Club",loading:"Aktuelle Angebote werden geladen…",empty:"Derzeit sind keine Ausflüge veröffentlicht. Neue Angebote folgen bald.",from:"Abfahrt",price:"Preis pro Person",details:"Details / Buchung",ask:"Preis auf Anfrage"},
+  uk:{title:"Актуальні подорожі",sub:"Нові пропозиції Fast & Furious Club",loading:"Завантажуємо актуальні пропозиції…",empty:"Наразі немає опублікованих подорожей. Нові пропозиції незабаром.",from:"Виїзд",price:"Ціна за особу",details:"Деталі / бронювання",ask:"Ціна за запитом"}
+ };
+ const list=document.getElementById("publishedTripsList");if(!list)return;
+ const db=window.supabase.createClient(FFC_SUPABASE_URL,FFC_SUPABASE_KEY);
+ const langNow=()=>({cs:"cz"}[lang]||lang||"de");
+ function render(rows){
+  const l=langNow(),c=copy[l]||copy.de;
+  document.getElementById("publishedTripsTitle").textContent=c.title;
+  document.getElementById("publishedTripsSub").textContent=c.sub;
+  list.replaceChildren();
+  if(!rows.length){const p=document.createElement("p");p.className="sub";p.textContent=c.empty;list.append(p);return;}
+  for(const t of rows){
+   const card=document.createElement("article");card.className="card";
+   const body=document.createElement("div");body.className="cardbody";
+   const title=document.createElement("h3");title.textContent=t[ "title_"+l]||t.title_de||t.destination;
+   const dest=document.createElement("p");dest.textContent=t.destination||"";
+   const desc=document.createElement("p");desc.textContent=t["description_"+l]||t.description_de||"";
+   const date=document.createElement("p");date.className="sub";date.textContent=t.departure_date?c.from+": "+new Date(t.departure_date+"T12:00:00").toLocaleDateString(l==="cz"?"cs-CZ":l==="uk"?"uk-UA":"de-AT"):"";
+   const foot=document.createElement("div");foot.className="cardfoot";
+   const price=document.createElement("strong");price.className="price";price.textContent=t.price==null?c.ask:t.price+" "+t.currency;
+   foot.append(price);
+   if(t.booking_url){try{const u=new URL(t.booking_url);if(u.protocol==="https:"||u.protocol==="http:"){const a=document.createElement("a");a.className="btn secondary";a.href=u.href;a.target="_blank";a.rel="noopener noreferrer";a.textContent=c.details;foot.append(a)}}catch{}}
+   body.append(title,dest,desc,date,foot);card.append(body);list.append(card);
+  }
+ }
+ async function load(){const c=copy[langNow()]||copy.de;document.getElementById("publishedTripsLoading").textContent=c.loading;const {data,error}=await db.from("trips").select("id,title_de,title_cz,title_uk,description_de,description_cz,description_uk,destination,departure_date,price,currency,booking_url").eq("published",true).order("departure_date",{ascending:true,nullsFirst:false});if(error){list.textContent="";return;}render(data||[]);}
+ load();
+ document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setTimeout(load,0)));
 })();
 </script>
 </body></html>
