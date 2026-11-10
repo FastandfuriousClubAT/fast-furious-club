@@ -854,6 +854,46 @@ function updateDateFlex(){const from=document.getElementById('dateFrom'),to=docu
 document.querySelectorAll('input[name=flexibleDate]').forEach(r=>r.addEventListener('change',updateDateFlex));document.getElementById('dateFrom').addEventListener('change',()=>{const from=document.getElementById('dateFrom'),to=document.getElementById('dateTo');to.min=from.value||to.min;if(to.value&&to.value<to.min)to.value='';});updateDateFlex();
 function showPanel(id){document.getElementById(id).classList.add('open');document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
 function prefill(type){showPanel('request');document.querySelectorAll('input[name=interest]').forEach(x=>x.checked=x.value===type)}
+async function sendFfcEmail({name,phone,email,inquiry_type,subject,details}) {
+  const accessKey = "53fb70e0-8010-446d-8ecd-c3dee116efa2";
+  const detailText = Object.entries(details || {}).map(([key,value]) =>
+    key.replace(/[_-]/g," ") + ": " +
+    (Array.isArray(value) ? value.join(", ") : typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? ""))
+  ).join("\n");
+  const message = [
+    "Neue Anfrage über Fast & Furious Club",
+    "",
+    "Name: " + name,
+    "E-Mail: " + (email || "—"),
+    "Telefon: " + (phone || "—"),
+    "Typ: " + inquiry_type,
+    "",
+    "Details:",
+    detailText,
+    "",
+    "Die Anfrage ist unverbindlich und wird erst nach unserer ausdrücklichen Bestätigung verbindlich."
+  ].join("\n");
+  const response = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify({
+      access_key: accessKey,
+      name,
+      email: email || "",
+      phone: phone || "",
+      inquiry_type,
+      message,
+      subject,
+      from_name: "Fast & Furious Club",
+      replyto: email || "odtahy.aut@gmail.com"
+    })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.success !== true) {
+    throw new Error(result.message || result.body?.message || result.error || "Web3Forms e-mail odeslání nepotvrdil.");
+  }
+  return result;
+}
 async function sendInquiry(form,notice,subject){
   const details={};
   for(const el of form.elements){
@@ -877,9 +917,7 @@ async function sendInquiry(form,notice,subject){
    if(error)throw error;
    let emailSent=false,emailErrorMessage='';
    try{
-    const {data:mailResult,error:mailError}=await ffcSupabase.functions.invoke('ffc-inquiry-email',{body:{name,phone,email,inquiry_type:type,subject,details:{...details,subject}}});
-    if(mailError)throw mailError;
-    if(!mailResult?.success)throw new Error(mailResult?.error||'E-mailová služba nepotvrdila odeslání.');
+    await sendFfcEmail({name,phone,email:email.trim().toLowerCase(),inquiry_type:type,subject,details:{...details,subject}});
     emailSent=true;
    }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error('FFC inquiry email failed; inquiry remains saved in Supabase',mailError);}
    notice.textContent=emailSent?translations[lang][form.id==='airportForm'?'airportThanks':'thanks']:(lang==='de'?'Anfrage gespeichert, aber die E-Mail konnte nicht gesendet werden.':lang==='uk'?'Запит збережено, але електронний лист не вдалося надіслати.':'Poptávka je uložená, ale e-mail se nepodařilo odeslat.')+(emailErrorMessage?' ('+emailErrorMessage+')':'')+(lang==='de'?' Bitte kontaktiere uns bei Bedarf per WhatsApp.':lang==='uk'?' За потреби зв’яжися з нами через WhatsApp.':' V případě potřeby nás kontaktuj přes WhatsApp.');
@@ -1488,9 +1526,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
      const {error}=await db.from("inquiries").insert(payload);if(error)throw error;
      let emailSent=false,emailErrorMessage='';
      try{
-      const {data:mailResult,error:mailError}=await db.functions.invoke("ffc-inquiry-email",{body:{name:payload.customer_name,phone:payload.customer_phone,email:payload.customer_email,inquiry_type:"trip",subject:`Fast & Furious Club – Neue Buchung: ${payload.details.destination}`,details:payload.details}});
-      if(mailError)throw mailError;
-      if(!mailResult?.success)throw new Error(mailResult?.error||"E-mailová služba nepotvrdila odeslání.");
+      await sendFfcEmail({name:payload.customer_name,phone:payload.customer_phone,email:payload.customer_email,inquiry_type:"trip",subject:`Fast & Furious Club – Neue Buchung: ${payload.details.destination}`,details:payload.details});
       emailSent=true;
      }catch(mailError){emailErrorMessage=mailError?.message||String(mailError);console.error("FFC trip booking email failed; booking remains saved in Supabase",mailError);}
      msg.textContent=emailSent?c.success:(c.emailWarning+(emailErrorMessage?" ("+emailErrorMessage+")":""));msg.classList.toggle("success",emailSent);if(emailSent){form.reset();count.value="1";delete form.dataset.prefilled;}
