@@ -519,10 +519,54 @@ main{padding-top:26px}
 /* Final override: readable dark category text on pale green pills. */
 .cards .card .cardbody > span.tag[data-t]{color:#263d19 !important;background-color:#e9f5d7 !important;-webkit-text-fill-color:#263d19 !important;text-shadow:none !important;font-weight:900 !important;}
 </style>
+<style id="ffc-sopron-booking-refresh">
+/* November 2026: put real departures first and remove empty showcase tiles */
+.service-grid,#offers,#about,.app-showcase{display:none!important}
+.hero{grid-template-columns:minmax(0,1fr)!important;min-height:0!important;padding:24px clamp(20px,4vw,42px)!important;margin-bottom:12px}
+.heroArt{display:none!important}
+.hero .btnrow{display:none!important}
+.hero h1{font-size:clamp(30px,4.5vw,48px)!important;margin:8px 0 12px!important;max-width:none!important}
+.hero p{margin:0!important;max-width:760px!important}
+#publishedTrips{margin-top:22px!important}
+#publishedTrips .sectionhead{margin-bottom:16px}
+#publishedTripsList{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;max-width:980px}
+.ffc-trip-card{display:grid;grid-template-columns:minmax(260px,.9fr) minmax(0,1.1fr);overflow:hidden;border:1px solid #d5e0e5;border-radius:22px;box-shadow:0 16px 38px #0c263315;background:#fff}
+.ffc-trip-photo{position:relative;min-height:340px;background:#dbe7e9;overflow:hidden}
+.ffc-trip-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ffc-trip-body{padding:clamp(18px,3vw,30px)!important}
+.ffc-trip-body h3{font-size:clamp(24px,3vw,32px)!important;margin:12px 0 8px!important}
+.ffc-trip-description{font-size:15px!important;line-height:1.65!important;min-height:0!important;margin-bottom:16px!important;color:#4e606b!important}
+.ffc-trip-meta{font-weight:750;color:#193747;font-size:14px;padding:5px 0}
+.ffc-trip-included{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f0f7e8;border:1px solid #d8e8c5;color:#304b20;font-size:14px;font-weight:700}
+.ffc-trip-drinks{font-size:12px!important;min-height:0!important;margin:8px 0 14px!important}
+.ffc-trip-foot{align-items:center;gap:16px;margin-top:14px;padding-top:16px}
+.ffc-trip-foot .price{font-size:26px;color:#102c3a}
+.ffc-trip-foot small{display:block;color:#687984;font-size:12px}
+.ffc-book-button{min-width:155px;background:#a8ed27;color:#102332;box-shadow:0 5px 0 #6b9e12;font-size:15px}
+.ffc-booking-form{margin-top:18px;padding:18px;border-radius:15px;background:#f4f7f8;border:1px solid #dbe4e8}
+.ffc-booking-form .formgrid{grid-template-columns:1fr 1fr;gap:12px}
+.ffc-booking-form .field{min-width:0}
+.ffc-booking-form .field input,.ffc-booking-form select{min-height:44px;width:100%;border:1px solid #cbd7dd;border-radius:10px;padding:10px 12px;background:#fff}
+.ffc-booking-form .field span{font-size:12px;font-weight:800;color:#344654}
+.ffc-booking-message{font-size:14px;font-weight:700;margin:12px 0}
+.ffc-booking-message.success{color:#236746}
+.ffc-booking-form button:disabled{opacity:.6;cursor:wait}
+@media(max-width:700px){
+ .ffc-trip-card{grid-template-columns:1fr}
+ .ffc-trip-photo{min-height:235px;height:235px}
+ .ffc-trip-body{padding:18px!important}
+ .ffc-trip-foot{align-items:stretch;flex-direction:column}
+ .ffc-book-button{width:100%}
+ .ffc-booking-form .formgrid{grid-template-columns:1fr}
+ .hero{padding:20px!important}
+}
+</style>
 </head><body>
 <header class="top"><div class="topinner"><a class="brandlockup" href="#top" aria-label="Fast and Furious Club – Startseite"><span class="brand-text"><img class="wordmark" src="brand-logo-transparent.png?v=5" alt="Fast and Furious Club"><span class="tagline" data-t="tagline">EUROPA ENTDECKEN – KOMFORTABEL UND ERLEBNISREICH</span></span></a><nav class="mainnav" aria-label="Hauptnavigation"><a href="#top" data-nav="home">Start</a><a href="#offers" data-nav="offers">Angebote</a><a href="#request" data-nav="trips">Ausflüge</a><a href="#airportRequest" data-nav="transfer">Flughafentransfer</a><a href="#about" data-nav="about">Über uns</a><a href="#memberArea" data-nav="member" onclick="showPanel('memberArea');return false">Registrace</a></nav><div class="spacer"></div><div class="lang" aria-label="Language"><button data-lang="cz">CZ</button><button data-lang="de">DE</button><button data-lang="uk">УКР</button></div></div></header>
 <main id="top">
 <section class="hero"><div><div class="eyebrow" data-t="eyebrow">Tvůj klub pro další dobrodružství</div><div class="hero-title-row"><h1 data-t="hero">Tak kam vyrazíme?</h1><button class="btn member hero-member" onclick="showPanel('memberArea')" data-t="memberCta">♥ Registrace zákazníka</button></div><p data-t="intro">Ty řekneš, co chceš zažít. My ti pomůžeme sestavit výlet podle termínu, počtu lidí a tvých zájmů.</p><div class="btnrow"><button class="btn tours" onclick="showPanel('request')" data-t="cta">Sestavit výlet na přání ↗</button><button class="btn offers" onclick="document.getElementById('offers').scrollIntoView({behavior:'smooth'})" data-t="offersBtn">Prohlédnout nabídky</button><button class="btn ride" onclick="showPanel('rideRequest')" data-t="rideButton">Poptat jízdu</button><button class="btn airport" onclick="showPanel('airportRequest')" data-t="airportButton">✈ Transfer – na letiště nebo zpět</button></div></div><div class="heroArt" aria-hidden="true"><img src="hero-road.png?v=6" alt="" loading="eager"></div></section>
+<section class="section" id="publishedTrips"><div class="sectionhead"><div><h2 id="publishedTripsTitle">Aktuální výlety</h2><p class="sub" id="publishedTripsSub">Nové nabídky Fast & Furious Club</p></div></div><div class="cards" id="publishedTripsList"><p class="sub" id="publishedTripsLoading">Načítám aktuální nabídky…</p></div></section>
+
 
 <section class="service-grid" aria-label="Unsere Services">
  <article class="service-tile"><div class="service-icon">✈️</div><h3 data-t="serviceTransfer">Transfer</h3><p data-t="serviceTransferDesc">Flughafen, Unterkunft und zurück — wir bringen dich bequem ans Ziel.</p><button class="btn" onclick="showPanel('airportRequest')" data-t="serviceBook">Transfer buchen ›</button></article>
@@ -532,7 +576,7 @@ main{padding-top:26px}
 <article class="card"><div class="cardart"><img src="card-coast.jpg" alt="Airbus A320 im Fast & Furious Club Design" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="daytrip">Jednodenní i vícedenní</span><h3 data-t="seaTitle">K vodě a za sluncem</h3><p data-t="seaDesc">Jezera, moře a příjemné zastávky cestou.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('swim')" data-t="details">Mám zájem</button></div></div></article>
 <article class="card"><div class="cardart"><img src="card-city.jpg" alt="Schloss in Europa" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="culture">Města a kultura</span><h3 data-t="cityTitle">Objevuj Evropu</h3><p data-t="cityDesc">Historická centra, památky a místní atmosféra.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('culture')" data-t="details">Mám zájem</button></div></div></article>
 <article class="card"><div class="cardart"><img src="card-nature.jpg" alt="See in der Natur" loading="lazy"></div><div class="cardbody"><span class="tag" data-t="nature">Příroda a zážitky</span><h3 data-t="natureTitle">Vyraz mimo město</h3><p data-t="natureDesc">Hory, vyhlídky, termály a netradiční zážitky.</p><div class="cardfoot"><span class="price" data-t="askPrice">Cena podle nabídky</span><button class="btn secondary" onclick="prefill('nature')" data-t="details">Mám zájem</button></div></div></article></div></section>
-<section class="section" id="publishedTrips"><div class="sectionhead"><div><h2 id="publishedTripsTitle">Aktuální výlety</h2><p class="sub" id="publishedTripsSub">Nové nabídky Fast & Furious Club</p></div></div><div class="cards" id="publishedTripsList"><p class="sub" id="publishedTripsLoading">Načítám aktuální nabídky…</p></div></section>
+
 <section class="section" id="about"><div class="feature"><div class="featurebox"><div class="featureicon">👥</div><div><h3 data-t="groupsTitle">Pro vaši partu</h3><p data-t="groupsDesc">Čtyři dny volna, Silvestr nebo rodinný výlet? Zadejte společné přání a připravíme návrh. Menší skupiny cestují našimi mikrobusy, větší výlety lze řešit ve spolupráci s dopravním partnerem.</p></div></div><div class="featurebox"><div class="featureicon">🎁</div><div><h3 data-t="rewardsTitle">Zákaznické výhody</h3><p data-t="rewardsDesc">Do budoucna: poukazy, odměny za doporučení a výhody pro opakované zákazníky. Členství zdarma.</p></div></div></div></section>
 
 <section class="app-showcase" aria-label="Fast and Furious Club App">
@@ -1251,16 +1295,37 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
 })();
 </script>
 <script>
-/* Published trips from Supabase – read-only public catalogue */
+/* Published trips + direct multi-person booking */
 (function(){
  const copy={
-  cz:{title:"Aktuální výlety",sub:"Nové nabídky Fast & Furious Club",loading:"Načítám aktuální nabídky…",empty:"Momentálně nejsou zveřejněné žádné výlety. Připravujeme další nabídky.",from:"Odjezd",price:"Cena na osobu",details:"Podrobnosti / rezervace",ask:"Cena na dotaz"},
-  de:{title:"Aktuelle Ausflüge",sub:"Neue Angebote von Fast & Furious Club",loading:"Aktuelle Angebote werden geladen…",empty:"Derzeit sind keine Ausflüge veröffentlicht. Neue Angebote folgen bald.",from:"Abfahrt",price:"Preis pro Person",details:"Details / Buchung",ask:"Preis auf Anfrage"},
-  uk:{title:"Актуальні подорожі",sub:"Нові пропозиції Fast & Furious Club",loading:"Завантажуємо актуальні пропозиції…",empty:"Наразі немає опублікованих подорожей. Нові пропозиції незабаром.",from:"Виїзд",price:"Ціна за особу",details:"Деталі / бронювання",ask:"Ціна за запитом"}
+  cz:{title:"Nejbližší výlet",sub:"Vyber si výlet a objednej místa pro sebe i svou partu.",loading:"Načítám aktuální nabídky…",empty:"Momentálně nejsou zveřejněné žádné výlety.",from:"Odjezd",price:"Cena za osobu",book:"OBJEDNAT",details:"Podrobnosti",people:"Počet cestujících",name:"Jméno a příjmení",email:"E-mail",phone:"Telefon",send:"Odeslat objednávku",sending:"Odesílám…",required:"Vyplň prosím všechny povinné údaje.",success:"Objednávka byla odeslána. Brzy se ti ozveme a potvrdíme podrobnosti.",error:"Objednávku se nepodařilo odeslat. Zkus to prosím znovu nebo nám napiš přes WhatsApp.",departure:"Odjezd: 12:00 · Wien Hauptbahnhof",return:"Návrat: přibližně 20:00",included:"V ceně: oběd, 30 minut thajské masáže a hodina volna v centru",drinks:"Nápoje při obědě si každý hradí sám",intro:"Zarezervuj si místo pro sebe nebo více cestujících. Objednávka je nezávazná do našeho potvrzení."},
+  de:{title:"Der nächste Ausflug",sub:"Wähle deinen Ausflug und bestelle Plätze für dich und deine Gruppe.",loading:"Aktuelle Angebote werden geladen…",empty:"Derzeit sind keine Ausflüge veröffentlicht.",from:"Abfahrt",price:"Preis pro Person",book:"JETZT BUCHEN",details:"Details",people:"Anzahl der Reisenden",name:"Vor- und Nachname",email:"E-Mail",phone:"Telefon",send:"Buchung senden",sending:"Wird gesendet…",required:"Bitte fülle alle Pflichtfelder aus.",success:"Deine Anfrage wurde gesendet. Wir melden uns bald zur Bestätigung.",error:"Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder schreibe uns per WhatsApp.",departure:"Abfahrt: 12:00 · Wien Hauptbahnhof",return:"Rückkehr: ca. 20:00",included:"Inklusive: Mittagessen, 30 Minuten Thai-Massage und eine Stunde Freizeit im Zentrum",drinks:"Getränke beim Mittagessen sind selbst zu bezahlen",intro:"Bestelle einen oder mehrere Plätze. Die Buchung ist bis zu unserer Bestätigung unverbindlich."},
+  uk:{title:"Найближча подорож",sub:"Обери поїздку та замов місця для себе й своєї компанії.",loading:"Завантажуємо пропозиції…",empty:"Наразі немає опублікованих подорожей.",from:"Виїзд",price:"Ціна за особу",book:"ЗАМОВИТИ",details:"Деталі",people:"Кількість пасажирів",name:"Ім’я та прізвище",email:"Електронна пошта",phone:"Телефон",send:"Надіслати замовлення",sending:"Надсилаємо…",required:"Будь ласка, заповни всі обов’язкові поля.",success:"Замовлення надіслано. Ми скоро зв’яжемося з тобою для підтвердження.",error:"Не вдалося надіслати замовлення. Спробуй ще раз або напиши нам у WhatsApp.",departure:"Виїзд: 12:00 · Wien Hauptbahnhof",return:"Повернення: приблизно о 20:00",included:"У ціні: обід, 30 хвилин тайського масажу та година вільного часу в центрі",drinks:"Напої під час обіду оплачуються окремо",intro:"Замов одне або кілька місць. Бронювання не є остаточним до нашого підтвердження."}
  };
  const list=document.getElementById("publishedTripsList");if(!list)return;
  const db=window.supabase.createClient(FFC_SUPABASE_URL,FFC_SUPABASE_KEY);
  const langNow=()=>({cs:"cz"}[lang]||lang||"de");
+ const safeDate=(value,l)=>value?new Date(value+"T12:00:00").toLocaleDateString(l==="cz"?"cs-CZ":l==="uk"?"uk-UA":"de-AT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}):"";
+ function field(label,type,id,autocomplete){
+  const wrap=document.createElement("label");wrap.className="field";
+  const caption=document.createElement("span");caption.textContent=label;
+  const input=document.createElement("input");input.type=type;input.id=id;input.name=id;input.required=true;input.autocomplete=autocomplete||"off";input.maxLength=type==="email"?254:120;
+  if(type==="tel"){input.minLength=6;input.maxLength=30;}
+  wrap.append(caption,input);return {wrap,input};
+ }
+ async function openBooking(form,t,button,c){
+  form.classList.toggle("hidden");
+  button.setAttribute("aria-expanded",String(!form.classList.contains("hidden")));
+  if(form.dataset.prefilled)return;
+  form.dataset.prefilled="1";
+  try{
+   const {data}=await db.auth.getUser();const u=data?.user;if(!u)return;
+   const meta=u.user_metadata||{};
+   form.querySelector('[name="customer_name"]').value=meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(" ")||"";
+   form.querySelector('[name="customer_email"]').value=u.email||"";
+   form.querySelector('[name="customer_phone"]').value=meta.phone||"";
+  }catch(e){console.warn("FFC booking prefill skipped",e);}
+ }
  function render(rows){
   const l=langNow(),c=copy[l]||copy.de;
   document.getElementById("publishedTripsTitle").textContent=c.title;
@@ -1268,22 +1333,55 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
   list.replaceChildren();
   if(!rows.length){const p=document.createElement("p");p.className="sub";p.textContent=c.empty;list.append(p);return;}
   for(const t of rows){
-   const card=document.createElement("article");card.className="card";
-   const body=document.createElement("div");body.className="cardbody";
-   const title=document.createElement("h3");title.textContent=t[ "title_"+l]||t.title_de||t.destination;
-   const dest=document.createElement("p");dest.textContent=t.destination||"";
-   const desc=document.createElement("p");desc.textContent=t["description_"+l]||t.description_de||"";
-   const date=document.createElement("p");date.className="sub";date.textContent=t.departure_date?c.from+": "+new Date(t.departure_date+"T12:00:00").toLocaleDateString(l==="cz"?"cs-CZ":l==="uk"?"uk-UA":"de-AT"):"";
-   const foot=document.createElement("div");foot.className="cardfoot";
-   const price=document.createElement("strong");price.className="price";price.textContent=t.price==null?c.ask:t.price+" "+t.currency;
-   foot.append(price);
-   if(t.booking_url){try{const u=new URL(t.booking_url);if(u.protocol==="https:"||u.protocol==="http:"){const a=document.createElement("a");a.className="btn secondary";a.href=u.href;a.target="_blank";a.rel="noopener noreferrer";a.textContent=c.details;foot.append(a)}}catch{}}
-   body.append(title,dest,desc,date,foot);card.append(body);list.append(card);
+   const card=document.createElement("article");card.className="card ffc-trip-card";
+   const media=document.createElement("div");media.className="ffc-trip-photo";
+   const img=document.createElement("img");img.src="https://www.strassederkaiserundkoenige.com/wp-content/uploads/2023/05/Soproncvisithungary-scaled.jpg";img.alt="Sopron – historické centrum a požární věž";img.loading="eager";media.append(img);
+   const body=document.createElement("div");body.className="cardbody ffc-trip-body";
+   const tag=document.createElement("span");tag.className="tag";tag.textContent=l==="de"?"Tagesausflug":l==="uk"?"Одноденна поїздка":"Odpolední výlet";
+   const title=document.createElement("h3");title.textContent=t["title_"+l]||t.title_de||t.destination;
+   const desc=document.createElement("p");desc.className="ffc-trip-description";desc.textContent=t["description_"+l]||t.description_de||"";
+   const date=document.createElement("div");date.className="ffc-trip-meta";date.textContent=safeDate(t.departure_date,l);
+   const departure=document.createElement("div");departure.className="ffc-trip-meta";departure.textContent=c.departure;
+   const ret=document.createElement("div");ret.className="ffc-trip-meta";ret.textContent=c.return;
+   const included=document.createElement("div");included.className="ffc-trip-included";included.textContent=c.included;
+   const drinks=document.createElement("p");drinks.className="ffc-trip-drinks";drinks.textContent=c.drinks;
+   const foot=document.createElement("div");foot.className="cardfoot ffc-trip-foot";
+   const priceWrap=document.createElement("div");const price=document.createElement("strong");price.className="price";price.textContent=t.price==null?c.price+" –":new Intl.NumberFormat(l==="cz"?"cs-CZ":l==="uk"?"uk-UA":"de-AT",{style:"currency",currency:t.currency||"EUR",maximumFractionDigits:0}).format(Number(t.price));
+   const priceLabel=document.createElement("small");priceLabel.textContent=c.price;priceWrap.append(price,priceLabel);
+   const book=document.createElement("button");book.type="button";book.className="btn ffc-book-button";book.textContent=c.book;book.setAttribute("aria-expanded","false");foot.append(priceWrap,book);
+   const form=document.createElement("form");form.className="ffc-booking-form hidden";
+   const intro=document.createElement("p");intro.className="sub";intro.textContent=c.intro;
+   const grid=document.createElement("div");grid.className="formgrid";
+   const countWrap=document.createElement("label");countWrap.className="field";const countLabel=document.createElement("span");countLabel.textContent=c.people;const count=document.createElement("select");count.name="persons";count.required=true;for(let n=1;n<=8;n++){const o=document.createElement("option");o.value=String(n);o.textContent=String(n);count.append(o);}countWrap.append(countLabel,count);
+   const nm=field(c.name,"text","customer_name","name");nm.input.minLength=2;
+   const em=field(c.email,"email","customer_email","email");
+   const ph=field(c.phone,"tel","customer_phone","tel");
+   grid.append(countWrap,nm.wrap,em.wrap,ph.wrap);
+   const msg=document.createElement("p");msg.className="ffc-booking-message";msg.setAttribute("role","status");msg.setAttribute("aria-live","polite");
+   const send=document.createElement("button");send.type="submit";send.className="btn dark";send.textContent=c.send;
+   form.append(intro,grid,msg,send);
+   book.addEventListener("click",()=>openBooking(form,t,book,c));
+   form.addEventListener("submit",async event=>{
+    event.preventDefault();if(!form.reportValidity())return;
+    send.disabled=true;send.textContent=c.sending;msg.textContent="";
+    try{
+     const {data:userData}=await db.auth.getUser();const user=userData?.user||null;
+     const persons=Number(count.value),unitPrice=t.price==null?null:Number(t.price);
+     const payload={inquiry_type:"trip",customer_name:nm.input.value.trim(),customer_email:em.input.value.trim(),customer_phone:ph.input.value.trim(),user_id:user?.id||null,details:{trip_id:t.id,destination:t.destination,departure_date:t.departure_date,departure_time:"12:00",departure_location:"Wien Hauptbahnhof",return_time:"20:00 approx.",persons,unit_price:unitPrice,total_price:unitPrice===null?null:unitPrice*persons,currency:t.currency||"EUR",language:l}};
+     const {error}=await db.from("inquiries").insert(payload);if(error)throw error;
+     msg.textContent=c.success;msg.classList.add("success");form.reset();count.value="1";
+    }catch(error){console.error("FFC trip booking failed",error);msg.textContent=c.error;msg.classList.remove("success");}
+    finally{send.disabled=false;send.textContent=c.send;}
+   });
+   body.append(tag,title,desc,date,departure,ret,included,drinks,foot,form);card.append(media,body);list.append(card);
   }
  }
- async function load(){const c=copy[langNow()]||copy.de;document.getElementById("publishedTripsLoading").textContent=c.loading;const {data,error}=await db.from("trips").select("id,title_de,title_cz,title_uk,description_de,description_cz,description_uk,destination,departure_date,price,currency,booking_url").eq("published",true).order("departure_date",{ascending:true,nullsFirst:false});if(error){list.textContent="";return;}render(data||[]);}
- load();
- document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setTimeout(load,0)));
-})();
+ async function load(){
+  const c=copy[langNow()]||copy.de;const loading=document.getElementById("publishedTripsLoading");if(loading)loading.textContent=c.loading;
+  const {data,error}=await db.from("trips").select("id,title_de,title_cz,title_uk,description_de,description_cz,description_uk,destination,departure_date,price,currency,booking_url").eq("published",true).order("departure_date",{ascending:true,nullsFirst:false});
+  if(error){console.error("FFC published trips failed",error);list.textContent="";return;}render(data||[]);
+ }
+ load();document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setTimeout(load,0)));
+})(); 
 </script>
 </body></html>
