@@ -1564,11 +1564,11 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
   });
  }
  async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();}
- async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;try{const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error)throw error;if(data?.user_id!==user.id)return;nav.hidden=false;panel.hidden=false;await load();}catch(error){nav.hidden=true;panel.hidden=true;console.warn('FFC admin access check failed; admin UI remains hidden',error);}}
+ async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;try{const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error)throw error;if(data?.user_id!==user.id)return;nav.hidden=false;panel.hidden=true;}catch(error){nav.hidden=true;panel.hidden=true;console.warn('FFC admin access check failed; admin UI remains hidden',error);}}
  document.getElementById('ffcAdminReload').addEventListener('click',load);search.addEventListener('input',render);filter.addEventListener('change',render);
  // Run database checks outside the Supabase auth callback to avoid its auth-lock deadlock.
  db.auth.getSession().then(({data,error})=>{if(error){console.warn('FFC admin session check failed',error);return;}setTimeout(()=>sync(data.session?.user||null),0);});
  db.auth.onAuthStateChange((event,session)=>{setTimeout(()=>sync(session?.user||null),0);});
- nav.addEventListener('click',event=>{event.preventDefault();if(!panel.hidden)panel.scrollIntoView({behavior:'smooth',block:'start'});});
+ nav.addEventListener('click',async event=>{event.preventDefault();if(panel.hidden){panel.hidden=false;await load();panel.scrollIntoView({behavior:'smooth',block:'start'});}else{panel.hidden=true;document.getElementById('top')?.scrollIntoView({behavior:'smooth',block:'start'});}});
 })();
 </script></body></html>
