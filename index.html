@@ -1571,7 +1571,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
   emailTest.disabled=true;emailTest.textContent='Odesílám test…';message.textContent='Odesílám zkušební e-mail na odtahy.aut@gmail.com…';
   try{
    const {data,error}=await db.functions.invoke('ffc-inquiry-email',{body:{
-    name:'Fast & Furious Club – technický test',phone:'',email:'',inquiry_type:'trip',
+    name:'Fast & Furious Club – technický test',phone:'',email:'odtahy.aut@gmail.com',inquiry_type:'trip',
     subject:'FFC – testovací e-mailová zpráva',
     details:{language:'cz',test:true,note:'Toto je technický test e-mailového spojení. Nejde o objednávku ani rezervaci.'}
    }});
