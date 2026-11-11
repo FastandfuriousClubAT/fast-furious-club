@@ -670,7 +670,7 @@ main{padding-top:26px}
 <section class="hero"><div><div class="eyebrow" data-t="eyebrow">Tvůj klub pro další dobrodružství</div><div class="hero-title-row"><h1 data-t="hero">Tak kam vyrazíme?</h1><button class="btn member hero-member" onclick="showPanel('memberArea')" data-t="memberCta">♥ Registrace zákazníka</button></div><p data-t="intro">Ty řekneš, co chceš zažít. My ti pomůžeme sestavit výlet podle termínu, počtu lidí a tvých zájmů.</p><div class="btnrow"><button class="btn tours" onclick="showPanel('request')" data-t="cta">Sestavit výlet na přání ↗</button><button class="btn offers" onclick="document.getElementById('offers').scrollIntoView({behavior:'smooth'})" data-t="offersBtn">Prohlédnout nabídky</button><button class="btn ride" onclick="showPanel('rideRequest')" data-t="rideButton">Poptat jízdu</button><button class="btn airport" onclick="showPanel('airportRequest')" data-t="airportButton">✈ Transfer – na letiště nebo zpět</button></div></div><div class="heroArt" aria-hidden="true"><img src="hero-road.png?v=6" alt="" loading="eager"></div></section>
 <section class="section" id="publishedTrips"><div class="sectionhead"><div><h2 id="publishedTripsTitle">Aktuální výlety</h2><p class="sub" id="publishedTripsSub">Nové nabídky Fast & Furious Club</p></div></div><div class="cards" id="publishedTripsList"><p class="sub" id="publishedTripsLoading">Načítám aktuální nabídky…</p></div></section>
 <section class="section" id="ffcAdmin" hidden>
- <div class="sectionhead"><div><h2 id="ffcAdminTitle">Buchungsverwaltung</h2><p class="sub" id="ffcAdminSubtitle">Private Administration</p></div><button class="btn" type="button" id="ffcAdminReload">Aktualisieren</button></div>
+ <div class="sectionhead"><div><h2 id="ffcAdminTitle">Buchungsverwaltung</h2><p class="sub" id="ffcAdminSubtitle">Private Administration</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" type="button" id="ffcEmailTest">✉ Test E-Mail</button><button class="btn" type="button" id="ffcAdminReload">Aktualisieren</button></div></div>
  <div class="ffc-admin-stats" id="ffcAdminStats"></div>
  <div class="ffc-admin-tools"><input id="ffcAdminSearch" type="search" placeholder="Name, Telefon oder Reiseziel suchen"><select id="ffcAdminFilter" aria-label="Anfragen filtern"><option value="all">Alle Anfragen</option><option value="new">Neu</option><option value="in_progress">In Bearbeitung</option><option value="answered">Beantwortet</option><option value="closed">Geschlossen</option></select></div>
  <p class="sub" id="ffcAdminMessage" aria-live="polite"></p><div id="ffcAdminList" class="ffc-admin-list"></div>
@@ -1565,6 +1565,23 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
  }
  async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();}
  async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;try{const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error)throw error;if(data?.user_id!==user.id)return;nav.hidden=false;panel.hidden=true;}catch(error){nav.hidden=true;panel.hidden=true;console.warn('FFC admin access check failed; admin UI remains hidden',error);}}
+ const emailTest=document.getElementById('ffcEmailTest');
+ emailTest.addEventListener('click',async()=>{
+  const original=emailTest.textContent;
+  emailTest.disabled=true;emailTest.textContent='Odesílám test…';message.textContent='Odesílám zkušební e-mail na odtahy.aut@gmail.com…';
+  try{
+   const {data,error}=await db.functions.invoke('ffc-inquiry-email',{body:{
+    name:'Fast & Furious Club – technický test',phone:'',email:'',inquiry_type:'trip',
+    subject:'FFC – testovací e-mailová zpráva',
+    details:{language:'cz',test:true,note:'Toto je technický test e-mailového spojení. Nejde o objednávku ani rezervaci.'}
+   }});
+   if(error)throw new Error(error.message||'Funkce e-mailu není dostupná.');
+   if(!data?.success||!data?.owner_notification)throw new Error(data?.error||'Brevo nepotvrdilo odeslání.');
+   message.textContent='Brevo přijalo testovací e-mail. Zkontroluj doručenou poštu i spam na odtahy.aut@gmail.com.';
+  }catch(err){
+   console.error('FFC email test failed',err);message.textContent='Test se nezdařil: '+(err?.message||String(err));
+  }finally{emailTest.disabled=false;emailTest.textContent=original;}
+ });
  document.getElementById('ffcAdminReload').addEventListener('click',load);search.addEventListener('input',render);filter.addEventListener('change',render);
  // Run database checks outside the Supabase auth callback to avoid its auth-lock deadlock.
  db.auth.getSession().then(({data,error})=>{if(error){console.warn('FFC admin session check failed',error);return;}setTimeout(()=>sync(data.session?.user||null),0);});
