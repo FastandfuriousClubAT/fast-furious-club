@@ -1,18 +1,16 @@
-importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
-
 const CACHE_NAME = "ffc-club-v66";
 const APP_SHELL = [
-  "/fast-furious-club/",
-  "/fast-furious-club/index.html",
-  "/fast-furious-club/legal.html",
-  "/fast-furious-club/manifest.webmanifest",
-  "/fast-furious-club/pwa-icon-192.png",
-  "/fast-furious-club/pwa-icon-512.png",
-  "/fast-furious-club/app-icon-192.png",
-  "/fast-furious-club/app-icon.png",
-  "/fast-furious-club/card-coast.jpg",
-  "/fast-furious-club/card-city.jpg",
-  "/fast-furious-club/card-nature.jpg"
+  "/",
+  "/index.html",
+  "/legal.html",
+  "/manifest.webmanifest",
+  "/pwa-icon-192.png",
+  "/pwa-icon-512.png",
+  "/app-icon-192.png",
+  "/app-icon.png",
+  "/card-coast.jpg",
+  "/card-city.jpg",
+  "/card-nature.jpg"
 ];
 
 self.addEventListener("install", event => {
@@ -49,11 +47,11 @@ self.addEventListener("fetch", event => {
         if (response.ok) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then(cache =>
-            cache.put("/fast-furious-club/index.html", copy)
+            cache.put("/index.html", copy)
           );
         }
         return response;
-      }).catch(() => caches.match("/fast-furious-club/index.html"))
+      }).catch(() => caches.match("/index.html"))
     );
     return;
   }
