@@ -1218,6 +1218,7 @@ async function waitForFfcPushSubscription(OneSignal,maxWaitMs=45000){
  return subscription;
 }
 memberPushEnable.addEventListener('click',async()=>{
+ memberPushStatus.textContent='Push notifikace jsou v testovací verzi vypnuté.';return;
  memberPushEnable.disabled=true;
  memberPushStatus.textContent='';
  try{
