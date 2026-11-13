@@ -673,6 +673,11 @@ main{padding-top:26px}
  <div class="sectionhead"><div><h2 id="ffcAdminTitle">Buchungsverwaltung</h2><p class="sub" id="ffcAdminSubtitle">Private Administration</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" type="button" id="ffcEmailTest">✉ Test E-Mail</button><button class="btn" type="button" id="ffcAdminReload">Aktualisieren</button></div></div>
  <div class="ffc-admin-stats" id="ffcAdminStats"></div>
  <div class="ffc-admin-stats" id="ffcAnalyticsStats" aria-label="App analytics"></div><p class="sub" id="ffcAnalyticsNote">Orientační anonymní statistiky používání aplikace.</p>
+ <section id="ffcRegisteredCustomers" hidden style="margin:16px 0;padding:16px;border:1px solid #31586a;border-radius:16px;background:#102b3a">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h3 id="ffcCustomersTitle" style="margin:0;color:#fff">Registrovaní zákazníci</h3><button type="button" class="btn secondary" id="ffcCustomersClose">Zavřít</button></div>
+  <input id="ffcCustomersSearch" type="search" placeholder="Hledat jméno nebo telefon" style="margin:12px 0;min-height:44px;width:100%;padding:10px 12px;border:1px solid #b8c9d0;border-radius:10px;background:#fff;color:#132b39">
+  <p id="ffcCustomersMessage" class="sub" aria-live="polite"></p><div id="ffcCustomersList" class="ffc-admin-list"></div>
+ </section>
  <div class="ffc-admin-tools"><input id="ffcAdminSearch" type="search" placeholder="Name, Telefon oder Reiseziel suchen"><select id="ffcAdminFilter" aria-label="Anfragen filtern"><option value="all">Alle Anfragen</option><option value="new">Neu</option><option value="in_progress">In Bearbeitung</option><option value="answered">Beantwortet</option><option value="closed">Geschlossen</option></select></div>
  <p class="sub" id="ffcAdminMessage" aria-live="polite"></p><div id="ffcAdminList" class="ffc-admin-list"></div>
 </section>
@@ -1542,9 +1547,9 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
  const db=ffcSupabase,list=document.getElementById('ffcAdminList'),message=document.getElementById('ffcAdminMessage');
  const search=document.getElementById('ffcAdminSearch'),filter=document.getElementById('ffcAdminFilter');
  const words={
- cz:{title:'Správa objednávek',sub:'Soukromá administrace Fast & Furious Club',reload:'Obnovit',search:'Hledat jméno, telefon nebo cíl',all:'Všechny poptávky',new:'Nové',in_progress:'Rozpracované',answered:'Zodpovězené',closed:'Uzavřené',newCount:'Nové poptávky',seats:'Počet míst – výlety',potential:'Hodnota poptávek',trip:'Výlet',ride:'Jízda',airport:'Letištní transfer',people:'osob',destination:'Cíl',empty:'Žádné poptávky neodpovídají filtru.',loading:'Načítám objednávky…',error:'Objednávky se nepodařilo načíst. Zkontroluj přihlášení správce.',saved:'Stav uložen.',saveError:'Stav se nepodařilo uložit.',details:'Další údaje',name:'Zákazník',visits:'Návštěvy (denně / zařízení)',androidInstalls:'Potvrzené instalace Android',iosInstalls:'Spuštění z plochy iPhone',registrations:'Registrované účty',analyticsNote:'Orientační anonymní statistiky. iPhone se započítá jako instalace až při spuštění z ikony na ploše.'},
- de:{title:'Buchungsverwaltung',sub:'Private Administration des Fast & Furious Club',reload:'Aktualisieren',search:'Name, Telefon oder Reiseziel suchen',all:'Alle Anfragen',new:'Neu',in_progress:'In Bearbeitung',answered:'Beantwortet',closed:'Geschlossen',newCount:'Neue Anfragen',seats:'Angefragte Plätze',potential:'Anfragewert',trip:'Ausflug',ride:'Fahrt',airport:'Flughafentransfer',people:'Personen',destination:'Ziel',empty:'Keine passenden Anfragen gefunden.',loading:'Buchungen werden geladen…',error:'Buchungen konnten nicht geladen werden. Bitte Admin-Anmeldung prüfen.',saved:'Status gespeichert.',saveError:'Status konnte nicht gespeichert werden.',details:'Weitere Angaben',name:'Kunde',visits:'Besuche (täglich / Gerät)',androidInstalls:'Bestätigte Android-Installationen',iosInstalls:'Starts vom iPhone-Home-Bildschirm',registrations:'Registrierte Konten',analyticsNote:'Ungefähre anonyme Statistik. iPhone-Installationen werden erst gezählt, wenn die App über das Home-Bildschirm-Symbol gestartet wird.'},
- uk:{title:'Керування бронюваннями',sub:'Приватна адміністрація Fast & Furious Club',reload:'Оновити',search:'Пошук за ім’ям, телефоном або напрямком',all:'Усі запити',new:'Нові',in_progress:'У роботі',answered:'Відповіли',closed:'Закриті',newCount:'Нові запити',seats:'Замовлені місця',potential:'Сума запитів',trip:'Подорож',ride:'Поїздка',airport:'Трансфер до аеропорту',people:'осіб',destination:'Напрямок',empty:'Немає запитів за цим фільтром.',loading:'Завантажуємо бронювання…',error:'Не вдалося завантажити бронювання. Перевір вхід адміністратора.',saved:'Статус збережено.',saveError:'Не вдалося зберегти статус.',details:'Додаткова інформація',name:'Клієнт',visits:'Відвідування (щодня / пристрій)',androidInstalls:'Підтверджені встановлення Android',iosInstalls:'Запуски з головного екрана iPhone',registrations:'Зареєстровані облікові записи',analyticsNote:'Приблизна анонімна статистика. Встановлення iPhone рахується після запуску з іконки на головному екрані.'}
+ cz:{title:'Správa objednávek',sub:'Soukromá administrace Fast & Furious Club',reload:'Obnovit',search:'Hledat jméno, telefon nebo cíl',all:'Všechny poptávky',new:'Nové',in_progress:'Rozpracované',answered:'Zodpovězené',closed:'Uzavřené',newCount:'Nové poptávky',seats:'Počet míst – výlety',potential:'Hodnota poptávek',trip:'Výlet',ride:'Jízda',airport:'Letištní transfer',people:'osob',destination:'Cíl',empty:'Žádné poptávky neodpovídají filtru.',loading:'Načítám objednávky…',error:'Objednávky se nepodařilo načíst. Zkontroluj přihlášení správce.',saved:'Stav uložen.',saveError:'Stav se nepodařilo uložit.',details:'Další údaje',name:'Zákazník',visits:'Návštěvy (denně / zařízení)',androidInstalls:'Potvrzené instalace Android',iosInstalls:'Spuštění z plochy iPhone',registrations:'Registrované účty',customersTitle:'Registrovaní zákazníci',customersSearch:'Hledat jméno nebo telefon',customersLoading:'Načítám zákazníky…',customersError:'Seznam zákazníků se nepodařilo načíst.',customersEmpty:'Žádní zákazníci neodpovídají hledání.',customersClose:'Zavřít',active:'Členství aktivní',inactive:'Členství neaktivní',registered:'Registrace',analyticsNote:'Orientační anonymní statistiky. iPhone se započítá jako instalace až při spuštění z ikony na ploše.'},
+ de:{title:'Buchungsverwaltung',sub:'Private Administration des Fast & Furious Club',reload:'Aktualisieren',search:'Name, Telefon oder Reiseziel suchen',all:'Alle Anfragen',new:'Neu',in_progress:'In Bearbeitung',answered:'Beantwortet',closed:'Geschlossen',newCount:'Neue Anfragen',seats:'Angefragte Plätze',potential:'Anfragewert',trip:'Ausflug',ride:'Fahrt',airport:'Flughafentransfer',people:'Personen',destination:'Ziel',empty:'Keine passenden Anfragen gefunden.',loading:'Buchungen werden geladen…',error:'Buchungen konnten nicht geladen werden. Bitte Admin-Anmeldung prüfen.',saved:'Status gespeichert.',saveError:'Status konnte nicht gespeichert werden.',details:'Weitere Angaben',name:'Kunde',visits:'Besuche (täglich / Gerät)',androidInstalls:'Bestätigte Android-Installationen',iosInstalls:'Starts vom iPhone-Home-Bildschirm',registrations:'Registrierte Konten',customersTitle:'Registrierte Kunden',customersSearch:'Name oder Telefonnummer suchen',customersLoading:'Kunden werden geladen…',customersError:'Kundenliste konnte nicht geladen werden.',customersEmpty:'Keine passenden Kunden gefunden.',customersClose:'Schließen',active:'Mitgliedschaft aktiv',inactive:'Mitgliedschaft inaktiv',registered:'Registriert',analyticsNote:'Ungefähre anonyme Statistik. iPhone-Installationen werden erst gezählt, wenn die App über das Home-Bildschirm-Symbol gestartet wird.'},
+ uk:{title:'Керування бронюваннями',sub:'Приватна адміністрація Fast & Furious Club',reload:'Оновити',search:'Пошук за ім’ям, телефоном або напрямком',all:'Усі запити',new:'Нові',in_progress:'У роботі',answered:'Відповіли',closed:'Закриті',newCount:'Нові запити',seats:'Замовлені місця',potential:'Сума запитів',trip:'Подорож',ride:'Поїздка',airport:'Трансфер до аеропорту',people:'осіб',destination:'Напрямок',empty:'Немає запитів за цим фільтром.',loading:'Завантажуємо бронювання…',error:'Не вдалося завантажити бронювання. Перевір вхід адміністратора.',saved:'Статус збережено.',saveError:'Не вдалося зберегти статус.',details:'Додаткова інформація',name:'Клієнт',visits:'Відвідування (щодня / пристрій)',androidInstalls:'Підтверджені встановлення Android',iosInstalls:'Запуски з головного екрана iPhone',registrations:'Зареєстровані облікові записи',customersTitle:'Зареєстровані клієнти',customersSearch:'Пошук за ім’ям або телефоном',customersLoading:'Завантаження клієнтів…',customersError:'Не вдалося завантажити список клієнтів.',customersEmpty:'Клієнтів не знайдено.',customersClose:'Закрити',active:'Членство активне',inactive:'Членство неактивне',registered:'Реєстрація',analyticsNote:'Приблизна анонімна статистика. Встановлення iPhone рахується після запуску з іконки на головному екрані.'}
  };
  let rows=[];
  const currentLang=()=>{const v=localStorage.getItem('ffc-language')||'de';return v==='cs'?'cz':v;};
@@ -1592,10 +1597,39 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
   const ev=events||[],visits=ev.filter(x=>x.event_name==='visit').length;
   const android=ev.filter(x=>x.event_name==='pwa_install'&&x.platform==='android').length;
   const ios=ev.filter(x=>x.event_name==='pwa_install'&&x.platform==='ios').length;
-  [[visits,c.visits],[android,c.androidInstalls],[ios,c.iosInstalls],[profileError?'—':(registrations??0),c.registrations]].forEach(([value,label])=>{const card=el(box,'div','ffc-admin-stat','');el(card,'strong','',String(value));el(card,'span','',label);});
+  [[visits,c.visits],[android,c.androidInstalls],[ios,c.iosInstalls],[profileError?'—':(registrations??0),c.registrations]].forEach(([value,label],index)=>{const card=el(box,'div','ffc-admin-stat','');el(card,'strong','',String(value));el(card,'span','',label);if(index===3){card.style.cursor='pointer';card.setAttribute('role','button');card.setAttribute('tabindex','0');card.setAttribute('aria-controls','ffcRegisteredCustomers');card.setAttribute('aria-expanded',String(!document.getElementById('ffcRegisteredCustomers').hidden));card.title=c.customersTitle;card.addEventListener('click',toggleCustomers);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomers();}});}});
   const sources={};ev.filter(x=>x.event_name==='visit').forEach(x=>sources[x.source]=(sources[x.source]||0)+1);
   const sourceText=Object.entries(sources).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+': '+v).join(' · ');
   note.textContent=c.analyticsNote+(sourceText?' Zdroje: '+sourceText:'');
+ }
+ let customerRows=null;
+ async function toggleCustomers(){
+  const section=document.getElementById('ffcRegisteredCustomers'),c=t();
+  if(!section.hidden){section.hidden=true;return;}
+  section.hidden=false;
+  document.getElementById('ffcCustomersTitle').textContent=c.customersTitle;
+  document.getElementById('ffcCustomersClose').textContent=c.customersClose;
+  const input=document.getElementById('ffcCustomersSearch');input.placeholder=c.customersSearch;
+  const status=document.getElementById('ffcCustomersMessage'),list=document.getElementById('ffcCustomersList');
+  if(customerRows===null){
+   status.textContent=c.customersLoading;list.replaceChildren();
+   const {data,error}=await db.from('profiles').select('id,full_name,phone,membership_active,created_at').order('created_at',{ascending:false});
+   if(error){console.warn('FFC customer list failed',error);status.textContent=c.customersError;return;}
+   customerRows=data||[];
+  }
+  function renderCustomers(){
+   const q=(input.value||'').toLowerCase(),filtered=customerRows.filter(x=>[x.full_name,x.phone].join(' ').toLowerCase().includes(q));
+   list.replaceChildren();status.textContent=filtered.length+' / '+customerRows.length;
+   if(!filtered.length){el(list,'p','',c.customersEmpty);return;}
+   filtered.forEach(customer=>{
+    const card=el(list,'article','ffc-admin-card',''),head=el(card,'div','ffc-admin-card-head',''),left=el(head,'div','','');
+    el(left,'h3','',customer.full_name||c.name);
+    el(left,'p','',c.registered+': '+new Date(customer.created_at).toLocaleDateString(currentLang()==='cz'?'cs-CZ':currentLang()==='uk'?'uk-UA':'de-AT'));
+    el(card,'p','',customer.phone||'');
+    el(card,'span','ffc-admin-pill',customer.membership_active?c.active:c.inactive);
+   });
+  }
+  input.oninput=renderCustomers;renderCustomers();
  }
  async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();await loadAnalytics();}
  async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;try{const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error)throw error;if(data?.user_id!==user.id)return;nav.hidden=false;panel.hidden=true;}catch(error){nav.hidden=true;panel.hidden=true;console.warn('FFC admin access check failed; admin UI remains hidden',error);}}
@@ -1616,6 +1650,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
    console.error('FFC email test failed',err);message.textContent='Test se nezdařil: '+(err?.message||String(err));
   }finally{emailTest.disabled=false;emailTest.textContent=original;}
  });
+ document.getElementById('ffcCustomersClose').addEventListener('click',()=>{document.getElementById('ffcRegisteredCustomers').hidden=true;});
  document.getElementById('ffcAdminReload').addEventListener('click',load);search.addEventListener('input',render);filter.addEventListener('change',render);
  // Run database checks outside the Supabase auth callback to avoid its auth-lock deadlock.
  db.auth.getSession().then(({data,error})=>{if(error){console.warn('FFC admin session check failed',error);return;}setTimeout(()=>sync(data.session?.user||null),0);});
