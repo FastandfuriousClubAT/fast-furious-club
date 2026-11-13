@@ -1655,7 +1655,7 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
   }
   input.oninput=renderCustomers;renderCustomers();
  }
- async function load(){message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();await loadAnalytics();}
+ async function load(){renderPushLabels();message.textContent=t().loading;const {data,error}=await db.from('inquiries').select('id,inquiry_type,customer_name,customer_email,customer_phone,details,status,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.error('FFC admin read failed',error);message.textContent=t().error;return;}rows=data||[];render();await loadAnalytics();}
  async function sync(user){nav.hidden=true;panel.hidden=true;if(!user)return;try{const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();if(error)throw error;if(data?.user_id!==user.id)return;nav.hidden=false;panel.hidden=true;}catch(error){nav.hidden=true;panel.hidden=true;console.warn('FFC admin access check failed; admin UI remains hidden',error);}}
  const emailTest=document.getElementById('ffcEmailTest');
  emailTest.addEventListener('click',async()=>{
