@@ -514,6 +514,16 @@ main{padding-top:26px}
 
 /* Legal links in the site footer */
 .legal-links{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.legal-links a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* PINK WORKBENCH — isolated to workbench-pink branch only */
+:root{--ffc-workbench-pink:#ff2f9b;--ffc-workbench-pink-soft:#ffe0f0}
+body{background:linear-gradient(180deg,#ffb4d8 0%,#ffd0e7 48%,#ffb4d8 100%)!important}
+.top{background:linear-gradient(110deg,#7a1249,#c21870 55%,#7a1249)!important;border-bottom:4px solid #ff2f9b!important}
+.top:after{background:linear-gradient(90deg,#ff8fc5,#fff,#ff2f9b)!important}
+main{background:transparent}
+body:before{content:"TESTOVACÍ VERZE";position:sticky;top:0;display:block;z-index:10000;text-align:center;padding:7px 12px;background:#ff168d;color:#fff;font-weight:1000;letter-spacing:.16em;font-size:13px;box-shadow:0 3px 12px #76104455}
+.panel,.card,.featurebox,.review{border-color:#f18abb}
+
 </style>
 <style id="ffc-category-contrast-fix">
 /* Final override: readable dark category text on pale green pills. */
