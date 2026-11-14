@@ -1633,6 +1633,15 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
    const {data,error}=await db.rpc('admin_list_customers');
    if(error){console.warn('FFC customer list failed',error);status.textContent=c.customersError;return;}
    customerRows=data||[];
+   try{
+    const {data:pushData,error:pushError}=await db.functions.invoke('ffc-admin-push-status',{body:{}});
+    if(pushError)throw pushError;
+    const statuses=pushData?.statuses||{};
+    customerRows=customerRows.map(customer=>({...customer,push_active:Object.prototype.hasOwnProperty.call(statuses,customer.id)?statuses[customer.id]:null}));
+   }catch(pushError){
+    console.warn('FFC push status lookup failed; customer list remains available.',pushError);
+    customerRows=customerRows.map(customer=>({...customer,push_active:null}));
+   }
   }
   function renderCustomers(){
    const q=(input.value||'').toLowerCase(),filtered=customerRows.filter(x=>[x.full_name,x.phone,x.email].join(' ').toLowerCase().includes(q));
@@ -1651,6 +1660,9 @@ ffcSupabase.auth.onAuthStateChange((event,session)=>{
      const email=el(card,'p','','');const mail=document.createElement('a');mail.href='mailto:'+customer.email;mail.textContent=customer.email;mail.style.color='#b8ed54';mail.style.textDecoration='underline';email.append('E-mail: ',mail);
     }
     el(card,'span','ffc-admin-pill',customer.membership_active?c.active:c.inactive);
+    const pushLabel=currentLang()==='cz'?'Push notifikace: ':currentLang()==='uk'?'Push-сповіщення: ':'Push-Benachrichtigungen: ';
+    const pushValue=customer.push_active===true?(currentLang()==='cz'?'Aktivní':currentLang()==='uk'?'Активні':'Aktiv'):(customer.push_active===false?(currentLang()==='cz'?'Neaktivní':currentLang()==='uk'?'Неактивні':'Nicht aktiv'):(currentLang()==='cz'?'Nelze zjistit':currentLang()==='uk'?'Не вдалося перевірити':'Nicht ermittelbar'));
+    el(card,'span','ffc-admin-pill',pushLabel+pushValue);
    });
   }
   input.oninput=renderCustomers;renderCustomers();
