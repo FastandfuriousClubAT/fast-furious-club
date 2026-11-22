@@ -747,7 +747,7 @@ main{padding-top:26px}
 <div class="field"><label for="airportTime" data-t="airportTime">Čas</label><input id="airportTime" type="time" required></div>
 <div class="field"><label for="airportPeople" data-t="airportPeople">Počet osob</label><select id="airportPeople" required><option value="">Vyber…</option><option value="1-4">1–4</option><option value="5-8">5–8</option><option value="9-20">9–20</option><option value="20+">20+</option></select></div>
 <div class="field"><label for="airportFlight" data-t="airportFlight">Číslo letu (nepovinné)</label><input id="airportFlight" placeholder="např. OS123"></div>
-<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" autocomplete="street-address" required><div class="airport-address-suggest"><button type="button" class="airport-vienna-chip" id="airportViennaChip" data-t="airportViennaChip">Wien / Vienna</button><button type="button" class="airport-vienna-dismiss" id="airportViennaDismiss" aria-label="Remove Vienna suggestion">×</button></div></div>
+<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" autocomplete="street-address" value="Wien" required></div>
 <div class="field full" id="airportFixedPriceCard" hidden aria-live="polite" style="margin:8px 0 18px;padding:18px 20px;border:2px solid #e7b86a;border-radius:16px;background:linear-gradient(135deg,#fff8e8,#fff);text-align:center;box-shadow:0 8px 24px #172b3a12"><div id="airportFixedPriceLabel" style="font-size:14px;font-weight:800;color:#59451f">Pevná cena za celé vozidlo</div><strong id="airportFixedPriceValue" style="display:block;font-size:clamp(38px,8vw,58px);line-height:1.15;color:#172b3a;margin:7px 0">— €</strong><div id="airportFixedPriceNote" style="font-size:13px;color:#59451f">Celý vůz · jedna cesta</div></div>
 <input type="hidden" id="airportFixedPrice" name="airportFixedPrice" value=""><input type="hidden" id="airportOrderStatus" name="airportOrderStatus" value="quote">
 <div class="field"><label for="airportName" data-t="contactName">Jméno</label><input id="airportName" required></div>
@@ -958,11 +958,6 @@ function updateAirportFixedPrice(){
   button.textContent=translations[lang].airportSend;
  }
 }
-const airportAddressInput=document.getElementById('airportAddress');
-const airportViennaChip=document.getElementById('airportViennaChip');
-const airportViennaDismiss=document.getElementById('airportViennaDismiss');
-airportViennaChip.addEventListener('click',()=>{airportAddressInput.value='Wien';updateAirportFixedPrice();airportAddressInput.focus();});
-airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\s*(wien|vienna|vídeň|відень)\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
 ['airportAddress','airportCode','airportPeople'].forEach(id=>{
  const field=document.getElementById(id);
  field.addEventListener('input',updateAirportFixedPrice);
