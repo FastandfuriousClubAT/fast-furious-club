@@ -514,6 +514,7 @@ main{padding-top:26px}
 
 /* Legal links in the site footer */
 .legal-links{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.legal-links a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.airport-address-suggest{display:flex;align-items:center;gap:7px;margin-top:9px}.airport-vienna-chip{border:1px solid #6ba9bd;border-radius:999px;background:#eaf7fc;color:#12384c;padding:7px 13px;font-weight:800;font-size:13px;cursor:pointer}.airport-vienna-dismiss{border:1px solid #9aaab2;border-radius:50%;width:28px;height:28px;background:transparent;color:inherit;font-size:19px;line-height:1;cursor:pointer}.airport-vienna-chip:focus-visible,.airport-vienna-dismiss:focus-visible{outline:3px solid #ffd21f;outline-offset:2px}
 </style>
 <style id="ffc-category-contrast-fix">
 /* Final override: readable dark category text on pale green pills. */
@@ -746,7 +747,7 @@ main{padding-top:26px}
 <div class="field"><label for="airportTime" data-t="airportTime">Čas</label><input id="airportTime" type="time" required></div>
 <div class="field"><label for="airportPeople" data-t="airportPeople">Počet osob</label><select id="airportPeople" required><option value="">Vyber…</option><option value="1-4">1–4</option><option value="5-8">5–8</option><option value="9-20">9–20</option><option value="20+">20+</option></select></div>
 <div class="field"><label for="airportFlight" data-t="airportFlight">Číslo letu (nepovinné)</label><input id="airportFlight" placeholder="např. OS123"></div>
-<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle (uveď také město Wien/Vienna)</label><input id="airportAddress" autocomplete="street-address" required></div>
+<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" autocomplete="street-address" required><div class="airport-address-suggest"><button type="button" class="airport-vienna-chip" id="airportViennaChip" data-t="airportViennaChip">Wien / Vienna</button><button type="button" class="airport-vienna-dismiss" id="airportViennaDismiss" aria-label="Remove Vienna suggestion">×</button></div></div>
 <div class="field full" id="airportFixedPriceCard" hidden aria-live="polite" style="margin:8px 0 18px;padding:18px 20px;border:2px solid #e7b86a;border-radius:16px;background:linear-gradient(135deg,#fff8e8,#fff);text-align:center;box-shadow:0 8px 24px #172b3a12"><div id="airportFixedPriceLabel" style="font-size:14px;font-weight:800;color:#59451f">Pevná cena za celé vozidlo</div><strong id="airportFixedPriceValue" style="display:block;font-size:clamp(38px,8vw,58px);line-height:1.15;color:#172b3a;margin:7px 0">— €</strong><div id="airportFixedPriceNote" style="font-size:13px;color:#59451f">Celý vůz · jedna cesta</div></div>
 <input type="hidden" id="airportFixedPrice" name="airportFixedPrice" value=""><input type="hidden" id="airportOrderStatus" name="airportOrderStatus" value="quote">
 <div class="field"><label for="airportName" data-t="contactName">Jméno</label><input id="airportName" required></div>
@@ -870,9 +871,9 @@ Object.assign(translations.cz,{pushTest:'Poslat testovací oznámení',pushTestS
 Object.assign(translations.de,{pushTest:'Testbenachrichtigung senden',pushTestSending:'Testbenachrichtigung wird gesendet…',pushTestSent:'Testbenachrichtigung wurde gesendet. Bitte prüfe dein Gerät.',pushTestError:'Testbenachrichtigung konnte nicht gesendet werden.',pushTestNoRecipients:'Kein Gerät ist mit diesem Konto verknüpft. Bitte aktiviere die Benachrichtigungen erneut.'});
 Object.assign(translations.uk,{pushTest:'Надіслати тестове сповіщення',pushTestSending:'Надсилаємо тестове сповіщення…',pushTestSent:'Тестове сповіщення надіслано. Перевір пристрій.',pushTestError:'Не вдалося надіслати тестове сповіщення.',pushTestNoRecipients:'З цим обліковим записом не пов’язано жодного пристрою. Увімкни сповіщення ще раз.'});
 Object.assign(translations.uk,{pushEnable:'Увімкнути сповіщення про нові поїздки',pushEnabled:'Сповіщення увімкнено.',pushAlready:'Сповіщення вже увімкнені.',pushDenied:'Сповіщення заблоковані у браузері. Зміни це в налаштуваннях сайту.',pushError:'Не вдалося увімкнути сповіщення. Спробуй ще раз.',pushUnsupported:'Цей браузер не підтримує сповіщення.'});
-Object.assign(translations.cz,{airportFixedLabel:'Pevná cena za celé vozidlo',airportFixedVehicle:'Celý vůz · jedna cesta',airportFixedBook:'Potvrdit objednávku za pevnou cenu'});
-Object.assign(translations.de,{airportFixedLabel:'Festpreis für das gesamte Fahrzeug',airportFixedVehicle:'Gesamtes Fahrzeug · einfache Fahrt',airportFixedBook:'Festpreis bestätigen und bestellen'});
-Object.assign(translations.uk,{airportFixedLabel:'Фіксована ціна за весь автомобіль',airportFixedVehicle:'Увесь автомобіль · в один бік',airportFixedBook:'Підтвердити замовлення за фіксованою ціною'});
+Object.assign(translations.cz,{airportFixedLabel:'Pevná cena za celé vozidlo',airportFixedVehicle:'Celý vůz · jedna cesta',airportFixedBook:'Potvrdit objednávku za pevnou cenu',airportViennaChip:'Vídeň / Wien'});
+Object.assign(translations.de,{airportFixedLabel:'Festpreis für das gesamte Fahrzeug',airportFixedVehicle:'Gesamtes Fahrzeug · einfache Fahrt',airportFixedBook:'Festpreis bestätigen und bestellen',airportViennaChip:'Wien / Vienna'});
+Object.assign(translations.uk,{airportFixedLabel:'Фіксована ціна за весь автомобіль',airportFixedVehicle:'Увесь автомобіль · в один бік',airportFixedBook:'Підтвердити замовлення за фіксованою ціною',airportViennaChip:'Відень / Vienna'});
 let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;document.querySelectorAll('[data-legal]').forEach(el=>{const labels={de:{imprint:'Impressum',privacy:'Datenschutz'},cz:{imprint:'Údaje o společnosti',privacy:'Ochrana osobních údajů'},uk:{imprint:'Відомості про компанію',privacy:'Політика конфіденційності'}};el.textContent=(labels[l]||labels.de)[el.dataset.legal]});localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});if(typeof setMemberMode==='function')setMemberMode(memberMode);if(typeof showMemberSession==='function')showMemberSession(currentMemberUser);else if(typeof updateHeroGreeting==='function')updateHeroGreeting();document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 // Initial language setup runs after member-mode functions are initialized.
@@ -957,6 +958,11 @@ function updateAirportFixedPrice(){
   button.textContent=translations[lang].airportSend;
  }
 }
+const airportAddressInput=document.getElementById('airportAddress');
+const airportViennaChip=document.getElementById('airportViennaChip');
+const airportViennaDismiss=document.getElementById('airportViennaDismiss');
+airportViennaChip.addEventListener('click',()=>{airportAddressInput.value='Wien';updateAirportFixedPrice();airportAddressInput.focus();});
+airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\s*(wien|vienna|vídeň|відень)\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
 ['airportAddress','airportCode','airportPeople'].forEach(id=>{
  const field=document.getElementById(id);
  field.addEventListener('input',updateAirportFixedPrice);
