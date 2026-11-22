@@ -906,6 +906,7 @@ async function sendInquiry(form,notice,subject){
    else details[key]=el.value;
   }
   const type=form.id==='airportForm'?'airport':form.id==='rideForm'?'ride':'trip';
+  details.language=lang;
   const contact=(details.contact||'').toString().trim();
   const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
   const contactPhone=contact.replace(/[^\d+]/g,'');
