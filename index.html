@@ -747,7 +747,7 @@ main{padding-top:26px}
 <div class="field"><label for="airportTime" data-t="airportTime">Čas</label><input id="airportTime" type="time" required></div>
 <div class="field"><label for="airportPeople" data-t="airportPeople">Počet osob</label><select id="airportPeople" required><option value="">Vyber…</option><option value="1-4">1–4</option><option value="5-8">5–8</option><option value="9-20">9–20</option><option value="20+">20+</option></select></div>
 <div class="field"><label for="airportFlight" data-t="airportFlight">Číslo letu (nepovinné)</label><input id="airportFlight" placeholder="např. OS123"></div>
-<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" autocomplete="street-address" required><div class="airport-address-suggest"><button type="button" class="airport-vienna-chip" id="airportViennaChip" data-t="airportViennaChip">Wien / Vienna</button><button type="button" class="airport-vienna-dismiss" id="airportViennaDismiss" aria-label="Remove Vienna suggestion">×</button></div></div>
+<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" autocomplete="street-address" value="Wien" required></div>
 <div class="field full" id="airportFixedPriceCard" hidden aria-live="polite" style="margin:8px 0 18px;padding:18px 20px;border:2px solid #e7b86a;border-radius:16px;background:linear-gradient(135deg,#fff8e8,#fff);text-align:center;box-shadow:0 8px 24px #172b3a12"><div id="airportFixedPriceLabel" style="font-size:14px;font-weight:800;color:#59451f">Pevná cena za celé vozidlo</div><strong id="airportFixedPriceValue" style="display:block;font-size:clamp(38px,8vw,58px);line-height:1.15;color:#172b3a;margin:7px 0">— €</strong><div id="airportFixedPriceNote" style="font-size:13px;color:#59451f">Celý vůz · jedna cesta</div></div>
 <input type="hidden" id="airportFixedPrice" name="airportFixedPrice" value=""><input type="hidden" id="airportOrderStatus" name="airportOrderStatus" value="quote">
 <div class="field"><label for="airportName" data-t="contactName">Jméno</label><input id="airportName" required></div>
@@ -906,6 +906,7 @@ async function sendInquiry(form,notice,subject){
    else details[key]=el.value;
   }
   const type=form.id==='airportForm'?'airport':form.id==='rideForm'?'ride':'trip';
+  details.language=lang;
   const contact=(details.contact||'').toString().trim();
   const contactEmail=(contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
   const contactPhone=contact.replace(/[^\d+]/g,'');
@@ -933,8 +934,10 @@ async function sendInquiry(form,notice,subject){
 function contactProvided(form,phoneId,emailId,noticeId){const phone=document.getElementById(phoneId),email=document.getElementById(emailId),notice=document.getElementById(noticeId);if(!phone.value.trim()&&!email.value.trim()){notice.textContent=lang==='de'?'Bitte Telefon oder E-Mail angeben.':lang==='uk'?'Вкажи телефон або електронну пошту.':'Vyplň telefon nebo e-mail.';notice.classList.add('show');(phone).focus();return false;}return true;}
 const airportFixedPrices={VIE:{'1-4':49,'5-8':65},BTS:{'1-4':99,'5-8':120},PRG:{'1-4':449,'5-8':499},BUD:{'1-4':399,'5-8':449}};
 function updateAirportFixedPrice(){
- const address=(document.getElementById('airportAddress').value||'').trim();
- const isVienna=/\b(wien|vienna)\b/i.test(address);
+ const address=(document.getElementById('airportAddress').value||'').normalize('NFKC').trim();
+ // A fixed fare is available only while the CURRENT address contains Vienna.
+ // Always clear stale price/order values before calculating the new state.
+ const isVienna=/(^|[^a-z])(?:wien|vienna|vídeň|відень)(?=$|[^a-z])/i.test(address);
  const code=document.getElementById('airportCode').value;
  const people=document.getElementById('airportPeople').value;
  const price=isVienna&&airportFixedPrices[code]?airportFixedPrices[code][people]:undefined;
@@ -943,6 +946,9 @@ function updateAirportFixedPrice(){
  const orderStatus=document.getElementById('airportOrderStatus');
  const button=document.querySelector('#airportForm button[type="submit"]');
  const note=document.getElementById('airportFixedPriceNote');
+ hiddenPrice.value='';
+ orderStatus.value='quote';
+ card.hidden=true;
  if(Number.isFinite(price)){
   card.hidden=false;
   document.getElementById('airportFixedPriceLabel').textContent=translations[lang].airportFixedLabel;
@@ -952,21 +958,16 @@ function updateAirportFixedPrice(){
   button.textContent=translations[lang].airportFixedBook;
   note.textContent=translations[lang].airportFixedVehicle;
  }else{
-  card.hidden=true;
-  hiddenPrice.value='';
-  orderStatus.value='quote';
+  document.getElementById('airportFixedPriceValue').textContent='— €';
   button.textContent=translations[lang].airportSend;
  }
 }
 const airportAddressInput=document.getElementById('airportAddress');
-const airportViennaChip=document.getElementById('airportViennaChip');
-const airportViennaDismiss=document.getElementById('airportViennaDismiss');
-airportViennaChip.addEventListener('click',()=>{airportAddressInput.value='Wien';updateAirportFixedPrice();airportAddressInput.focus();});
-airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\s*(wien|vienna|vídeň|відень)\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
 ['airportAddress','airportCode','airportPeople'].forEach(id=>{
  const field=document.getElementById(id);
- field.addEventListener('input',updateAirportFixedPrice);
- field.addEventListener('change',updateAirportFixedPrice);
+ // Recalculate from the live field value on every edit/selection, never retain
+ // a previously calculated fare after the user changes the address.
+ ['input','change','keyup','paste'].forEach(eventName=>field.addEventListener(eventName,()=>{updateAirportFixedPrice();}));
 });
 document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>setTimeout(updateAirportFixedPrice,0)));
 document.getElementById('airportForm').addEventListener('submit',e=>{
@@ -974,9 +975,20 @@ document.getElementById('airportForm').addEventListener('submit',e=>{
  updateAirportFixedPrice();
  if(!contactProvided(e.currentTarget,'airportPhone','airportEmail','airportNotice'))return;
  const price=document.getElementById('airportFixedPrice').value;
- const subject=price
-  ?'Fast & Furious Club — airport transfer ORDER ('+price+' EUR vehicle price, one way)'
-  :'Fast & Furious Club — airport transfer quote request';
+ const status=document.getElementById('airportOrderStatus').value;
+ // Last-second guard: an address without Vienna can never submit an old fare.
+ const currentAddress=(document.getElementById('airportAddress').value||'').normalize('NFKC').trim();
+ const stillVienna=/(^|[^a-z])(?:wien|vienna|vídeň|відень)(?=$|[^a-z])/i.test(currentAddress);
+ if(!stillVienna||!price||status!=='fixed-price-order'){
+  document.getElementById('airportFixedPrice').value='';
+  document.getElementById('airportOrderStatus').value='quote';
+ }
+ const finalPrice=document.getElementById('airportFixedPrice').value;
+ const finalStatus=document.getElementById('airportOrderStatus').value;
+ const subject=finalStatus==='fixed-price-order'&&finalPrice
+  ?'Fast & Furious Club — airport transfer FIXED-PRICE ORDER ('+finalPrice+' EUR, whole vehicle, one way)'
+  :'Fast & Furious Club — airport transfer QUOTE REQUEST';
+ updateAirportFixedPrice();
  sendInquiry(e.currentTarget,document.getElementById('airportNotice'),subject);
 });
 document.getElementById('rideForm').addEventListener('submit',e=>{e.preventDefault();if(!contactProvided(e.currentTarget,'ridePhone','rideEmail','rideNotice'))return;sendInquiry(e.currentTarget,document.getElementById('rideNotice'),'Fast & Furious Club — ride request');});
@@ -1213,6 +1225,21 @@ function showMemberSession(user){
   return;
  }
  const meta=user.user_metadata||{};
+ // Fill airport contact fields from the authenticated Supabase account.
+ // Preserve a customer's manual edit; refresh a field only if it is blank
+ // or still contains the previous automatic profile value.
+ const airportProfileValues={
+  airportName:(meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(' ')||'').trim(),
+  airportEmail:(user.email||'').trim(),
+  airportPhone:(meta.phone||'').trim()
+ };
+ Object.entries(airportProfileValues).forEach(([id,value])=>{
+  const field=document.getElementById(id);
+  if(!field||!value)return;
+  const previous=field.dataset.ffcProfileValue||'';
+  if(!field.value.trim()||field.value===previous)field.value=value;
+  field.dataset.ffcProfileValue=value;
+ });
  const fullName=(meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(' ')||user.email||'Zákazník').trim();
  memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',fullName);
  memberSessionStatus.classList.add('show');
