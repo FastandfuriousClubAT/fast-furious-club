@@ -962,7 +962,7 @@ const airportAddressInput=document.getElementById('airportAddress');
 const airportViennaChip=document.getElementById('airportViennaChip');
 const airportViennaDismiss=document.getElementById('airportViennaDismiss');
 airportViennaChip.addEventListener('click',()=>{airportAddressInput.value='Wien';updateAirportFixedPrice();airportAddressInput.focus();});
-airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\\s*(wien|vienna|vídeň|відень)\\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
+airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\s*(wien|vienna|vídeň|відень)\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
 ['airportAddress','airportCode','airportPeople'].forEach(id=>{
  const field=document.getElementById(id);
  field.addEventListener('input',updateAirportFixedPrice);
