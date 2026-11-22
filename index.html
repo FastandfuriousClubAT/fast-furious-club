@@ -933,8 +933,10 @@ async function sendInquiry(form,notice,subject){
 function contactProvided(form,phoneId,emailId,noticeId){const phone=document.getElementById(phoneId),email=document.getElementById(emailId),notice=document.getElementById(noticeId);if(!phone.value.trim()&&!email.value.trim()){notice.textContent=lang==='de'?'Bitte Telefon oder E-Mail angeben.':lang==='uk'?'Вкажи телефон або електронну пошту.':'Vyplň telefon nebo e-mail.';notice.classList.add('show');(phone).focus();return false;}return true;}
 const airportFixedPrices={VIE:{'1-4':49,'5-8':65},BTS:{'1-4':99,'5-8':120},PRG:{'1-4':449,'5-8':499},BUD:{'1-4':399,'5-8':449}};
 function updateAirportFixedPrice(){
- const address=(document.getElementById('airportAddress').value||'').trim();
- const isVienna=/\b(wien|vienna)\b/i.test(address);
+ const address=(document.getElementById('airportAddress').value||'').normalize('NFKC').trim();
+ // A fixed fare is available only while the CURRENT address contains Vienna.
+ // Always clear stale price/order values before calculating the new state.
+ const isVienna=/(^|[^a-z])(?:wien|vienna|vídeň|відень)(?=$|[^a-z])/i.test(address);
  const code=document.getElementById('airportCode').value;
  const people=document.getElementById('airportPeople').value;
  const price=isVienna&&airportFixedPrices[code]?airportFixedPrices[code][people]:undefined;
@@ -943,6 +945,9 @@ function updateAirportFixedPrice(){
  const orderStatus=document.getElementById('airportOrderStatus');
  const button=document.querySelector('#airportForm button[type="submit"]');
  const note=document.getElementById('airportFixedPriceNote');
+ hiddenPrice.value='';
+ orderStatus.value='quote';
+ card.hidden=true;
  if(Number.isFinite(price)){
   card.hidden=false;
   document.getElementById('airportFixedPriceLabel').textContent=translations[lang].airportFixedLabel;
@@ -952,9 +957,7 @@ function updateAirportFixedPrice(){
   button.textContent=translations[lang].airportFixedBook;
   note.textContent=translations[lang].airportFixedVehicle;
  }else{
-  card.hidden=true;
-  hiddenPrice.value='';
-  orderStatus.value='quote';
+  document.getElementById('airportFixedPriceValue').textContent='— €';
   button.textContent=translations[lang].airportSend;
  }
 }
@@ -965,8 +968,9 @@ airportViennaChip.addEventListener('click',()=>{airportAddressInput.value='Wien'
 airportViennaDismiss.addEventListener('click',()=>{airportViennaChip.hidden=true;airportViennaDismiss.hidden=true;if(/^\s*(wien|vienna|vídeň|відень)\s*$/i.test(airportAddressInput.value))airportAddressInput.value='';updateAirportFixedPrice();});
 ['airportAddress','airportCode','airportPeople'].forEach(id=>{
  const field=document.getElementById(id);
- field.addEventListener('input',updateAirportFixedPrice);
- field.addEventListener('change',updateAirportFixedPrice);
+ // Recalculate from the live field value on every edit/selection, never retain
+ // a previously calculated fare after the user changes the address.
+ ['input','change','keyup','paste'].forEach(eventName=>field.addEventListener(eventName,()=>{updateAirportFixedPrice();}));
 });
 document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>setTimeout(updateAirportFixedPrice,0)));
 document.getElementById('airportForm').addEventListener('submit',e=>{
@@ -974,9 +978,20 @@ document.getElementById('airportForm').addEventListener('submit',e=>{
  updateAirportFixedPrice();
  if(!contactProvided(e.currentTarget,'airportPhone','airportEmail','airportNotice'))return;
  const price=document.getElementById('airportFixedPrice').value;
- const subject=price
-  ?'Fast & Furious Club — airport transfer ORDER ('+price+' EUR vehicle price, one way)'
-  :'Fast & Furious Club — airport transfer quote request';
+ const status=document.getElementById('airportOrderStatus').value;
+ // Last-second guard: an address without Vienna can never submit an old fare.
+ const currentAddress=(document.getElementById('airportAddress').value||'').normalize('NFKC').trim();
+ const stillVienna=/(^|[^a-z])(?:wien|vienna|vídeň|відень)(?=$|[^a-z])/i.test(currentAddress);
+ if(!stillVienna||!price||status!=='fixed-price-order'){
+  document.getElementById('airportFixedPrice').value='';
+  document.getElementById('airportOrderStatus').value='quote';
+ }
+ const finalPrice=document.getElementById('airportFixedPrice').value;
+ const finalStatus=document.getElementById('airportOrderStatus').value;
+ const subject=finalStatus==='fixed-price-order'&&finalPrice
+  ?'Fast & Furious Club — airport transfer FIXED-PRICE ORDER ('+finalPrice+' EUR, whole vehicle, one way)'
+  :'Fast & Furious Club — airport transfer QUOTE REQUEST';
+ updateAirportFixedPrice();
  sendInquiry(e.currentTarget,document.getElementById('airportNotice'),subject);
 });
 document.getElementById('rideForm').addEventListener('submit',e=>{e.preventDefault();if(!contactProvided(e.currentTarget,'ridePhone','rideEmail','rideNotice'))return;sendInquiry(e.currentTarget,document.getElementById('rideNotice'),'Fast & Furious Club — ride request');});
