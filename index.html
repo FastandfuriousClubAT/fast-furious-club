@@ -746,7 +746,9 @@ main{padding-top:26px}
 <div class="field"><label for="airportTime" data-t="airportTime">Čas</label><input id="airportTime" type="time" required></div>
 <div class="field"><label for="airportPeople" data-t="airportPeople">Počet osob</label><select id="airportPeople" required><option value="">Vyber…</option><option value="1-4">1–4</option><option value="5-8">5–8</option><option value="9-20">9–20</option><option value="20+">20+</option></select></div>
 <div class="field"><label for="airportFlight" data-t="airportFlight">Číslo letu (nepovinné)</label><input id="airportFlight" placeholder="např. OS123"></div>
-<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle</label><input id="airportAddress" required></div>
+<div class="field"><label for="airportAddress" data-t="airportAddress">Adresa nástupu / cíle (uveď také město Wien/Vienna)</label><input id="airportAddress" autocomplete="street-address" required></div>
+<div class="field full" id="airportFixedPriceCard" hidden aria-live="polite" style="margin:8px 0 18px;padding:18px 20px;border:2px solid #e7b86a;border-radius:16px;background:linear-gradient(135deg,#fff8e8,#fff);text-align:center;box-shadow:0 8px 24px #172b3a12"><div id="airportFixedPriceLabel" style="font-size:14px;font-weight:800;color:#59451f">Pevná cena za celé vozidlo</div><strong id="airportFixedPriceValue" style="display:block;font-size:clamp(38px,8vw,58px);line-height:1.15;color:#172b3a;margin:7px 0">— €</strong><div id="airportFixedPriceNote" style="font-size:13px;color:#59451f">Celý vůz · jedna cesta</div></div>
+<input type="hidden" id="airportFixedPrice" name="airportFixedPrice" value=""><input type="hidden" id="airportOrderStatus" name="airportOrderStatus" value="quote">
 <div class="field"><label for="airportName" data-t="contactName">Jméno</label><input id="airportName" required></div>
 <div class="field"><label for="airportPhone" data-t="contactPhone">Telefon</label><input id="airportPhone" type="tel"></div>
 <div class="field"><label for="airportEmail" data-t="contactEmail">E-mail</label><input id="airportEmail" type="email"></div>
@@ -868,7 +870,7 @@ Object.assign(translations.cz,{pushTest:'Poslat testovací oznámení',pushTestS
 Object.assign(translations.de,{pushTest:'Testbenachrichtigung senden',pushTestSending:'Testbenachrichtigung wird gesendet…',pushTestSent:'Testbenachrichtigung wurde gesendet. Bitte prüfe dein Gerät.',pushTestError:'Testbenachrichtigung konnte nicht gesendet werden.',pushTestNoRecipients:'Kein Gerät ist mit diesem Konto verknüpft. Bitte aktiviere die Benachrichtigungen erneut.'});
 Object.assign(translations.uk,{pushTest:'Надіслати тестове сповіщення',pushTestSending:'Надсилаємо тестове сповіщення…',pushTestSent:'Тестове сповіщення надіслано. Перевір пристрій.',pushTestError:'Не вдалося надіслати тестове сповіщення.',pushTestNoRecipients:'З цим обліковим записом не пов’язано жодного пристрою. Увімкни сповіщення ще раз.'});
 Object.assign(translations.uk,{pushEnable:'Увімкнути сповіщення про нові поїздки',pushEnabled:'Сповіщення увімкнено.',pushAlready:'Сповіщення вже увімкнені.',pushDenied:'Сповіщення заблоковані у браузері. Зміни це в налаштуваннях сайту.',pushError:'Не вдалося увімкнути сповіщення. Спробуй ще раз.',pushUnsupported:'Цей браузер не підтримує сповіщення.'});
-let lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;document.querySelectorAll('[data-legal]').forEach(el=>{const labels={de:{imprint:'Impressum',privacy:'Datenschutz'},cz:{imprint:'Údaje o společnosti',privacy:'Ochrana osobních údajů'},uk:{imprint:'Відомості про компанію',privacy:'Політика конфіденційності'}};el.textContent=(labels[l]||labels.de)[el.dataset.legal]});localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});if(typeof setMemberMode==='function')setMemberMode(memberMode);if(typeof showMemberSession==='function')showMemberSession(currentMemberUser);else if(typeof updateHeroGreeting==='function')updateHeroGreeting();document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
+Object.assign(translations.cz,{airportFixedLabel:'Pevná cena za celé vozidlo',airportFixedVehicle:'Celý vůz · jedna cesta',airportFixedBook:'Potvrdit objednávku za pevnou cenu'});\nObject.assign(translations.de,{airportFixedLabel:'Festpreis für das gesamte Fahrzeug',airportFixedVehicle:'Gesamtes Fahrzeug · einfache Fahrt',airportFixedBook:'Festpreis bestätigen und bestellen'});\nObject.assign(translations.uk,{airportFixedLabel:'Фіксована ціна за весь автомобіль',airportFixedVehicle:'Увесь автомобіль · в один бік',airportFixedBook:'Підтвердити замовлення за фіксованою ціною'});\nlet lang=localStorage.getItem('ffc-language')||'de';if(lang==='cs')lang='cz';const navLabels={de:{home:'Start',offers:'Angebote',trips:'Ausflüge',transfer:'Flughafentransfer',about:'Über uns',member:'Registrierung'},cz:{home:'Úvod',offers:'Nabídky',trips:'Výlet na míru',transfer:'Letištní transfer',about:'O nás',member:'Registrace'},uk:{home:'Головна',offers:'Пропозиції',trips:'Екскурсії',transfer:'Трансфер з аеропорту',about:'Про нас',member:'Реєстрація'}};function setLang(l){lang=l;document.querySelectorAll('[data-legal]').forEach(el=>{const labels={de:{imprint:'Impressum',privacy:'Datenschutz'},cz:{imprint:'Údaje o společnosti',privacy:'Ochrana osobních údajů'},uk:{imprint:'Відомості про компанію',privacy:'Політика конфіденційності'}};el.textContent=(labels[l]||labels.de)[el.dataset.legal]});localStorage.setItem('ffc-language',l);document.documentElement.lang=l;document.querySelectorAll('[data-nav]').forEach(a=>{const k=a.dataset.nav;if(navLabels[l]&&navLabels[l][k])a.textContent=navLabels[l][k]});document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('[data-t]').forEach(el=>{let k=el.dataset.t;if(translations[l][k])el.textContent=translations[l][k]});if(typeof setMemberMode==='function')setMemberMode(memberMode);if(typeof showMemberSession==='function')showMemberSession(currentMemberUser);else if(typeof updateHeroGreeting==='function')updateHeroGreeting();document.getElementById('departure').value=l==='de'?'Wien':l==='uk'?'Відень':'Vídeň';document.getElementById('notice').textContent='';}
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 // Initial language setup runs after member-mode functions are initialized.
 function setMinimumDates(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+1);const min=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');['airportDate','rideDate','dateFrom','dateTo'].forEach(id=>{const el=document.getElementById(id);if(el){el.min=min;if(el.value&&el.value<min)el.value='';}});const from=document.getElementById('dateFrom'),to=document.getElementById('dateTo');if(from&&to){to.min=from.value&&from.value>min?from.value:min;}}
@@ -925,7 +927,49 @@ async function sendInquiry(form,notice,subject){
   notice.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function contactProvided(form,phoneId,emailId,noticeId){const phone=document.getElementById(phoneId),email=document.getElementById(emailId),notice=document.getElementById(noticeId);if(!phone.value.trim()&&!email.value.trim()){notice.textContent=lang==='de'?'Bitte Telefon oder E-Mail angeben.':lang==='uk'?'Вкажи телефон або електронну пошту.':'Vyplň telefon nebo e-mail.';notice.classList.add('show');(phone).focus();return false;}return true;}
-document.getElementById('airportForm').addEventListener('submit',e=>{e.preventDefault();if(!contactProvided(e.currentTarget,'airportPhone','airportEmail','airportNotice'))return;sendInquiry(e.currentTarget,document.getElementById('airportNotice'),'Fast & Furious Club — airport transfer request');});
+const airportFixedPrices={VIE:{'1-4':49,'5-8':65},BTS:{'1-4':99,'5-8':120},PRG:{'1-4':449,'5-8':499},BUD:{'1-4':399,'5-8':449}};
+function updateAirportFixedPrice(){
+ const address=(document.getElementById('airportAddress').value||'').trim();
+ const isVienna=/\\b(wien|vienna)\\b/i.test(address);
+ const code=document.getElementById('airportCode').value;
+ const people=document.getElementById('airportPeople').value;
+ const price=isVienna&&airportFixedPrices[code]?airportFixedPrices[code][people]:undefined;
+ const card=document.getElementById('airportFixedPriceCard');
+ const hiddenPrice=document.getElementById('airportFixedPrice');
+ const orderStatus=document.getElementById('airportOrderStatus');
+ const button=document.querySelector('#airportForm button[type="submit"]');
+ const note=document.getElementById('airportFixedPriceNote');
+ if(Number.isFinite(price)){
+  card.hidden=false;
+  document.getElementById('airportFixedPriceLabel').textContent=translations[lang].airportFixedLabel;
+  document.getElementById('airportFixedPriceValue').textContent=price.toLocaleString(lang==='de'?'de-AT':lang==='uk'?'uk-UA':'cs-CZ')+' €';
+  hiddenPrice.value=String(price);
+  orderStatus.value='fixed-price-order';
+  button.textContent=translations[lang].airportFixedBook;
+  note.textContent=translations[lang].airportFixedVehicle;
+ }else{
+  card.hidden=true;
+  hiddenPrice.value='';
+  orderStatus.value='quote';
+  button.textContent=translations[lang].airportSend;
+ }
+}
+['airportAddress','airportCode','airportPeople'].forEach(id=>{
+ const field=document.getElementById(id);
+ field.addEventListener('input',updateAirportFixedPrice);
+ field.addEventListener('change',updateAirportFixedPrice);
+});
+document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>setTimeout(updateAirportFixedPrice,0)));
+document.getElementById('airportForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ updateAirportFixedPrice();
+ if(!contactProvided(e.currentTarget,'airportPhone','airportEmail','airportNotice'))return;
+ const price=document.getElementById('airportFixedPrice').value;
+ const subject=price
+  ?'Fast & Furious Club — airport transfer ORDER ('+price+' EUR vehicle price, one way)'
+  :'Fast & Furious Club — airport transfer quote request';
+ sendInquiry(e.currentTarget,document.getElementById('airportNotice'),subject);
+});
 document.getElementById('rideForm').addEventListener('submit',e=>{e.preventDefault();if(!contactProvided(e.currentTarget,'ridePhone','rideEmail','rideNotice'))return;sendInquiry(e.currentTarget,document.getElementById('rideNotice'),'Fast & Furious Club — ride request');});
 document.getElementById('tripForm').addEventListener('submit',e=>{e.preventDefault();let n=document.getElementById('notice');const from=document.getElementById('dateFrom').value,to=document.getElementById('dateTo').value;const flexible=document.querySelector('input[name=flexibleDate]:checked').value==='yes';if(!flexible&&from&&to&&to<from){document.getElementById('dateTo').setCustomValidity(lang==='de'?'Das Bis-Datum muss nach dem Von-Datum liegen.':lang==='uk'?'Дата завершення має бути не раніше дати початку.':'Datum „do“ musí být stejné nebo pozdější než datum „od“.');document.getElementById('dateTo').reportValidity();document.getElementById('dateTo').setCustomValidity('');return;}sendInquiry(e.currentTarget,n,'Fast & Furious Club — trip request');});
 
