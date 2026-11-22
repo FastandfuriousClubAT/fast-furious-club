@@ -83,11 +83,12 @@ async function sendBrevo(apiKey: string, to: string, subject: string, textBody: 
 }
 
 Deno.serve(async (req: Request) => {
+  const origin = req.headers.get("origin") || "";
+  const respond = (body: unknown, status = 200) => reply(body, status, origin);
+  if (origin && !isAllowedOrigin(origin)) return respond({ success: false, error: "Origin not allowed" }, 403);
   if (req.method === "OPTIONS") return new Response("ok", { headers: responseHeaders(origin) });
-  if (req.method === "GET") return respond({ service: "brevo", configured: Boolean(Deno.env.get("BREVO_API_KEY")), function_version: 18 });
+  if (req.method === "GET") return respond({ service: "brevo", configured: Boolean(Deno.env.get("BREVO_API_KEY")), function_version: 19 });
   if (req.method !== "POST") return respond({ success: false, error: "Method not allowed" }, 405);
-  const origin = req.headers.get("origin");
-  if (origin && origin !== ALLOWED_ORIGIN) return respond({ success: false, error: "Origin not allowed" }, 403);
 
   let input: Record<string, unknown>;
   try { input = await req.json(); } catch { return respond({ success: false, error: "Invalid JSON" }, 400); }
