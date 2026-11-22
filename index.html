@@ -1225,6 +1225,21 @@ function showMemberSession(user){
   return;
  }
  const meta=user.user_metadata||{};
+ // Fill airport contact fields from the authenticated Supabase account.
+ // Preserve a customer's manual edit; refresh a field only if it is blank
+ // or still contains the previous automatic profile value.
+ const airportProfileValues={
+  airportName:(meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(' ')||'').trim(),
+  airportEmail:(user.email||'').trim(),
+  airportPhone:(meta.phone||'').trim()
+ };
+ Object.entries(airportProfileValues).forEach(([id,value])=>{
+  const field=document.getElementById(id);
+  if(!field||!value)return;
+  const previous=field.dataset.ffcProfileValue||'';
+  if(!field.value.trim()||field.value===previous)field.value=value;
+  field.dataset.ffcProfileValue=value;
+ });
  const fullName=(meta.full_name||[meta.first_name,meta.last_name].filter(Boolean).join(' ')||user.email||'Zákazník').trim();
  memberSessionStatus.textContent=translations[lang].memberSession.replace('{name}',fullName);
  memberSessionStatus.classList.add('show');
